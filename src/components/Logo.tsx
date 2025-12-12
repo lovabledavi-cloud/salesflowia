@@ -1,14 +1,15 @@
 import logoImage from "@/assets/logo-salesflowia-white.png";
 
 interface LogoProps {
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
 }
 
-const Logo = ({ size = "md" }: LogoProps) => {
+const Logo = ({ size = "lg" }: LogoProps) => {
   const sizeClasses = {
-    sm: "h-10",
-    md: "h-14",
-    lg: "h-20",
+    sm: "h-16",
+    md: "h-20",
+    lg: "h-28",
+    xl: "h-36",
   };
 
   return (
