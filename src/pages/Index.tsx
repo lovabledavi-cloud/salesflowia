@@ -12,7 +12,7 @@ const Index = () => {
   return (
     <main className="min-h-screen bg-background overflow-hidden">
       {/* Header with Logo */}
-      <header className="fixed top-0 left-0 right-0 z-50 py-4 px-4 md:px-8 bg-background/80 backdrop-blur-md border-b border-border/50">
+      <header className="py-4 px-4 md:px-8 bg-background border-b border-border/50">
         <div className="container flex items-center justify-center md:justify-between">
           <Logo size="lg" />
           <a 
@@ -24,7 +24,7 @@ const Index = () => {
         </div>
       </header>
       
-      <div className="pt-16">
+      <div>
         <HeroSection />
         <StorySection />
         <SystemFeatures />
