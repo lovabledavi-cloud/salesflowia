@@ -192,7 +192,7 @@ const HeroSection = () => {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.2 }}
-                        className="absolute top-2 right-2 md:-top-4 md:-right-4 px-3 py-1.5 md:px-4 md:py-2 bg-emerald text-background text-xs md:text-sm font-bold rounded-full shadow-lg"
+                        className="absolute top-2 right-2 md:-top-4 md:-right-4 px-2 py-1 md:px-4 md:py-2 bg-emerald text-background text-[10px] md:text-sm font-bold rounded-full shadow-lg whitespace-nowrap"
                       >
                         {dashboardImages[currentIndex].label}
                       </motion.div>
