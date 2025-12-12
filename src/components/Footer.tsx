@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="container">
         <div className="flex flex-col items-center gap-6">
           {/* Logo */}
-          <Logo size="lg" />
+          <Logo size="xl" />
 
           {/* Description */}
           <p className="text-sm text-muted-foreground text-center max-w-md">
