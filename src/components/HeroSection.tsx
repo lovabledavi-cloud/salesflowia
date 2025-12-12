@@ -170,7 +170,7 @@ const HeroSection = () => {
                 </button>
 
                 {/* Image Container */}
-                <div className="relative w-full max-w-[800px] mx-8 md:mx-16 overflow-hidden rounded-xl">
+                <div className="relative w-full max-w-[800px] mx-8 md:mx-16 overflow-visible rounded-xl">
                   <div className="absolute -inset-4 bg-gradient-to-r from-emerald/20 via-violet/20 to-emerald/20 rounded-2xl blur-xl" />
                   
                   <AnimatePresence mode="wait">
@@ -192,7 +192,7 @@ const HeroSection = () => {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.2 }}
-                        className="absolute -top-4 -right-4 px-4 py-2 bg-emerald text-background text-sm font-bold rounded-full shadow-lg"
+                        className="absolute top-2 right-2 md:-top-4 md:-right-4 px-3 py-1.5 md:px-4 md:py-2 bg-emerald text-background text-xs md:text-sm font-bold rounded-full shadow-lg"
                       >
                         {dashboardImages[currentIndex].label}
                       </motion.div>
