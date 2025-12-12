@@ -1,4 +1,4 @@
-import logoImage from "@/assets/logo-salesflowia-new.png";
+import logoImage from "@/assets/logo-salesflowia-white.png";
 
 interface LogoProps {
   size?: "sm" | "md" | "lg";
