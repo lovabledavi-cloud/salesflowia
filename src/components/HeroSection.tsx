@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, MessageSquare, Bot, BarChart3, Zap, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, MessageSquare, Bot, BarChart3, Zap, ChevronLeft, ChevronRight, DollarSign, TrendingUp, Brain, Sparkles, CircleDollarSign, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import dashboardCampaigns from "@/assets/dashboard-campaigns.png";
@@ -12,6 +12,16 @@ const dashboardImages = [
   { src: dashboardPipeline, alt: "Pipeline IA - Gestão de leads automatizada", label: "Pipeline" },
   { src: dashboardCampaigns, alt: "Disparador de Campanhas - Automação WhatsApp", label: "Campanhas" },
   { src: dashboardFollowup, alt: "Follow-up Automático - Recuperação de vendas", label: "Follow-up" },
+];
+
+// Floating icons configuration
+const floatingIcons = [
+  { Icon: DollarSign, position: "top-[15%] left-[5%] md:left-[10%]", delay: 0, color: "text-emerald" },
+  { Icon: Brain, position: "top-[10%] right-[8%] md:right-[15%]", delay: 0.5, color: "text-violet" },
+  { Icon: TrendingUp, position: "top-[35%] left-[2%] md:left-[5%]", delay: 1, color: "text-emerald" },
+  { Icon: Sparkles, position: "top-[25%] right-[3%] md:right-[8%]", delay: 1.5, color: "text-violet" },
+  { Icon: CircleDollarSign, position: "top-[50%] left-[3%] md:left-[8%]", delay: 0.8, color: "text-emerald" },
+  { Icon: ShoppingCart, position: "top-[45%] right-[5%] md:right-[10%]", delay: 1.2, color: "text-violet" },
 ];
 
 const HeroSection = () => {
@@ -42,6 +52,29 @@ const HeroSection = () => {
       {/* Floating orbs */}
       <div className="absolute top-20 left-10 w-72 h-72 bg-violet/20 rounded-full blur-[100px] animate-float" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-emerald/10 rounded-full blur-[120px] animate-float" style={{ animationDelay: "1s" }} />
+      
+      {/* Floating Icons */}
+      {floatingIcons.map(({ Icon, position, delay, color }, index) => (
+        <motion.div
+          key={index}
+          className={`absolute ${position} hidden sm:block`}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ 
+            opacity: [0.4, 0.8, 0.4],
+            y: [0, -15, 0],
+          }}
+          transition={{
+            duration: 4,
+            delay,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          <div className={`p-3 md:p-4 rounded-xl bg-card/50 border border-border/50 backdrop-blur-sm ${color}`}>
+            <Icon className="w-5 h-5 md:w-7 md:h-7" />
+          </div>
+        </motion.div>
+      ))}
       
       <div className="container relative z-10">
         <div className="max-w-4xl mx-auto text-center">
