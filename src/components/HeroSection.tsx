@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, MessageSquare, Bot, BarChart3, Zap, ChevronLeft, ChevronRight, DollarSign, TrendingUp, Brain, Sparkles, CircleDollarSign, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import dashboardCampaigns from "@/assets/dashboard-campaigns.png";
 import dashboardPipeline from "@/assets/dashboard-pipeline.png";
 import dashboardVendas from "@/assets/dashboard-vendas.png";
@@ -14,15 +14,39 @@ const dashboardImages = [
   { src: dashboardFollowup, alt: "Follow-up Automático - Recuperação de vendas", label: "Follow-up" },
 ];
 
-// Floating icons configuration
+// Floating icons configuration - mobile positions adjusted for better visibility
 const floatingIcons = [
-  { Icon: DollarSign, position: "top-[15%] left-[5%] md:left-[10%]", delay: 0, color: "text-emerald" },
-  { Icon: Brain, position: "top-[10%] right-[8%] md:right-[15%]", delay: 0.5, color: "text-violet" },
-  { Icon: TrendingUp, position: "top-[35%] left-[2%] md:left-[5%]", delay: 1, color: "text-emerald" },
-  { Icon: Sparkles, position: "top-[25%] right-[3%] md:right-[8%]", delay: 1.5, color: "text-violet" },
-  { Icon: CircleDollarSign, position: "top-[50%] left-[3%] md:left-[8%]", delay: 0.8, color: "text-emerald" },
-  { Icon: ShoppingCart, position: "top-[45%] right-[5%] md:right-[10%]", delay: 1.2, color: "text-violet" },
+  { Icon: DollarSign, position: "top-[8%] left-[3%] md:top-[15%] md:left-[10%]", delay: 0, color: "text-emerald", size: "w-4 h-4 md:w-6 md:h-6" },
+  { Icon: Brain, position: "top-[5%] right-[5%] md:top-[10%] md:right-[15%]", delay: 0.3, color: "text-violet", size: "w-4 h-4 md:w-6 md:h-6" },
+  { Icon: TrendingUp, position: "top-[18%] left-[1%] md:top-[35%] md:left-[5%]", delay: 0.6, color: "text-emerald", size: "w-4 h-4 md:w-6 md:h-6" },
+  { Icon: Sparkles, position: "top-[15%] right-[2%] md:top-[25%] md:right-[8%]", delay: 0.9, color: "text-violet", size: "w-4 h-4 md:w-6 md:h-6" },
+  { Icon: CircleDollarSign, position: "top-[28%] left-[2%] md:top-[50%] md:left-[8%]", delay: 0.4, color: "text-emerald", size: "w-4 h-4 md:w-6 md:h-6" },
+  { Icon: ShoppingCart, position: "top-[25%] right-[3%] md:top-[45%] md:right-[10%]", delay: 0.7, color: "text-violet", size: "w-4 h-4 md:w-6 md:h-6" },
 ];
+
+// Memoized floating icon component for better performance
+const FloatingIcon = memo(({ Icon, position, delay, color, size }: { Icon: any; position: string; delay: number; color: string; size: string }) => (
+  <motion.div
+    className={`absolute ${position} z-10 will-change-transform`}
+    initial={{ opacity: 0 }}
+    animate={{ 
+      opacity: [0.5, 0.9, 0.5],
+      y: [0, -12, 0],
+    }}
+    transition={{
+      duration: 5,
+      delay,
+      repeat: Infinity,
+      ease: "linear",
+    }}
+  >
+    <div className={`p-2 md:p-3 rounded-lg md:rounded-xl bg-card/60 border border-border/40 backdrop-blur-sm ${color} shadow-lg`}>
+      <Icon className={size} />
+    </div>
+  </motion.div>
+));
+
+FloatingIcon.displayName = "FloatingIcon";
 
 const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -40,6 +64,7 @@ const HeroSection = () => {
     const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
   }, []);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-20 px-4">
       {/* Background Effects */}
@@ -54,26 +79,8 @@ const HeroSection = () => {
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-emerald/10 rounded-full blur-[120px] animate-float" style={{ animationDelay: "1s" }} />
       
       {/* Floating Icons */}
-      {floatingIcons.map(({ Icon, position, delay, color }, index) => (
-        <motion.div
-          key={index}
-          className={`absolute ${position} hidden sm:block`}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ 
-            opacity: [0.4, 0.8, 0.4],
-            y: [0, -15, 0],
-          }}
-          transition={{
-            duration: 4,
-            delay,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        >
-          <div className={`p-3 md:p-4 rounded-xl bg-card/50 border border-border/50 backdrop-blur-sm ${color}`}>
-            <Icon className="w-5 h-5 md:w-7 md:h-7" />
-          </div>
-        </motion.div>
+      {floatingIcons.map((props, index) => (
+        <FloatingIcon key={index} {...props} />
       ))}
       
       <div className="container relative z-10">
@@ -82,7 +89,7 @@ const HeroSection = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.4 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border bg-muted/50 backdrop-blur-sm mb-8"
           >
             <span className="w-2 h-2 rounded-full bg-emerald animate-pulse" />
@@ -93,7 +100,7 @@ const HeroSection = () => {
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-6"
           >
             Transforme seu Depósito em uma{" "}
@@ -105,7 +112,7 @@ const HeroSection = () => {
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
             className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10"
           >
             O sistema de <span className="text-violet font-semibold">Inteligência Artificial</span> que atende, vende e fideliza clientes no WhatsApp sozinho.{" "}
@@ -116,7 +123,7 @@ const HeroSection = () => {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
           >
             <Button 
               size="lg" 
@@ -135,7 +142,7 @@ const HeroSection = () => {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
             className="mt-16 relative"
           >
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
@@ -184,7 +191,7 @@ const HeroSection = () => {
           <motion.div
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.7 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
             className="mt-20 relative"
           >
             {/* Glow behind main dashboard */}
@@ -209,22 +216,23 @@ const HeroSection = () => {
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={currentIndex}
-                      initial={{ opacity: 0, x: 100 }}
+                      initial={{ opacity: 0, x: 50 }}
                       animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -100 }}
-                      transition={{ duration: 0.4, ease: "easeInOut" }}
+                      exit={{ opacity: 0, x: -50 }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
                       className="relative"
                     >
                       <img 
                         src={dashboardImages[currentIndex].src} 
                         alt={dashboardImages[currentIndex].alt}
                         className="relative w-full rounded-xl border-2 border-emerald/40 shadow-2xl shadow-emerald/30"
+                        loading="eager"
                       />
                       {/* Floating label */}
                       <motion.div 
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2 }}
+                        transition={{ delay: 0.15 }}
                         className="absolute top-2 right-2 md:-top-4 md:-right-4 px-2 py-1 md:px-4 md:py-2 bg-emerald text-background text-[10px] md:text-sm font-bold rounded-full shadow-lg whitespace-nowrap"
                       >
                         {dashboardImages[currentIndex].label}
