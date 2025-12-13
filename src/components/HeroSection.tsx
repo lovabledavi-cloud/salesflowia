@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, MessageSquare, Bot, BarChart3, Zap, ChevronLeft, ChevronRight, DollarSign, TrendingUp, Brain, Sparkles, CircleDollarSign, ShoppingCart } from "lucide-react";
+import { ArrowRight, MessageSquare, Bot, BarChart3, Zap, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect } from "react";
 import dashboardCampaigns from "@/assets/dashboard-campaigns.png";
 import dashboardPipeline from "@/assets/dashboard-pipeline.png";
 import dashboardVendas from "@/assets/dashboard-vendas.png";
@@ -13,40 +13,6 @@ const dashboardImages = [
   { src: dashboardCampaigns, alt: "Disparador de Campanhas - Automação WhatsApp", label: "Campanhas" },
   { src: dashboardFollowup, alt: "Follow-up Automático - Recuperação de vendas", label: "Follow-up" },
 ];
-
-// Floating icons configuration - mobile positions adjusted for better visibility
-const floatingIcons = [
-  { Icon: DollarSign, position: "top-[8%] left-[3%] md:top-[15%] md:left-[10%]", delay: 0, color: "text-emerald", size: "w-4 h-4 md:w-6 md:h-6" },
-  { Icon: Brain, position: "top-[5%] right-[5%] md:top-[10%] md:right-[15%]", delay: 0.3, color: "text-violet", size: "w-4 h-4 md:w-6 md:h-6" },
-  { Icon: TrendingUp, position: "top-[18%] left-[1%] md:top-[35%] md:left-[5%]", delay: 0.6, color: "text-emerald", size: "w-4 h-4 md:w-6 md:h-6" },
-  { Icon: Sparkles, position: "top-[15%] right-[2%] md:top-[25%] md:right-[8%]", delay: 0.9, color: "text-violet", size: "w-4 h-4 md:w-6 md:h-6" },
-  { Icon: CircleDollarSign, position: "top-[28%] left-[2%] md:top-[50%] md:left-[8%]", delay: 0.4, color: "text-emerald", size: "w-4 h-4 md:w-6 md:h-6" },
-  { Icon: ShoppingCart, position: "top-[25%] right-[3%] md:top-[45%] md:right-[10%]", delay: 0.7, color: "text-violet", size: "w-4 h-4 md:w-6 md:h-6" },
-];
-
-// Memoized floating icon component for better performance
-const FloatingIcon = memo(({ Icon, position, delay, color, size }: { Icon: any; position: string; delay: number; color: string; size: string }) => (
-  <motion.div
-    className={`absolute ${position} z-10 will-change-transform`}
-    initial={{ opacity: 0 }}
-    animate={{ 
-      opacity: [0.5, 0.9, 0.5],
-      y: [0, -12, 0],
-    }}
-    transition={{
-      duration: 5,
-      delay,
-      repeat: Infinity,
-      ease: "linear",
-    }}
-  >
-    <div className={`p-2 md:p-3 rounded-lg md:rounded-xl bg-card/60 border border-border/40 backdrop-blur-sm ${color} shadow-lg`}>
-      <Icon className={size} />
-    </div>
-  </motion.div>
-));
-
-FloatingIcon.displayName = "FloatingIcon";
 
 const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -78,10 +44,6 @@ const HeroSection = () => {
       <div className="absolute top-20 left-10 w-72 h-72 bg-violet/20 rounded-full blur-[100px] animate-float" />
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-emerald/10 rounded-full blur-[120px] animate-float" style={{ animationDelay: "1s" }} />
       
-      {/* Floating Icons */}
-      {floatingIcons.map((props, index) => (
-        <FloatingIcon key={index} {...props} />
-      ))}
       
       <div className="container relative z-10">
         <div className="max-w-4xl mx-auto text-center">
