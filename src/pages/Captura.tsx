@@ -9,6 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useToast } from "@/hooks/use-toast";
 import { CheckCircle2, MessageCircle, Sparkles, Users, ArrowRight, Bot } from "lucide-react";
 import Logo from "@/components/Logo";
+import Footer from "@/components/Footer";
 
 const formSchema = z.object({
   name: z.string().trim().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }).max(100),
@@ -259,6 +260,8 @@ const Captura = () => {
           </div>
         </div>
       </div>
+
+      <Footer />
     </main>
   );
 };
