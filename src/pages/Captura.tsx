@@ -116,26 +116,12 @@ const Captura = () => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3 }}
-                className="mb-8 p-4 rounded-xl bg-destructive/10 border border-destructive/20"
+                className="mb-6 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-destructive/10 border border-destructive/20"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-destructive/20 flex items-center justify-center flex-shrink-0">
-                    <AlertTriangle className="w-5 h-5 text-destructive" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-destructive font-semibold">
-                      Vagas Limitadas!
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <span className="text-2xl font-bold text-foreground">7</span>
-                      <span className="text-muted-foreground text-sm">vagas restantes esta semana</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>Próximas demonstrações: Segunda a Sexta, 9h às 18h</span>
-                </div>
+                <AlertTriangle className="w-3.5 h-3.5 text-destructive" />
+                <span className="text-xs text-destructive font-medium">
+                  Apenas <span className="font-bold">7 vagas</span> restantes esta semana
+                </span>
               </motion.div>
 
               {/* Benefits */}
