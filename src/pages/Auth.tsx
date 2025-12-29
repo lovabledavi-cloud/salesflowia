@@ -121,7 +121,7 @@ const Auth = () => {
 
           <div className="bg-card/80 backdrop-blur-sm border border-border rounded-2xl p-6 md:p-8 shadow-2xl">
             {isLogin ? (
-              <Form {...loginForm}>
+              <Form {...loginForm} key="login-form">
                 <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-5">
                   <FormField
                     control={loginForm.control}
@@ -136,7 +136,10 @@ const Auth = () => {
                               type="email"
                               placeholder="seu@email.com"
                               className="pl-10 bg-background/50 border-border/50 focus:border-emerald h-12"
-                              {...field}
+                              value={field.value}
+                              onChange={field.onChange}
+                              onBlur={field.onBlur}
+                              name={field.name}
                             />
                           </div>
                         </FormControl>
@@ -158,7 +161,10 @@ const Auth = () => {
                               type="password"
                               placeholder="••••••••"
                               className="pl-10 bg-background/50 border-border/50 focus:border-emerald h-12"
-                              {...field}
+                              value={field.value}
+                              onChange={field.onChange}
+                              onBlur={field.onBlur}
+                              name={field.name}
                             />
                           </div>
                         </FormControl>
@@ -181,7 +187,7 @@ const Auth = () => {
                 </form>
               </Form>
             ) : (
-              <Form {...signupForm}>
+              <Form {...signupForm} key="signup-form">
                 <form onSubmit={signupForm.handleSubmit(onSignup)} className="space-y-5">
                   <FormField
                     control={signupForm.control}
@@ -195,7 +201,10 @@ const Auth = () => {
                             <Input
                               placeholder="Seu nome"
                               className="pl-10 bg-background/50 border-border/50 focus:border-emerald h-12"
-                              {...field}
+                              value={field.value}
+                              onChange={field.onChange}
+                              onBlur={field.onBlur}
+                              name={field.name}
                             />
                           </div>
                         </FormControl>
@@ -217,7 +226,10 @@ const Auth = () => {
                               type="email"
                               placeholder="seu@email.com"
                               className="pl-10 bg-background/50 border-border/50 focus:border-emerald h-12"
-                              {...field}
+                              value={field.value}
+                              onChange={field.onChange}
+                              onBlur={field.onBlur}
+                              name={field.name}
                             />
                           </div>
                         </FormControl>
@@ -239,7 +251,10 @@ const Auth = () => {
                               type="password"
                               placeholder="••••••••"
                               className="pl-10 bg-background/50 border-border/50 focus:border-emerald h-12"
-                              {...field}
+                              value={field.value}
+                              onChange={field.onChange}
+                              onBlur={field.onBlur}
+                              name={field.name}
                             />
                           </div>
                         </FormControl>
