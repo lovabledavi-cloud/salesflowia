@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { User, Mail, Phone, Calendar, Clock, MessageSquare } from "lucide-react";
+import { User, Mail, Phone, Calendar, Clock, MessageSquare, Trash2 } from "lucide-react";
 import { format, isToday, isPast } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
@@ -20,10 +20,11 @@ interface KanbanCardProps {
   lead: Lead;
   onOpenNotes: (lead: Lead) => void;
   onOpenFollowup: (lead: Lead) => void;
+  onDeleteLead: (lead: Lead) => void;
   isDragging?: boolean;
 }
 
-const KanbanCard = ({ lead, onOpenNotes, onOpenFollowup, isDragging }: KanbanCardProps) => {
+const KanbanCard = ({ lead, onOpenNotes, onOpenFollowup, onDeleteLead, isDragging }: KanbanCardProps) => {
   const formatDate = (dateString: string) => {
     return format(new Date(dateString), "dd/MM", { locale: ptBR });
   };
@@ -129,7 +130,7 @@ const KanbanCard = ({ lead, onOpenNotes, onOpenFollowup, isDragging }: KanbanCar
         <Button
           variant="ghost"
           size="sm"
-          className="h-7 px-2 text-xs ml-auto"
+          className="h-7 px-2 text-xs"
           onClick={(e) => {
             e.stopPropagation();
             onOpenNotes(lead);
@@ -137,6 +138,17 @@ const KanbanCard = ({ lead, onOpenNotes, onOpenFollowup, isDragging }: KanbanCar
         >
           <MessageSquare className="w-3 h-3" />
           {lead.notes && <span className="ml-1 w-1.5 h-1.5 rounded-full bg-emerald" />}
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-7 px-2 text-xs text-muted-foreground hover:text-destructive ml-auto"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDeleteLead(lead);
+          }}
+        >
+          <Trash2 className="w-3 h-3" />
         </Button>
       </div>
     </motion.div>

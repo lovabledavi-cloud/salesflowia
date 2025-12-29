@@ -1,6 +1,6 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Mail, Phone, FileText, Users, Loader2 } from "lucide-react";
+import { Mail, Phone, FileText, Users, Loader2, Trash2 } from "lucide-react";
 import LeadStatusBadge, { LeadStatus } from "./LeadStatusBadge";
 import LeadStatusSelect from "./LeadStatusSelect";
 
@@ -19,6 +19,7 @@ interface LeadTableProps {
   loading: boolean;
   onStatusChange: (leadId: string, status: LeadStatus) => void;
   onOpenNotes: (lead: Lead) => void;
+  onDeleteLead: (lead: Lead) => void;
   updatingLeadId: string | null;
 }
 
@@ -27,6 +28,7 @@ const LeadTable = ({
   loading,
   onStatusChange,
   onOpenNotes,
+  onDeleteLead,
   updatingLeadId,
 }: LeadTableProps) => {
   const formatDate = (dateString: string) => {
@@ -74,6 +76,7 @@ const LeadTable = ({
             <TableHead>Status</TableHead>
             <TableHead>Data</TableHead>
             <TableHead className="w-[80px]">Notas</TableHead>
+            <TableHead className="w-[60px]">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -118,6 +121,16 @@ const LeadTable = ({
                   className={lead.notes ? "text-emerald" : "text-muted-foreground"}
                 >
                   <FileText className="w-4 h-4" />
+                </Button>
+              </TableCell>
+              <TableCell>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onDeleteLead(lead)}
+                  className="text-muted-foreground hover:text-destructive"
+                >
+                  <Trash2 className="w-4 h-4" />
                 </Button>
               </TableCell>
             </TableRow>

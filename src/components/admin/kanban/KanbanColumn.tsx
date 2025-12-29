@@ -19,6 +19,7 @@ interface KanbanColumnProps {
   leads: Lead[];
   onOpenNotes: (lead: Lead) => void;
   onOpenFollowup: (lead: Lead) => void;
+  onDeleteLead: (lead: Lead) => void;
   onDrop: (leadId: string, newStatus: LeadStatus) => void;
 }
 
@@ -50,6 +51,7 @@ const KanbanColumn = ({
   leads,
   onOpenNotes,
   onOpenFollowup,
+  onDeleteLead,
   onDrop,
 }: KanbanColumnProps) => {
   const columnRef = useRef<HTMLDivElement>(null);
@@ -112,6 +114,7 @@ const KanbanColumn = ({
                 lead={lead}
                 onOpenNotes={onOpenNotes}
                 onOpenFollowup={onOpenFollowup}
+                onDeleteLead={onDeleteLead}
               />
             </motion.div>
           ))}
