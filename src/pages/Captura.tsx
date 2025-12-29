@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { CheckCircle2, MessageCircle, Sparkles, Users, ArrowRight, Bot, Clock, AlertTriangle } from "lucide-react";
+import { CheckCircle2, MessageCircle, Sparkles, Users, ArrowRight, Bot, AlertTriangle } from "lucide-react";
 import Logo from "@/components/Logo";
 import Footer from "@/components/Footer";
+import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z.object({
   name: z.string().trim().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }).max(100),
@@ -43,18 +44,32 @@ const Captura = () => {
   const onSubmit = async (data: FormData) => {
     setIsLoading(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    console.log("Form submitted:", data);
-    
-    setIsLoading(false);
-    setIsSubmitted(true);
-    
-    toast({
-      title: "Cadastro realizado!",
-      description: "Em breve entraremos em contato com você.",
-    });
+    try {
+      const { error } = await supabase.from("leads").insert({
+        name: data.name,
+        email: data.email,
+        whatsapp: data.whatsapp,
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      setIsSubmitted(true);
+      toast({
+        title: "Cadastro realizado!",
+        description: "Em breve entraremos em contato com você.",
+      });
+    } catch (error) {
+      console.error("Error submitting lead:", error);
+      toast({
+        title: "Erro ao enviar",
+        description: "Tente novamente em alguns instantes.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const formatWhatsApp = (value: string) => {
