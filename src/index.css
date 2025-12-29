@@ -36,6 +36,16 @@
 
     --radius: 0.75rem;
 
+    /* Sidebar tokens */
+    --sidebar-background: 222 47% 6%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 142 71% 45%;
+    --sidebar-primary-foreground: 222 47% 4%;
+    --sidebar-accent: 217 33% 12%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 142 71% 45%;
+
     /* Custom tokens */
     --emerald: 142 71% 45%;
     --emerald-glow: 142 71% 55%;
@@ -61,6 +71,65 @@
     --shadow-emerald: 0 0 60px hsl(142 71% 45% / 0.3);
     --shadow-violet: 0 0 40px hsl(263 70% 50% / 0.2);
     --shadow-card: 0 25px 50px -12px hsl(0 0% 0% / 0.5);
+  }
+
+  /* Admin Light Theme */
+  [data-admin-theme="light"] {
+    --background: 0 0% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 142 71% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 263 70% 55%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
+
+    --accent: 263 70% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 142 71% 40%;
+
+    /* Sidebar tokens for light */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 142 71% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 142 71% 40%;
+
+    /* Custom tokens for light */
+    --emerald: 142 71% 40%;
+    --emerald-glow: 142 71% 50%;
+    --violet: 263 70% 55%;
+    --violet-glow: 263 70% 65%;
+    --slate-950: 222 47% 11%;
+    --slate-900: 222 47% 15%;
+    --slate-800: 220 13% 91%;
+    --slate-700: 220 9% 70%;
+    --slate-400: 220 9% 46%;
+    --slate-200: 220 14% 96%;
+    --slate-50: 0 0% 98%;
+
+    /* Shadows for light */
+    --shadow-emerald: 0 0 40px hsl(142 71% 40% / 0.2);
+    --shadow-violet: 0 0 30px hsl(263 70% 55% / 0.15);
+    --shadow-card: 0 10px 30px -10px hsl(0 0% 0% / 0.1);
   }
 }
 
