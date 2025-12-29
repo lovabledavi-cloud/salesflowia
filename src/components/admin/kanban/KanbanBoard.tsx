@@ -19,6 +19,7 @@ interface KanbanBoardProps {
   onStatusChange: (leadId: string, newStatus: LeadStatus) => Promise<void>;
   onOpenNotes: (lead: Lead) => void;
   onOpenFollowup: (lead: Lead) => void;
+  onDeleteLead: (lead: Lead) => void;
 }
 
 const statuses: LeadStatus[] = ["novo", "contactado", "convertido", "perdido"];
@@ -28,6 +29,7 @@ const KanbanBoard = ({
   onStatusChange,
   onOpenNotes,
   onOpenFollowup,
+  onDeleteLead,
 }: KanbanBoardProps) => {
   const leadsByStatus = useMemo(() => {
     const grouped: Record<LeadStatus, Lead[]> = {
@@ -73,6 +75,7 @@ const KanbanBoard = ({
           leads={leadsByStatus[status]}
           onOpenNotes={onOpenNotes}
           onOpenFollowup={onOpenFollowup}
+          onDeleteLead={onDeleteLead}
           onDrop={handleDrop}
         />
       ))}
