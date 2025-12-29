@@ -20,6 +20,8 @@ export type Database = {
           email: string
           id: string
           name: string
+          notes: string | null
+          status: Database["public"]["Enums"]["lead_status"]
           whatsapp: string
         }
         Insert: {
@@ -27,6 +29,8 @@ export type Database = {
           email: string
           id?: string
           name: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["lead_status"]
           whatsapp: string
         }
         Update: {
@@ -34,6 +38,8 @@ export type Database = {
           email?: string
           id?: string
           name?: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["lead_status"]
           whatsapp?: string
         }
         Relationships: []
@@ -73,7 +79,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      lead_status: "novo" | "contactado" | "convertido" | "perdido"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -200,6 +206,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      lead_status: ["novo", "contactado", "convertido", "perdido"],
+    },
   },
 } as const
