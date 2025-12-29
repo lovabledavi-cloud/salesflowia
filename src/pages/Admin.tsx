@@ -4,12 +4,14 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Loader2, RefreshCw, Menu } from "lucide-react";
+import { Loader2, RefreshCw, Menu, UserPlus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import LeadStats from "@/components/admin/LeadStats";
 import LeadFilters from "@/components/admin/LeadFilters";
 import LeadTable from "@/components/admin/LeadTable";
 import LeadNotesDialog from "@/components/admin/LeadNotesDialog";
+import NewLeadDialog from "@/components/admin/NewLeadDialog";
+import DeleteLeadDialog from "@/components/admin/DeleteLeadDialog";
 import ExportButton from "@/components/admin/ExportButton";
 import { LeadStatus } from "@/components/admin/LeadStatusBadge";
 import LeadsChart from "@/components/admin/dashboard/LeadsChart";
@@ -67,6 +69,14 @@ const AdminContent = () => {
   // Notes dialog state
   const [notesDialogOpen, setNotesDialogOpen] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+
+  // New lead dialog state
+  const [newLeadDialogOpen, setNewLeadDialogOpen] = useState(false);
+
+  // Delete lead dialog state
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   // Followup dialog state
   const [followupDialogOpen, setFollowupDialogOpen] = useState(false);
@@ -243,6 +253,58 @@ const AdminContent = () => {
     }
   };
 
+  const handleCreateLead = async (data: { name: string; email: string; whatsapp: string; notes?: string }) => {
+    const { error } = await supabase
+      .from("leads")
+      .insert([{ ...data, status: "novo" as LeadStatus }]);
+
+    if (error) {
+      toast({
+        title: "Erro ao cadastrar lead",
+        description: error.message,
+        variant: "destructive",
+      });
+      throw error;
+    } else {
+      toast({
+        title: "Lead cadastrado",
+        description: "O lead foi cadastrado com sucesso.",
+      });
+    }
+  };
+
+  const handleOpenDeleteLead = (lead: Lead) => {
+    setLeadToDelete(lead);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!leadToDelete) return;
+
+    setDeleting(true);
+    const { error } = await supabase
+      .from("leads")
+      .delete()
+      .eq("id", leadToDelete.id);
+
+    if (error) {
+      toast({
+        title: "Erro ao excluir lead",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      setLeads((prev) => prev.filter((lead) => lead.id !== leadToDelete.id));
+      toast({
+        title: "Lead excluído",
+        description: "O lead foi excluído com sucesso.",
+      });
+      setDeleteDialogOpen(false);
+      setLeadToDelete(null);
+    }
+    setDeleting(false);
+  };
+
   const handleSelectLeadById = (leadId: string) => {
     const lead = leads.find((l) => l.id === leadId);
     if (lead) {
@@ -374,6 +436,14 @@ const AdminContent = () => {
 
               {activeView === "table" && (
                 <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => setNewLeadDialogOpen(true)}
+                    className="gap-2"
+                  >
+                    <UserPlus className="w-4 h-4" />
+                    <span className="hidden sm:inline">Novo Lead</span>
+                  </Button>
                   <ExportButton leads={filteredLeads} disabled={loadingLeads} />
                   <Button
                     variant="outline"
@@ -386,6 +456,17 @@ const AdminContent = () => {
                     <span className="hidden sm:inline">Atualizar</span>
                   </Button>
                 </div>
+              )}
+
+              {activeView === "kanban" && (
+                <Button
+                  size="sm"
+                  onClick={() => setNewLeadDialogOpen(true)}
+                  className="gap-2"
+                >
+                  <UserPlus className="w-4 h-4" />
+                  <span className="hidden sm:inline">Novo Lead</span>
+                </Button>
               )}
             </div>
           </header>
@@ -429,6 +510,7 @@ const AdminContent = () => {
                       loading={loadingLeads}
                       onStatusChange={handleStatusChange}
                       onOpenNotes={handleOpenNotes}
+                      onDeleteLead={handleOpenDeleteLead}
                       updatingLeadId={updatingLeadId}
                     />
                   </div>
@@ -442,6 +524,7 @@ const AdminContent = () => {
                   onStatusChange={handleStatusChange}
                   onOpenNotes={handleOpenNotes}
                   onOpenFollowup={handleOpenFollowup}
+                  onDeleteLead={handleOpenDeleteLead}
                 />
               )}
 
@@ -473,6 +556,24 @@ const AdminContent = () => {
             currentFollowupDate={followupLead.next_followup_date}
             currentFollowupNotes={followupLead.followup_notes}
             onSave={handleSaveFollowup}
+          />
+        )}
+
+        {/* New Lead Dialog */}
+        <NewLeadDialog
+          open={newLeadDialogOpen}
+          onOpenChange={setNewLeadDialogOpen}
+          onSave={handleCreateLead}
+        />
+
+        {/* Delete Lead Dialog */}
+        {leadToDelete && (
+          <DeleteLeadDialog
+            open={deleteDialogOpen}
+            onOpenChange={setDeleteDialogOpen}
+            leadName={leadToDelete.name}
+            onConfirm={handleConfirmDelete}
+            deleting={deleting}
           />
         )}
       </div>
