@@ -18,8 +18,11 @@ export type Database = {
         Row: {
           created_at: string
           email: string
+          followup_notes: string | null
           id: string
+          last_contact_date: string | null
           name: string
+          next_followup_date: string | null
           notes: string | null
           status: Database["public"]["Enums"]["lead_status"]
           whatsapp: string
@@ -27,8 +30,11 @@ export type Database = {
         Insert: {
           created_at?: string
           email: string
+          followup_notes?: string | null
           id?: string
+          last_contact_date?: string | null
           name: string
+          next_followup_date?: string | null
           notes?: string | null
           status?: Database["public"]["Enums"]["lead_status"]
           whatsapp: string
@@ -36,8 +42,11 @@ export type Database = {
         Update: {
           created_at?: string
           email?: string
+          followup_notes?: string | null
           id?: string
+          last_contact_date?: string | null
           name?: string
+          next_followup_date?: string | null
           notes?: string | null
           status?: Database["public"]["Enums"]["lead_status"]
           whatsapp?: string
