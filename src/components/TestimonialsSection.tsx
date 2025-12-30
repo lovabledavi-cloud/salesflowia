@@ -98,7 +98,23 @@ const TestimonialsSection = () => {
 
         {/* Second row - scrolls right */}
         <div className="flex animate-scroll-right">
-          {duplicatedTestimonials.reverse().map((testimonial, index) => {})}
+          {[...duplicatedTestimonials].reverse().map((testimonial, index) => (
+            <div key={`row2-${index}`} className="flex-shrink-0 w-[350px] mx-3 p-6 rounded-2xl border border-border bg-card/80 backdrop-blur-sm hover:border-violet/50 transition-colors duration-300">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald to-violet flex items-center justify-center text-background font-bold">
+                  {testimonial.avatar}
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground">{testimonial.name}</p>
+                  <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                </div>
+              </div>
+              <p className="text-foreground/80 leading-relaxed">"{testimonial.text}"</p>
+              <div className="flex gap-1 mt-4">
+                {[...Array(5)].map((_, i) => <span key={i} className="text-yellow-400">★</span>)}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>;
