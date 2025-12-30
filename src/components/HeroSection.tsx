@@ -23,8 +23,12 @@ const dashboardImages = [{
   alt: "Follow-up Automático - Recuperação de vendas",
   label: "Follow-up"
 }];
+const rotatingWords = ["Atende 24h", "Vende Mais", "Recupera Clientes", "Aumenta Lucros"];
+
 const HeroSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [wordIndex, setWordIndex] = useState(0);
+
   const nextSlide = () => {
     setCurrentIndex(prev => (prev + 1) % dashboardImages.length);
   };
@@ -32,10 +36,18 @@ const HeroSection = () => {
     setCurrentIndex(prev => (prev - 1 + dashboardImages.length) % dashboardImages.length);
   };
 
-  // Auto-play
+  // Auto-play carousel
   useEffect(() => {
     const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
+  }, []);
+
+  // Rotating words animation
+  useEffect(() => {
+    const wordInterval = setInterval(() => {
+      setWordIndex(prev => (prev + 1) % rotatingWords.length);
+    }, 2500);
+    return () => clearInterval(wordInterval);
   }, []);
   return <section className="relative min-h-screen flex items-center justify-center overflow-hidden py-20 px-4">
       {/* Background Effects */}
@@ -78,9 +90,24 @@ const HeroSection = () => {
           duration: 0.5,
           delay: 0.1
         }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-6">
-            Transforme seu Depósito em uma{" "}
-            <span className="text-gradient-emerald">Máquina de Vendas</span>{" "}
-            Automática.
+            A IA que{" "}
+            <span className="relative inline-block min-w-[280px] sm:min-w-[350px]">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={wordIndex}
+                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.9 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="absolute left-0 text-gradient-emerald whitespace-nowrap"
+                >
+                  {rotatingWords[wordIndex]}
+                </motion.span>
+              </AnimatePresence>
+              <span className="invisible">{rotatingWords[0]}</span>
+            </span>
+            <br className="hidden sm:block" />
+            para sua Revenda de Gás
           </motion.h1>
 
           {/* Subheadline */}
