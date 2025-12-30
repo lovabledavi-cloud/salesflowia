@@ -21,8 +21,10 @@ import TodayFollowups from "@/components/admin/followup/TodayFollowups";
 import FollowupDialog from "@/components/admin/followup/FollowupDialog";
 import KanbanBoard from "@/components/admin/kanban/KanbanBoard";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import { NotificationPermissionBanner } from "@/components/admin/NotificationPermissionBanner";
 import { useRealtimeLeads } from "@/hooks/useRealtimeLeads";
 import { AdminThemeProvider } from "@/hooks/useAdminTheme";
+import { useFollowupNotifications } from "@/hooks/useFollowupNotifications";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { isToday, isPast, isWithinInterval, startOfDay, endOfDay } from "date-fns";
 
@@ -50,6 +52,7 @@ const AdminContent = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { requestNotificationPermission } = useFollowupNotifications();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loadingLeads, setLoadingLeads] = useState(true);
   const [updatingLeadId, setUpdatingLeadId] = useState<string | null>(null);
@@ -402,6 +405,7 @@ const AdminContent = () => {
 
   return (
     <SidebarProvider>
+      <NotificationPermissionBanner onRequestPermission={requestNotificationPermission} />
       <div className="min-h-screen flex w-full bg-background">
         <AdminSidebar
           onSignOut={handleSignOut}
