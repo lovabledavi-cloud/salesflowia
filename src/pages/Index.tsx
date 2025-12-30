@@ -5,6 +5,8 @@ import SystemFeatures from "@/components/SystemFeatures";
 import BonusSection from "@/components/BonusSection";
 import PriceAnchor from "@/components/PriceAnchor";
 import PricingCard from "@/components/PricingCard";
+import TestimonialsSection from "@/components/TestimonialsSection";
+import FAQSection from "@/components/FAQSection";
 import GuaranteeSection from "@/components/GuaranteeSection";
 import Footer from "@/components/Footer";
 
@@ -31,6 +33,8 @@ const Index = () => {
         <BonusSection />
         <PriceAnchor />
         <PricingCard />
+        <TestimonialsSection />
+        <FAQSection />
         <GuaranteeSection />
         <Footer />
       </div>
