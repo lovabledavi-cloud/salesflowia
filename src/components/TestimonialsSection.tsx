@@ -1,4 +1,7 @@
 import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
+import { useCallback, useEffect, useState } from "react";
 
 const testimonials = [
   {
@@ -51,10 +54,38 @@ const testimonials = [
   }
 ];
 
-// Duplicate for infinite effect
-const duplicatedTestimonials = [...testimonials, ...testimonials];
-
 const TestimonialsSection = () => {
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: "start",
+    slidesToScroll: 1,
+    dragFree: true,
+  });
+
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setCanScrollPrev(emblaApi.canScrollPrev());
+    setCanScrollNext(emblaApi.canScrollNext());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+  }, [emblaApi, onSelect]);
+
   return (
     <section className="py-16 md:py-20 relative overflow-hidden">
       {/* Background */}
@@ -78,39 +109,64 @@ const TestimonialsSection = () => {
         </p>
       </motion.div>
 
-      {/* Infinite scroll container */}
-      <div className="relative">
+      {/* Carousel container */}
+      <div className="relative px-4 md:px-12">
         {/* Gradient fade left */}
-        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-8 md:w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
         {/* Gradient fade right */}
-        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-8 md:w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
-        {/* Single row - scrolls left */}
-        <div className="flex animate-scroll-left-fast">
-          {duplicatedTestimonials.map((testimonial, index) => (
-            <div
-              key={`row1-${index}`}
-              className="flex-shrink-0 w-[280px] md:w-[320px] mx-2 md:mx-3 p-4 md:p-5 rounded-xl border border-border/50 bg-card/60 backdrop-blur-sm hover:border-violet/30 transition-colors duration-300"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-br from-violet to-emerald flex items-center justify-center text-background text-sm font-bold">
-                  {testimonial.avatar}
-                </div>
-                <div>
-                  <p className="font-semibold text-foreground text-sm md:text-base">{testimonial.name}</p>
-                  <p className="text-xs md:text-sm text-muted-foreground">{testimonial.role}</p>
+        {/* Navigation arrows - Desktop only */}
+        <button
+          onClick={scrollPrev}
+          className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-card/80 border border-border/50 text-foreground hover:bg-violet/20 hover:border-violet/30 transition-all duration-200"
+          aria-label="Anterior"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <button
+          onClick={scrollNext}
+          className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 items-center justify-center rounded-full bg-card/80 border border-border/50 text-foreground hover:bg-violet/20 hover:border-violet/30 transition-all duration-200"
+          aria-label="Próximo"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+
+        {/* Embla Carousel */}
+        <div className="overflow-hidden cursor-grab active:cursor-grabbing" ref={emblaRef}>
+          <div className="flex">
+            {testimonials.map((testimonial, index) => (
+              <div
+                key={index}
+                className="flex-shrink-0 w-[85%] sm:w-[45%] md:w-[32%] lg:w-[24%] min-w-0 pl-3 md:pl-4"
+              >
+                <div className="p-4 md:p-5 rounded-xl border border-border/50 bg-card/60 backdrop-blur-sm hover:border-violet/30 transition-colors duration-300 h-full">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-br from-violet to-emerald flex items-center justify-center text-background text-sm font-bold flex-shrink-0">
+                      {testimonial.avatar}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-foreground text-sm md:text-base truncate">{testimonial.name}</p>
+                      <p className="text-xs md:text-sm text-muted-foreground truncate">{testimonial.role}</p>
+                    </div>
+                  </div>
+                  <p className="text-foreground/80 leading-relaxed text-sm">"{testimonial.text}"</p>
+                  {/* Stars */}
+                  <div className="flex gap-0.5 mt-3">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} className="text-yellow-400 text-sm">★</span>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <p className="text-foreground/80 leading-relaxed text-sm">"{testimonial.text}"</p>
-              {/* Stars */}
-              <div className="flex gap-0.5 mt-3">
-                {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400 text-sm">★</span>
-                ))}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+
+        {/* Mobile hint */}
+        <p className="md:hidden text-center text-xs text-muted-foreground mt-4">
+          ← Arraste para ver mais →
+        </p>
       </div>
     </section>
   );
