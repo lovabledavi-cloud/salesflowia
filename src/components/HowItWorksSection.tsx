@@ -88,12 +88,27 @@ const HowItWorksSection = () => {
                   
                   {/* Icon */}
                   <div className="mt-4 mb-6 flex justify-center">
-                    <div className="relative">
+                    <motion.div 
+                      className="relative"
+                      initial={{ scale: 0, rotate: -180 }}
+                      whileInView={{ scale: 1, rotate: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ 
+                        type: "spring", 
+                        stiffness: 200, 
+                        damping: 15,
+                        delay: index * 0.15 + 0.3 
+                      }}
+                    >
                       <div className="absolute inset-0 bg-purple-500/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                      <div className="relative w-14 h-14 bg-purple-500/10 rounded-xl flex items-center justify-center border border-purple-500/20 group-hover:scale-105 transition-transform duration-300">
+                      <motion.div 
+                        className="relative w-14 h-14 bg-purple-500/10 rounded-xl flex items-center justify-center border border-purple-500/20"
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
                         <step.icon className="w-7 h-7 text-purple-400" />
-                      </div>
-                    </div>
+                      </motion.div>
+                    </motion.div>
                   </div>
                   
                   {/* Content */}
