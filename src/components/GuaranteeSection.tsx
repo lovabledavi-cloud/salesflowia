@@ -4,8 +4,12 @@ import { Button } from "@/components/ui/button";
 
 const GuaranteeSection = () => {
   return (
-    <section className="py-20 px-4 relative">
-      <div className="container">
+    <section className="py-20 px-4 relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-grid opacity-10" />
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-violet/10 rounded-full blur-[150px]" />
+      
+      <div className="container relative z-10">
         {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -13,13 +17,15 @@ const GuaranteeSection = () => {
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-emerald/20 text-emerald text-sm font-medium mb-4">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-violet text-violet text-sm font-medium mb-6">
+            <Shield className="w-4 h-4" />
             Risco Zero
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-            Garantia <span className="text-gradient-emerald">Dupla</span>
+          <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight">
+            <span className="text-gradient-white">Garantia </span>
+            <span className="text-gradient-violet">Dupla</span>
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+          <p className="text-muted-foreground max-w-xl mx-auto text-lg">
             Sua segurança é nossa prioridade. Você não tem nada a perder.
           </p>
         </motion.div>
@@ -31,11 +37,11 @@ const GuaranteeSection = () => {
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="relative"
+            className="relative group"
           >
-            <div className="h-full rounded-2xl border border-emerald/30 bg-card p-8 text-center">
-              {/* Shield icon */}
-              <div className="w-20 h-20 rounded-full bg-emerald/20 flex items-center justify-center mx-auto mb-6">
+            <div className="h-full rounded-2xl glass-card border-gradient p-8 text-center hover-lift transition-all duration-300">
+              {/* Icon */}
+              <div className="w-20 h-20 rounded-full bg-emerald/20 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <div className="w-14 h-14 rounded-full bg-emerald/30 flex items-center justify-center">
                   <Clock className="w-7 h-7 text-emerald" />
                 </div>
@@ -48,7 +54,7 @@ const GuaranteeSection = () => {
               </div>
 
               {/* Title */}
-              <h3 className="text-xl font-bold mb-3">7 Dias de Satisfação</h3>
+              <h3 className="text-xl font-bold mb-3 text-foreground">7 Dias de Satisfação</h3>
 
               {/* Description */}
               <p className="text-muted-foreground text-sm leading-relaxed">
@@ -64,11 +70,11 @@ const GuaranteeSection = () => {
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="relative"
+            className="relative group"
           >
-            <div className="h-full rounded-2xl border border-violet/30 bg-card p-8 text-center">
-              {/* Shield icon */}
-              <div className="w-20 h-20 rounded-full bg-violet/20 flex items-center justify-center mx-auto mb-6">
+            <div className="h-full rounded-2xl glass-card border-gradient p-8 text-center hover-lift transition-all duration-300">
+              {/* Icon */}
+              <div className="w-20 h-20 rounded-full bg-violet/20 flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                 <div className="w-14 h-14 rounded-full bg-violet/30 flex items-center justify-center">
                   <TrendingUp className="w-7 h-7 text-violet" />
                 </div>
@@ -81,7 +87,7 @@ const GuaranteeSection = () => {
               </div>
 
               {/* Title */}
-              <h3 className="text-xl font-bold mb-3">90 Dias de Lucro Garantido</h3>
+              <h3 className="text-xl font-bold mb-3 text-foreground">90 Dias de Lucro Garantido</h3>
 
               {/* Description */}
               <p className="text-muted-foreground text-sm leading-relaxed">
@@ -102,7 +108,7 @@ const GuaranteeSection = () => {
         >
           <Button 
             size="lg" 
-            className="h-14 px-8 text-lg font-bold bg-emerald hover:bg-emerald-glow text-background glow-emerald transition-all duration-300 group"
+            className="h-14 px-8 text-lg font-bold bg-violet hover:bg-violet-glow text-foreground glow-violet transition-all duration-300 group"
           >
             Quero Começar Agora com Risco Zero
             <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
