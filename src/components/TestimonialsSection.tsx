@@ -56,27 +56,24 @@ const duplicatedTestimonials = [...testimonials, ...testimonials];
 
 const TestimonialsSection = () => {
   return (
-    <section className="py-16 md:py-24 relative overflow-hidden">
+    <section className="py-16 md:py-20 relative overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-violet/5 to-background" />
-      <div className="absolute inset-0 bg-grid opacity-10" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/30 to-background" />
       
       {/* Section header */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-center mb-10 md:mb-14 px-4 relative z-10"
+        className="text-center mb-8 md:mb-12 px-4 relative z-10"
       >
-        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-violet text-violet text-sm font-medium mb-6">
+        <span className="inline-block px-4 py-1.5 rounded-full bg-violet/20 text-violet text-sm font-medium mb-4">
           Depoimentos Reais
         </span>
-        <h2 className="font-display text-3xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight">
-          <span className="text-gradient-white">O Que Nossos </span>
-          <span className="text-gradient-violet">Clientes</span>
-          <span className="text-gradient-white"> Dizem</span>
+        <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-4">
+          O Que Nossos <span className="text-gradient-violet">Clientes</span> Dizem
         </h2>
-        <p className="text-muted-foreground max-w-xl mx-auto text-lg">
+        <p className="text-muted-foreground max-w-xl mx-auto text-sm md:text-base">
           Donos de depósito como você que já estão lucrando mais
         </p>
       </motion.div>
@@ -84,31 +81,31 @@ const TestimonialsSection = () => {
       {/* Infinite scroll container */}
       <div className="relative">
         {/* Gradient fade left */}
-        <div className="absolute left-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
         {/* Gradient fade right */}
-        <div className="absolute right-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
         {/* Single row - scrolls left */}
         <div className="flex animate-scroll-left-fast">
           {duplicatedTestimonials.map((testimonial, index) => (
             <div
               key={`row1-${index}`}
-              className="flex-shrink-0 w-[300px] md:w-[350px] mx-3 p-5 md:p-6 rounded-2xl glass-card border-gradient hover-lift transition-all duration-300"
+              className="flex-shrink-0 w-[280px] md:w-[320px] mx-2 md:mx-3 p-4 md:p-5 rounded-xl border border-border/50 bg-card/60 backdrop-blur-sm hover:border-violet/30 transition-colors duration-300"
             >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet to-violet-glow flex items-center justify-center text-foreground text-sm font-bold">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-gradient-to-br from-violet to-emerald flex items-center justify-center text-background text-sm font-bold">
                   {testimonial.avatar}
                 </div>
                 <div>
-                  <p className="font-semibold text-foreground">{testimonial.name}</p>
-                  <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                  <p className="font-semibold text-foreground text-sm md:text-base">{testimonial.name}</p>
+                  <p className="text-xs md:text-sm text-muted-foreground">{testimonial.role}</p>
                 </div>
               </div>
-              <p className="text-foreground/80 leading-relaxed">"{testimonial.text}"</p>
+              <p className="text-foreground/80 leading-relaxed text-sm">"{testimonial.text}"</p>
               {/* Stars */}
-              <div className="flex gap-1 mt-4">
+              <div className="flex gap-0.5 mt-3">
                 {[...Array(5)].map((_, i) => (
-                  <span key={i} className="text-yellow-400">★</span>
+                  <span key={i} className="text-yellow-400 text-sm">★</span>
                 ))}
               </div>
             </div>

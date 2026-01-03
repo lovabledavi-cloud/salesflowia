@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,87 +6,71 @@
 
 @layer base {
   :root {
-    /* DataCrazy Dark Theme - Violeta como cor principal */
-    --background: 240 20% 3%;
+    --background: 222 47% 4%;
     --foreground: 210 40% 98%;
 
-    --card: 240 20% 6%;
+    --card: 222 47% 6%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 240 20% 6%;
+    --popover: 222 47% 6%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 263 70% 55%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 142 71% 45%;
+    --primary-foreground: 222 47% 4%;
 
-    --secondary: 142 71% 45%;
-    --secondary-foreground: 240 20% 3%;
+    --secondary: 263 70% 50%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 240 15% 12%;
+    --muted: 217 33% 12%;
     --muted-foreground: 215 20% 65%;
 
-    --accent: 263 70% 55%;
+    --accent: 263 70% 50%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 240 15% 15%;
-    --input: 240 15% 15%;
-    --ring: 263 70% 55%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 142 71% 45%;
 
     --radius: 0.75rem;
 
     /* Sidebar tokens */
-    --sidebar-background: 240 20% 6%;
+    --sidebar-background: 222 47% 6%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 263 70% 55%;
-    --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 240 15% 12%;
+    --sidebar-primary: 142 71% 45%;
+    --sidebar-primary-foreground: 222 47% 4%;
+    --sidebar-accent: 217 33% 12%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 240 15% 15%;
-    --sidebar-ring: 263 70% 55%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 142 71% 45%;
 
-    /* Custom tokens - Violeta como primário */
-    --violet: 263 70% 55%;
-    --violet-glow: 263 70% 65%;
-    --violet-dark: 263 70% 35%;
+    /* Custom tokens */
     --emerald: 142 71% 45%;
     --emerald-glow: 142 71% 55%;
-    --cyan: 190 80% 50%;
-    --cyan-glow: 190 80% 60%;
-    
-    /* Slate scale */
-    --slate-950: 240 20% 3%;
-    --slate-900: 240 20% 6%;
-    --slate-800: 240 15% 12%;
-    --slate-700: 240 12% 20%;
-    --slate-600: 240 10% 30%;
-    --slate-500: 240 8% 40%;
+    --violet: 263 70% 50%;
+    --violet-glow: 263 70% 60%;
+    --slate-950: 222 47% 4%;
+    --slate-900: 222 47% 6%;
+    --slate-800: 217 33% 12%;
+    --slate-700: 215 25% 20%;
     --slate-400: 215 20% 65%;
-    --slate-300: 214 25% 75%;
     --slate-200: 214 32% 91%;
     --slate-50: 210 40% 98%;
 
-    /* DataCrazy Style Gradients */
-    --gradient-hero: radial-gradient(ellipse 80% 50% at 50% -20%, hsl(263 70% 30% / 0.5) 0%, transparent 50%),
-                     radial-gradient(ellipse 60% 40% at 80% 80%, hsl(263 70% 25% / 0.3) 0%, transparent 40%);
-    --gradient-violet: linear-gradient(135deg, hsl(263 70% 55%) 0%, hsl(263 70% 40%) 100%);
-    --gradient-violet-soft: linear-gradient(135deg, hsl(263 70% 55% / 0.2) 0%, hsl(263 70% 40% / 0.05) 100%);
+    /* Gradients */
     --gradient-emerald: linear-gradient(135deg, hsl(142 71% 45%) 0%, hsl(142 71% 35%) 100%);
-    --gradient-dark: linear-gradient(180deg, hsl(240 20% 6%) 0%, hsl(240 20% 3%) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(240 15% 10% / 0.8) 0%, hsl(240 20% 6% / 0.6) 100%);
-    --gradient-glass: linear-gradient(135deg, hsl(263 70% 55% / 0.1) 0%, hsl(263 70% 40% / 0.05) 100%);
-    --gradient-border: linear-gradient(135deg, hsl(263 70% 55% / 0.5) 0%, hsl(263 70% 40% / 0.2) 100%);
+    --gradient-violet: linear-gradient(135deg, hsl(263 70% 50%) 0%, hsl(263 70% 40%) 100%);
+    --gradient-dark: linear-gradient(180deg, hsl(222 47% 6%) 0%, hsl(222 47% 4%) 100%);
     --gradient-bonus: linear-gradient(135deg, hsl(263 70% 15% / 0.5) 0%, hsl(142 71% 15% / 0.3) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(217 33% 12%) 0%, hsl(222 47% 6%) 100%);
+    --gradient-hero: radial-gradient(ellipse at top, hsl(263 70% 20% / 0.3) 0%, transparent 50%);
 
-    /* Enhanced Shadows */
-    --shadow-violet: 0 0 80px hsl(263 70% 55% / 0.4);
-    --shadow-violet-sm: 0 0 40px hsl(263 70% 55% / 0.25);
-    --shadow-violet-lg: 0 0 120px hsl(263 70% 55% / 0.5);
+    /* Shadows */
     --shadow-emerald: 0 0 60px hsl(142 71% 45% / 0.3);
-    --shadow-card: 0 25px 50px -12px hsl(0 0% 0% / 0.6);
-    --shadow-glow: 0 0 0 1px hsl(263 70% 55% / 0.2), 0 0 40px hsl(263 70% 55% / 0.15);
+    --shadow-violet: 0 0 40px hsl(263 70% 50% / 0.2);
+    --shadow-card: 0 25px 50px -12px hsl(0 0% 0% / 0.5);
   }
 
   /* Admin Light Theme */
@@ -101,10 +84,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
 
-    --primary: 263 70% 55%;
+    --primary: 142 71% 40%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 142 71% 45%;
+    --secondary: 263 70% 55%;
     --secondary-foreground: 0 0% 100%;
 
     --muted: 220 14% 96%;
@@ -118,17 +101,17 @@
 
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 263 70% 55%;
+    --ring: 142 71% 40%;
 
     /* Sidebar tokens for light */
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 263 70% 55%;
+    --sidebar-primary: 142 71% 40%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 220 14% 96%;
     --sidebar-accent-foreground: 222 47% 11%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 263 70% 55%;
+    --sidebar-ring: 142 71% 40%;
 
     /* Custom tokens for light */
     --emerald: 142 71% 40%;
@@ -166,90 +149,33 @@
 }
 
 @layer utilities {
-  /* Text Gradients - DataCrazy Style */
-  .text-gradient-violet {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(263 70% 60%) 0%, hsl(263 70% 80%) 50%, hsl(263 70% 60%) 100%);
-  }
-
   .text-gradient-emerald {
     @apply bg-clip-text text-transparent;
     background-image: linear-gradient(135deg, hsl(142 71% 45%) 0%, hsl(142 71% 60%) 100%);
   }
 
-  .text-gradient-white {
+  .text-gradient-violet {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(215 20% 75%) 100%);
-  }
-
-  /* Glow Effects */
-  .glow-violet {
-    box-shadow: 0 0 60px hsl(263 70% 55% / 0.4), 0 0 100px hsl(263 70% 55% / 0.2);
-  }
-
-  .glow-violet-sm {
-    box-shadow: 0 0 30px hsl(263 70% 55% / 0.3);
+    background-image: linear-gradient(135deg, hsl(263 70% 50%) 0%, hsl(263 70% 70%) 100%);
   }
 
   .glow-emerald {
     box-shadow: 0 0 60px hsl(142 71% 45% / 0.4), 0 0 100px hsl(142 71% 45% / 0.2);
   }
 
-  /* Glassmorphism */
-  .glass {
-    @apply bg-card/50 backdrop-blur-xl border border-border/50;
+  .glow-violet {
+    box-shadow: 0 0 40px hsl(263 70% 50% / 0.3);
   }
 
-  .glass-violet {
-    background: linear-gradient(135deg, hsl(263 70% 55% / 0.1) 0%, hsl(263 70% 40% / 0.05) 100%);
-    @apply backdrop-blur-xl border border-violet/20;
-  }
-
-  .glass-card {
-    background: linear-gradient(180deg, hsl(240 15% 10% / 0.6) 0%, hsl(240 20% 6% / 0.4) 100%);
-    @apply backdrop-blur-xl border border-border/30;
-  }
-
-  /* DataCrazy Grid Background */
   .bg-grid {
     background-image: 
-      linear-gradient(hsl(263 70% 55% / 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(263 70% 55% / 0.03) 1px, transparent 1px);
-    background-size: 80px 80px;
+      linear-gradient(hsl(217 33% 17% / 0.3) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(217 33% 17% / 0.3) 1px, transparent 1px);
+    background-size: 60px 60px;
   }
 
-  .bg-grid-dense {
-    background-image: 
-      linear-gradient(hsl(263 70% 55% / 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(263 70% 55% / 0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
-
-  /* Animated Gradient Border */
-  .border-gradient {
-    position: relative;
-  }
-
-  .border-gradient::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, hsl(263 70% 55% / 0.5), hsl(263 70% 40% / 0.2));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-  }
-
-  /* Pulse Glow Animation */
   .pulse-glow {
     animation: pulseGlow 2s ease-in-out infinite;
-  }
-
-  .pulse-glow-violet {
-    animation: pulseGlowViolet 2s ease-in-out infinite;
   }
 
   @keyframes pulseGlow {
@@ -261,32 +187,6 @@
     }
   }
 
-  @keyframes pulseGlowViolet {
-    0%, 100% {
-      box-shadow: 0 0 40px hsl(263 70% 55% / 0.4), 0 0 80px hsl(263 70% 55% / 0.2);
-    }
-    50% {
-      box-shadow: 0 0 60px hsl(263 70% 55% / 0.6), 0 0 120px hsl(263 70% 55% / 0.3);
-    }
-  }
-
-  /* Shimmer Effect */
-  @keyframes shimmer {
-    0% {
-      background-position: -200% 0;
-    }
-    100% {
-      background-position: 200% 0;
-    }
-  }
-
-  .shimmer {
-    background: linear-gradient(90deg, transparent 0%, hsl(263 70% 55% / 0.1) 50%, transparent 100%);
-    background-size: 200% 100%;
-    animation: shimmer 3s ease-in-out infinite;
-  }
-
-  /* Strikethrough */
   .strikethrough {
     position: relative;
   }
@@ -351,52 +251,6 @@
 
   .animate-float {
     animation: float 6s ease-in-out infinite;
-  }
-
-  /* Glow Orb Animation */
-  @keyframes orbFloat {
-    0%, 100% {
-      transform: translate(0, 0) scale(1);
-      opacity: 0.6;
-    }
-    33% {
-      transform: translate(30px, -30px) scale(1.1);
-      opacity: 0.8;
-    }
-    66% {
-      transform: translate(-20px, 20px) scale(0.9);
-      opacity: 0.5;
-    }
-  }
-
-  .animate-orb {
-    animation: orbFloat 8s ease-in-out infinite;
-  }
-
-  /* Hover Effects */
-  .hover-glow-violet {
-    transition: box-shadow 0.3s ease-out;
-  }
-
-  .hover-glow-violet:hover {
-    box-shadow: 0 0 40px hsl(263 70% 55% / 0.3);
-  }
-
-  .hover-scale {
-    transition: transform 0.3s ease-out;
-  }
-
-  .hover-scale:hover {
-    transform: scale(1.02);
-  }
-
-  .hover-lift {
-    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
-  }
-
-  .hover-lift:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 40px -10px hsl(0 0% 0% / 0.4);
   }
 }
 
