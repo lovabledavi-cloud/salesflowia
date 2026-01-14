@@ -151,7 +151,7 @@ const PricingCard = () => {
                   delay: 0.5,
                   type: "spring",
                   stiffness: 200
-                }} className="text-6xl md:text-7xl font-black text-gradient-emerald relative z-10 drop-shadow-[0_0_30px_rgba(16,185,129,0.5)]">5.997</motion.span>
+                }} className="text-6xl md:text-7xl font-black text-gradient-emerald relative z-10 drop-shadow-[0_0_30px_rgba(16,185,129,0.5)]">7.997</motion.span>
                   <motion.span initial={{
                   opacity: 0,
                   x: 10
