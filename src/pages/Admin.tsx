@@ -4,59 +4,50 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Loader2, RefreshCw, Menu, UserPlus } from "lucide-react";
+import { Loader2, RefreshCw, UserPlus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import LeadStats from "@/components/admin/LeadStats";
 import LeadFilters from "@/components/admin/LeadFilters";
 import LeadTable from "@/components/admin/LeadTable";
 import LeadNotesDialog from "@/components/admin/LeadNotesDialog";
 import NewLeadDialog from "@/components/admin/NewLeadDialog";
 import DeleteLeadDialog from "@/components/admin/DeleteLeadDialog";
 import ExportButton from "@/components/admin/ExportButton";
-import { LeadStatus } from "@/components/admin/LeadStatusBadge";
-import LeadsChart from "@/components/admin/dashboard/LeadsChart";
-import ConversionFunnel from "@/components/admin/dashboard/ConversionFunnel";
-import DateRangeFilter from "@/components/admin/dashboard/DateRangeFilter";
 import TodayFollowups from "@/components/admin/followup/TodayFollowups";
 import FollowupDialog from "@/components/admin/followup/FollowupDialog";
 import KanbanBoard from "@/components/admin/kanban/KanbanBoard";
 import AdminSidebar from "@/components/admin/AdminSidebar";
+import AdminHeader from "@/components/admin/layout/AdminHeader";
 import { NotificationPermissionBanner } from "@/components/admin/NotificationPermissionBanner";
 import { useRealtimeLeads } from "@/hooks/useRealtimeLeads";
 import { AdminThemeProvider } from "@/hooks/useAdminTheme";
 import { useFollowupNotifications } from "@/hooks/useFollowupNotifications";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { useTeamMembers } from "@/hooks/useTeamMembers";
+import { useGoals } from "@/hooks/useGoals";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { isToday, isPast, isWithinInterval, startOfDay, endOfDay } from "date-fns";
+import { AdminView, Lead, LeadStatus, DateRange } from "@/types/crm";
 
-interface Lead {
-  id: string;
-  name: string;
-  email: string;
-  whatsapp: string;
-  status: LeadStatus;
-  notes: string | null;
-  created_at: string;
-  next_followup_date: string | null;
-  followup_notes: string | null;
-  last_contact_date: string | null;
-}
-
-type ActiveView = "dashboard" | "table" | "kanban" | "followups";
-
-interface DateRange {
-  from: Date | undefined;
-  to: Date | undefined;
-}
+// Dashboard components
+import DashboardMetrics from "@/components/admin/dashboard/DashboardMetrics";
+import PerformanceChart from "@/components/admin/dashboard/PerformanceChart";
+import ConversionDonut from "@/components/admin/dashboard/ConversionDonut";
+import TeamPerformance from "@/components/admin/dashboard/TeamPerformance";
+import GoalsProgress from "@/components/admin/dashboard/GoalsProgress";
 
 const AdminContent = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { requestNotificationPermission } = useFollowupNotifications();
+  const { profile } = useUserProfile();
+  const { teamMembers } = useTeamMembers();
+  const { getCurrentMonthGoals } = useGoals();
+  
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loadingLeads, setLoadingLeads] = useState(true);
   const [updatingLeadId, setUpdatingLeadId] = useState<string | null>(null);
-  const [activeView, setActiveView] = useState<ActiveView>("dashboard");
+  const [activeView, setActiveView] = useState<AdminView>("dashboard");
 
   // Date range filter for dashboard
   const [dashboardDateRange, setDashboardDateRange] = useState<DateRange>({
@@ -69,21 +60,18 @@ const AdminContent = () => {
   const [statusFilter, setStatusFilter] = useState<LeadStatus | "all">("all");
   const [dateFilter, setDateFilter] = useState<"all" | "today" | "7days" | "30days">("all");
 
-  // Notes dialog state
+  // Dialog states
   const [notesDialogOpen, setNotesDialogOpen] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-
-  // New lead dialog state
   const [newLeadDialogOpen, setNewLeadDialogOpen] = useState(false);
-
-  // Delete lead dialog state
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
   const [deleting, setDeleting] = useState(false);
-
-  // Followup dialog state
   const [followupDialogOpen, setFollowupDialogOpen] = useState(false);
   const [followupLead, setFollowupLead] = useState<Lead | null>(null);
+
+  // Get current month goals
+  const { company: currentMonthGoal } = getCurrentMonthGoals();
 
   // Calculate pending followups count
   const pendingFollowupsCount = useMemo(() => {
@@ -136,14 +124,14 @@ const AdminContent = () => {
     );
   }, []);
 
-  const handleDeleteLead = useCallback((leadId: string) => {
+  const handleDeleteLeadCallback = useCallback((leadId: string) => {
     setLeads((prev) => prev.filter((lead) => lead.id !== leadId));
   }, []);
 
   useRealtimeLeads({
     onNewLead: handleNewLead,
     onUpdateLead: handleUpdateLead,
-    onDeleteLead: handleDeleteLead,
+    onDeleteLead: handleDeleteLeadCallback,
     enabled: !!user,
   });
 
@@ -321,7 +309,7 @@ const AdminContent = () => {
     setDateFilter("all");
   };
 
-  // Filter leads based on search and filters
+  // Filter leads
   const filteredLeads = useMemo(() => {
     return leads.filter((lead) => {
       if (searchQuery) {
@@ -358,7 +346,7 @@ const AdminContent = () => {
     });
   }, [leads, searchQuery, statusFilter, dateFilter]);
 
-  // Filter leads for dashboard based on date range
+  // Filter leads for dashboard
   const dashboardLeads = useMemo(() => {
     if (!dashboardDateRange.from && !dashboardDateRange.to) {
       return leads;
@@ -382,7 +370,6 @@ const AdminContent = () => {
     });
   }, [leads, dashboardDateRange]);
 
-  // Calculate days for chart based on date range
   const chartDays = useMemo(() => {
     if (!dashboardDateRange.from || !dashboardDateRange.to) {
       return 30;
@@ -394,7 +381,7 @@ const AdminContent = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-emerald" />
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
@@ -403,6 +390,34 @@ const AdminContent = () => {
     return null;
   }
 
+  const renderHeaderActions = () => {
+    if (activeView === "leads") {
+      return (
+        <div className="flex items-center gap-2">
+          <Button size="sm" onClick={() => setNewLeadDialogOpen(true)} className="gap-2">
+            <UserPlus className="w-4 h-4" />
+            <span className="hidden sm:inline">Novo Lead</span>
+          </Button>
+          <ExportButton leads={filteredLeads} disabled={loadingLeads} />
+          <Button variant="outline" size="sm" onClick={fetchLeads} disabled={loadingLeads} className="gap-2">
+            <RefreshCw className={`w-4 h-4 ${loadingLeads ? "animate-spin" : ""}`} />
+          </Button>
+        </div>
+      );
+    }
+
+    if (activeView === "kanban" || activeView === "pipeline") {
+      return (
+        <Button size="sm" onClick={() => setNewLeadDialogOpen(true)} className="gap-2">
+          <UserPlus className="w-4 h-4" />
+          <span className="hidden sm:inline">Novo Lead</span>
+        </Button>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <SidebarProvider>
       <NotificationPermissionBanner onRequestPermission={requestNotificationPermission} />
@@ -410,70 +425,20 @@ const AdminContent = () => {
         <AdminSidebar
           onSignOut={handleSignOut}
           userEmail={user.email}
+          userName={profile?.full_name || undefined}
           activeView={activeView}
           onViewChange={setActiveView}
           pendingFollowups={pendingFollowupsCount}
         />
 
         <main className="flex-1 overflow-auto">
-          {/* Header */}
-          <header className="sticky top-0 z-10 py-4 px-4 md:px-8 bg-card/80 backdrop-blur-lg border-b border-border">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <SidebarTrigger className="md:hidden">
-                  <Menu className="w-5 h-5" />
-                </SidebarTrigger>
-                <h1 className="text-xl font-semibold text-foreground">
-                  {activeView === "dashboard" && "Dashboard"}
-                  {activeView === "table" && "Leads"}
-                  {activeView === "kanban" && "Kanban"}
-                  {activeView === "followups" && "Follow-ups"}
-                </h1>
-              </div>
-              
-              {activeView === "dashboard" && (
-                <DateRangeFilter
-                  dateRange={dashboardDateRange}
-                  onDateRangeChange={setDashboardDateRange}
-                />
-              )}
-
-              {activeView === "table" && (
-                <div className="flex items-center gap-2">
-                  <Button
-                    size="sm"
-                    onClick={() => setNewLeadDialogOpen(true)}
-                    className="gap-2"
-                  >
-                    <UserPlus className="w-4 h-4" />
-                    <span className="hidden sm:inline">Novo Lead</span>
-                  </Button>
-                  <ExportButton leads={filteredLeads} disabled={loadingLeads} />
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={fetchLeads}
-                    disabled={loadingLeads}
-                    className="gap-2"
-                  >
-                    <RefreshCw className={`w-4 h-4 ${loadingLeads ? "animate-spin" : ""}`} />
-                    <span className="hidden sm:inline">Atualizar</span>
-                  </Button>
-                </div>
-              )}
-
-              {activeView === "kanban" && (
-                <Button
-                  size="sm"
-                  onClick={() => setNewLeadDialogOpen(true)}
-                  className="gap-2"
-                >
-                  <UserPlus className="w-4 h-4" />
-                  <span className="hidden sm:inline">Novo Lead</span>
-                </Button>
-              )}
-            </div>
-          </header>
+          <AdminHeader
+            activeView={activeView}
+            userName={profile?.full_name || undefined}
+            dateRange={dashboardDateRange}
+            onDateRangeChange={setDashboardDateRange}
+            actions={renderHeaderActions()}
+          />
 
           <div className="p-4 md:p-8">
             <motion.div
@@ -485,16 +450,22 @@ const AdminContent = () => {
               {/* Dashboard View */}
               {activeView === "dashboard" && (
                 <div className="space-y-6">
+                  <DashboardMetrics leads={dashboardLeads} companyGoal={currentMonthGoal} />
+                  
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <LeadsChart leads={dashboardLeads} days={chartDays} />
-                    <ConversionFunnel leads={dashboardLeads} />
+                    <PerformanceChart leads={dashboardLeads} days={chartDays} />
+                    <ConversionDonut leads={dashboardLeads} />
                   </div>
-                  <LeadStats leads={dashboardLeads} />
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <TeamPerformance teamMembers={teamMembers} leads={dashboardLeads} />
+                    <GoalsProgress leads={dashboardLeads} companyGoal={currentMonthGoal} />
+                  </div>
                 </div>
               )}
 
-              {/* Table View */}
-              {activeView === "table" && (
+              {/* Leads Table View */}
+              {activeView === "leads" && (
                 <div className="space-y-4">
                   <LeadFilters
                     searchQuery={searchQuery}
@@ -532,15 +503,47 @@ const AdminContent = () => {
                 />
               )}
 
+              {/* Pipeline View - Same as Kanban for now */}
+              {activeView === "pipeline" && (
+                <KanbanBoard
+                  leads={filteredLeads}
+                  onStatusChange={handleStatusChange}
+                  onOpenNotes={handleOpenNotes}
+                  onOpenFollowup={handleOpenFollowup}
+                  onDeleteLead={handleOpenDeleteLead}
+                />
+              )}
+
               {/* Follow-ups View */}
               {activeView === "followups" && (
                 <TodayFollowups leads={leads} onSelectLead={handleSelectLeadById} />
+              )}
+
+              {/* Team View - Placeholder */}
+              {activeView === "team" && (
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground">Gestão de equipe em breve.</p>
+                </div>
+              )}
+
+              {/* Goals View - Placeholder */}
+              {activeView === "goals" && (
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground">Gestão de metas em breve.</p>
+                </div>
+              )}
+
+              {/* Reports View - Placeholder */}
+              {activeView === "reports" && (
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground">Relatórios em breve.</p>
+                </div>
               )}
             </motion.div>
           </div>
         </main>
 
-        {/* Notes Dialog */}
+        {/* Dialogs */}
         {selectedLead && (
           <LeadNotesDialog
             open={notesDialogOpen}
@@ -551,7 +554,6 @@ const AdminContent = () => {
           />
         )}
 
-        {/* Followup Dialog */}
         {followupLead && (
           <FollowupDialog
             open={followupDialogOpen}
@@ -563,14 +565,12 @@ const AdminContent = () => {
           />
         )}
 
-        {/* New Lead Dialog */}
         <NewLeadDialog
           open={newLeadDialogOpen}
           onOpenChange={setNewLeadDialogOpen}
           onSave={handleCreateLead}
         />
 
-        {/* Delete Lead Dialog */}
         {leadToDelete && (
           <DeleteLeadDialog
             open={deleteDialogOpen}
