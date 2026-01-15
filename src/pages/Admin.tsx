@@ -623,6 +623,8 @@ const AdminContent = () => {
                   onCreateGoal={createGoal}
                   onUpdateGoal={updateGoal}
                   onRefresh={refreshGoals}
+                  currentUserRole={isAdmin ? "admin" : isManager ? "manager" : isSdr ? "sdr" : isCloser ? "closer" : undefined}
+                  currentTeamMemberId={teamMember?.id}
                 />
               )}
 
