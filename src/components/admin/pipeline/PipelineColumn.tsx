@@ -16,6 +16,8 @@ interface PipelineColumnProps {
   onOpenFollowup: (lead: Lead) => void;
   onDeleteLead: (lead: Lead) => void;
   onOpenDetails: (lead: Lead) => void;
+  onAssignLead?: (lead: Lead) => void;
+  canAssign?: boolean;
 }
 
 const PipelineColumn = ({
@@ -31,6 +33,8 @@ const PipelineColumn = ({
   onOpenFollowup,
   onDeleteLead,
   onOpenDetails,
+  onAssignLead,
+  canAssign = false,
 }: PipelineColumnProps) => {
   const [isDragOver, setIsDragOver] = useState(false);
 
@@ -108,6 +112,8 @@ const PipelineColumn = ({
               onOpenFollowup={() => onOpenFollowup(lead)}
               onDelete={() => onDeleteLead(lead)}
               onOpenDetails={() => onOpenDetails(lead)}
+              onAssign={onAssignLead ? () => onAssignLead(lead) : undefined}
+              canAssign={canAssign}
             />
           ))
         )}

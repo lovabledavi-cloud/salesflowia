@@ -1,10 +1,22 @@
 import { useMemo, useState, useCallback } from "react";
 import { motion } from "framer-motion";
+import { Users, Filter } from "lucide-react";
 import { Lead, PipelineStage, PIPELINE_STAGES, TeamMember } from "@/types/crm";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import PipelineColumn from "./PipelineColumn";
 import LostReasonDialog from "./LostReasonDialog";
+import LeadAssignDialog from "./LeadAssignDialog";
 
 interface PipelineBoardProps {
   leads: Lead[];
@@ -13,6 +25,9 @@ interface PipelineBoardProps {
   onOpenFollowup: (lead: Lead) => void;
   onOpenDetails: (lead: Lead) => void;
   onLeadUpdate?: () => void;
+  // Role-based props
+  currentUserRole?: "admin" | "manager" | "sdr" | "closer";
+  currentTeamMemberId?: string | null;
 }
 
 const PipelineBoard = ({
@@ -22,10 +37,62 @@ const PipelineBoard = ({
   onOpenFollowup,
   onOpenDetails,
   onLeadUpdate,
+  currentUserRole,
+  currentTeamMemberId,
 }: PipelineBoardProps) => {
   const { toast } = useToast();
   const [lostDialogOpen, setLostDialogOpen] = useState(false);
   const [pendingMove, setPendingMove] = useState<{ leadId: string; newStage: PipelineStage } | null>(null);
+  const [assignDialogOpen, setAssignDialogOpen] = useState(false);
+  const [leadToAssign, setLeadToAssign] = useState<Lead | null>(null);
+  const [memberFilter, setMemberFilter] = useState<string>("all");
+
+  // Permission checks
+  const isAdminOrManager = currentUserRole === "admin" || currentUserRole === "manager";
+  const canAssignLeads = isAdminOrManager;
+  const canSeeAllLeads = isAdminOrManager;
+
+  // Filter leads based on role and selected filter
+  const filteredLeads = useMemo(() => {
+    let filtered = leads;
+
+    // SDR/Closer can only see their assigned leads
+    if (!canSeeAllLeads && currentTeamMemberId) {
+      filtered = leads.filter((l) => l.assigned_to === currentTeamMemberId);
+    }
+
+    // Apply member filter for admins/managers
+    if (canSeeAllLeads && memberFilter !== "all") {
+      if (memberFilter === "unassigned") {
+        filtered = leads.filter((l) => !l.assigned_to);
+      } else {
+        filtered = leads.filter((l) => l.assigned_to === memberFilter);
+      }
+    }
+
+    return filtered;
+  }, [leads, canSeeAllLeads, currentTeamMemberId, memberFilter]);
+
+  // Get team members with leads count for filter
+  const membersWithCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    leads.forEach((lead) => {
+      if (lead.assigned_to) {
+        counts.set(lead.assigned_to, (counts.get(lead.assigned_to) || 0) + 1);
+      }
+    });
+    
+    return teamMembers
+      .filter((m) => m.is_active && (m.role === "sdr" || m.role === "closer"))
+      .map((m) => ({
+        ...m,
+        leadCount: counts.get(m.id) || 0,
+      }));
+  }, [teamMembers, leads]);
+
+  const unassignedCount = useMemo(() => {
+    return leads.filter((l) => !l.assigned_to).length;
+  }, [leads]);
 
   const leadsByStage = useMemo(() => {
     const grouped: Record<PipelineStage, Lead[]> = {
@@ -38,7 +105,7 @@ const PipelineBoard = ({
       perdido: [],
     };
 
-    leads.forEach((lead) => {
+    filteredLeads.forEach((lead) => {
       const stage = lead.pipeline_stage || "novo";
       if (grouped[stage]) {
         grouped[stage].push(lead);
@@ -55,7 +122,7 @@ const PipelineBoard = ({
     });
 
     return grouped;
-  }, [leads]);
+  }, [filteredLeads]);
 
   const stageTotals = useMemo(() => {
     const totals: Record<PipelineStage, number> = {
@@ -68,13 +135,13 @@ const PipelineBoard = ({
       perdido: 0,
     };
 
-    leads.forEach((lead) => {
+    filteredLeads.forEach((lead) => {
       const stage = lead.pipeline_stage || "novo";
       totals[stage] += lead.value || 0;
     });
 
     return totals;
-  }, [leads]);
+  }, [filteredLeads]);
 
   const handleStageChange = useCallback(async (leadId: string, newStage: PipelineStage, lostReason?: string) => {
     const updateData: Record<string, unknown> = {
@@ -113,7 +180,7 @@ const PipelineBoard = ({
   }, [toast, onLeadUpdate]);
 
   const handleDrop = async (leadId: string, newStage: PipelineStage) => {
-    const lead = leads.find((l) => l.id === leadId);
+    const lead = filteredLeads.find((l) => l.id === leadId);
     if (!lead || lead.pipeline_stage === newStage) return;
 
     if (newStage === "perdido") {
@@ -153,41 +220,158 @@ const PipelineBoard = ({
     }
   }, [toast, onLeadUpdate]);
 
+  const handleOpenAssign = (lead: Lead) => {
+    setLeadToAssign(lead);
+    setAssignDialogOpen(true);
+  };
+
+  const handleAssignLead = async (leadId: string, teamMemberId: string | null) => {
+    const { error } = await supabase
+      .from("leads")
+      .update({ assigned_to: teamMemberId })
+      .eq("id", leadId);
+
+    if (error) {
+      toast({
+        title: "Erro ao atribuir lead",
+        description: error.message,
+        variant: "destructive",
+      });
+      throw error;
+    }
+
+    toast({
+      title: "Lead atribuído",
+      description: teamMemberId 
+        ? "O lead foi atribuído com sucesso." 
+        : "A atribuição foi removida.",
+    });
+    onLeadUpdate?.();
+  };
+
   const getTeamMember = (memberId: string | null) => {
     if (!memberId) return null;
     return teamMembers.find((m) => m.id === memberId) || null;
+  };
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="overflow-x-auto pb-4"
+      className="space-y-4"
     >
-      <div className="flex gap-4 min-w-max">
-        {PIPELINE_STAGES.map((stageConfig, index) => (
-          <PipelineColumn
-            key={stageConfig.stage}
-            stage={stageConfig.stage}
-            label={stageConfig.label}
-            color={stageConfig.color}
-            leads={leadsByStage[stageConfig.stage]}
-            total={stageTotals[stageConfig.stage]}
-            index={index}
-            getTeamMember={getTeamMember}
-            onDrop={handleDrop}
-            onOpenNotes={onOpenNotes}
-            onOpenFollowup={onOpenFollowup}
-            onDeleteLead={handleDeleteLead}
-            onOpenDetails={onOpenDetails}
-          />
-        ))}
+      {/* Filter bar - only for admins/managers */}
+      {canSeeAllLeads && (
+        <div className="flex items-center gap-4 bg-card border border-border rounded-lg p-3">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Filter className="h-4 w-4" />
+            <span>Filtrar por:</span>
+          </div>
+          
+          <Select value={memberFilter} onValueChange={setMemberFilter}>
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Todos os leads" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">
+                <div className="flex items-center gap-2">
+                  <Users className="h-4 w-4" />
+                  <span>Todos os leads</span>
+                  <Badge variant="secondary" className="ml-auto">
+                    {leads.length}
+                  </Badge>
+                </div>
+              </SelectItem>
+              <SelectItem value="unassigned">
+                <div className="flex items-center gap-2">
+                  <span>Não atribuídos</span>
+                  <Badge variant="outline" className="ml-auto">
+                    {unassignedCount}
+                  </Badge>
+                </div>
+              </SelectItem>
+              {membersWithCounts.map((member) => (
+                <SelectItem key={member.id} value={member.id}>
+                  <div className="flex items-center gap-2">
+                    <Avatar className="h-5 w-5">
+                      <AvatarImage src={member.avatar_url || undefined} />
+                      <AvatarFallback className="text-[9px]">
+                        {getInitials(member.name)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="truncate max-w-[100px]">{member.name}</span>
+                    <Badge variant="secondary" className="ml-auto">
+                      {member.leadCount}
+                    </Badge>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {memberFilter !== "all" && (
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => setMemberFilter("all")}
+              className="text-xs"
+            >
+              Limpar filtro
+            </Button>
+          )}
+
+          <div className="ml-auto text-sm text-muted-foreground">
+            {filteredLeads.length} de {leads.length} leads
+          </div>
+        </div>
+      )}
+
+      {/* Pipeline columns */}
+      <div className="overflow-x-auto pb-4">
+        <div className="flex gap-4 min-w-max">
+          {PIPELINE_STAGES.map((stageConfig, index) => (
+            <PipelineColumn
+              key={stageConfig.stage}
+              stage={stageConfig.stage}
+              label={stageConfig.label}
+              color={stageConfig.color}
+              leads={leadsByStage[stageConfig.stage]}
+              total={stageTotals[stageConfig.stage]}
+              index={index}
+              getTeamMember={getTeamMember}
+              onDrop={handleDrop}
+              onOpenNotes={onOpenNotes}
+              onOpenFollowup={onOpenFollowup}
+              onDeleteLead={handleDeleteLead}
+              onOpenDetails={onOpenDetails}
+              onAssignLead={canAssignLeads ? handleOpenAssign : undefined}
+              canAssign={canAssignLeads}
+            />
+          ))}
+        </div>
       </div>
 
       <LostReasonDialog
         open={lostDialogOpen}
         onOpenChange={setLostDialogOpen}
         onConfirm={handleLostConfirm}
+      />
+
+      <LeadAssignDialog
+        open={assignDialogOpen}
+        onOpenChange={setAssignDialogOpen}
+        lead={leadToAssign}
+        teamMembers={teamMembers}
+        onAssign={handleAssignLead}
       />
     </motion.div>
   );

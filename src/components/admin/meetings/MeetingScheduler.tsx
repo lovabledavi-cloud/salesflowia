@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { format, setHours, setMinutes } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { CalendarIcon, Clock, Video, MapPin, Phone, Search } from "lucide-react";
+import { CalendarIcon, Clock, Video, MapPin, Phone, Search, User, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -25,6 +25,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -64,6 +69,7 @@ const MeetingScheduler = ({
 }: MeetingSchedulerProps) => {
   const [selectedLeadId, setSelectedLeadId] = useState<string>("");
   const [leadSearch, setLeadSearch] = useState("");
+  const [leadSelectorOpen, setLeadSelectorOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState<string>("10:00");
   const [type, setType] = useState<"video" | "presencial" | "phone">("video");
@@ -75,14 +81,14 @@ const MeetingScheduler = ({
 
   // Filter leads based on search
   const filteredLeads = useMemo(() => {
-    if (!leadSearch) return leads;
+    if (!leadSearch) return leads.slice(0, 50); // Limit initial display
     const search = leadSearch.toLowerCase();
     return leads.filter(
       (lead) =>
         lead.name.toLowerCase().includes(search) ||
         lead.email.toLowerCase().includes(search) ||
         lead.whatsapp.includes(search)
-    );
+    ).slice(0, 50);
   }, [leads, leadSearch]);
 
   // Get currently selected lead
@@ -98,6 +104,7 @@ const MeetingScheduler = ({
     if (isOpen) {
       setSelectedLeadId(preSelectedLead?.id || "");
       setLeadSearch("");
+      setLeadSelectorOpen(!preSelectedLead);
       setDate(undefined);
       setTime("10:00");
       setType("video");
@@ -105,6 +112,12 @@ const MeetingScheduler = ({
       setAssignedTo("");
     }
     onOpenChange(isOpen);
+  };
+
+  const handleSelectLead = (leadId: string) => {
+    setSelectedLeadId(leadId);
+    setLeadSelectorOpen(false);
+    setLeadSearch("");
   };
 
   const handleSchedule = async () => {
@@ -141,7 +154,7 @@ const MeetingScheduler = ({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-hidden flex flex-col">
+      <DialogContent className="sm:max-w-[500px] max-h-[85vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <CalendarIcon className="h-5 w-5 text-primary" />
@@ -152,118 +165,148 @@ const MeetingScheduler = ({
           </DialogDescription>
         </DialogHeader>
 
-        <ScrollArea className="flex-1 pr-4">
-          <div className="space-y-5 pb-2">
-            {/* Lead Selection */}
+        <ScrollArea className="flex-1 pr-4 -mr-4">
+          <div className="space-y-4 pb-2 pr-4">
+            {/* Lead Selection - Collapsible */}
             <div className="space-y-2">
-              <Label>Selecione o Lead *</Label>
-              <div className="space-y-2">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Buscar por nome, email ou telefone..."
-                    value={leadSearch}
-                    onChange={(e) => setLeadSearch(e.target.value)}
-                    className="pl-9"
-                  />
-                </div>
-                
-                <div className="border rounded-lg max-h-[180px] overflow-y-auto">
-                  {filteredLeads.length === 0 ? (
-                    <div className="p-4 text-center text-sm text-muted-foreground">
-                      {leads.length === 0 
-                        ? "Nenhum lead sem reunião agendada"
-                        : "Nenhum lead encontrado"}
-                    </div>
-                  ) : (
-                    <div className="divide-y divide-border">
-                      {filteredLeads.map((lead) => (
-                        <button
-                          key={lead.id}
-                          type="button"
-                          onClick={() => setSelectedLeadId(lead.id)}
-                          className={cn(
-                            "w-full text-left px-3 py-2 hover:bg-muted/50 transition-colors",
-                            selectedLead?.id === lead.id && "bg-primary/10 border-l-2 border-l-primary"
-                          )}
-                        >
-                          <p className="font-medium text-sm">{lead.name}</p>
-                          <p className="text-xs text-muted-foreground">{lead.email}</p>
-                          {lead.value > 0 && (
-                            <p className="text-xs text-emerald font-medium">
-                              {new Intl.NumberFormat("pt-BR", {
-                                style: "currency",
-                                currency: "BRL",
-                              }).format(lead.value)}
-                            </p>
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Selected Lead Info */}
-            {selectedLead && (
-              <div className="bg-primary/5 border border-primary/20 rounded-lg p-3">
-                <p className="text-xs text-muted-foreground mb-1">Lead selecionado:</p>
-                <p className="font-medium">{selectedLead.name}</p>
-                <p className="text-sm text-muted-foreground">{selectedLead.email}</p>
-              </div>
-            )}
-
-            {/* Date Picker */}
-            <div className="space-y-2">
-              <Label>Data da Reunião *</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "w-full justify-start text-left font-normal",
-                      !date && "text-muted-foreground"
-                    )}
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, "PPP", { locale: ptBR }) : "Selecione a data"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    disabled={(date) => date < new Date()}
-                    initialFocus
-                    className={cn("p-3 pointer-events-auto")}
-                    locale={ptBR}
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            {/* Time Picker */}
-            <div className="space-y-2">
-              <Label>Horário *</Label>
-              <Select value={time} onValueChange={setTime}>
-                <SelectTrigger className="w-full">
-                  <SelectValue>
+              <Label>Lead *</Label>
+              
+              {/* Selected Lead Display */}
+              {selectedLead && !leadSelectorOpen && (
+                <div 
+                  className="bg-primary/5 border border-primary/20 rounded-lg p-3 cursor-pointer hover:bg-primary/10 transition-colors"
+                  onClick={() => setLeadSelectorOpen(true)}
+                >
+                  <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-muted-foreground" />
-                      {time}
+                      <User className="h-4 w-4 text-primary" />
+                      <div>
+                        <p className="font-medium text-sm">{selectedLead.name}</p>
+                        <p className="text-xs text-muted-foreground">{selectedLead.email}</p>
+                      </div>
                     </div>
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  {TIME_SLOTS.map((slot) => (
-                    <SelectItem key={slot} value={slot}>
-                      {slot}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                    <Button variant="ghost" size="sm" className="h-7 text-xs">
+                      Alterar
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Lead Selector - Collapsible */}
+              <Collapsible open={leadSelectorOpen || !selectedLead} onOpenChange={setLeadSelectorOpen}>
+                <CollapsibleContent className="space-y-2">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Buscar por nome, email ou telefone..."
+                      value={leadSearch}
+                      onChange={(e) => setLeadSearch(e.target.value)}
+                      className="pl-9"
+                      autoFocus
+                    />
+                  </div>
+                  
+                  <div className="border rounded-lg overflow-hidden">
+                    <ScrollArea className="h-[140px]">
+                      {filteredLeads.length === 0 ? (
+                        <div className="p-4 text-center text-sm text-muted-foreground">
+                          {leads.length === 0 
+                            ? "Nenhum lead sem reunião agendada"
+                            : "Nenhum lead encontrado"}
+                        </div>
+                      ) : (
+                        <div className="divide-y divide-border">
+                          {filteredLeads.map((lead) => (
+                            <button
+                              key={lead.id}
+                              type="button"
+                              onClick={() => handleSelectLead(lead.id)}
+                              className={cn(
+                                "w-full text-left px-3 py-2 hover:bg-muted/50 transition-colors",
+                                selectedLead?.id === lead.id && "bg-primary/10 border-l-2 border-l-primary"
+                              )}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="min-w-0 flex-1">
+                                  <p className="font-medium text-sm truncate">{lead.name}</p>
+                                  <p className="text-xs text-muted-foreground truncate">{lead.email}</p>
+                                </div>
+                                {lead.value > 0 && (
+                                  <span className="text-xs text-emerald font-medium ml-2 flex-shrink-0">
+                                    {new Intl.NumberFormat("pt-BR", {
+                                      style: "currency",
+                                      currency: "BRL",
+                                      minimumFractionDigits: 0,
+                                    }).format(lead.value)}
+                                  </span>
+                                )}
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </ScrollArea>
+                    {leads.length > 50 && !leadSearch && (
+                      <div className="px-3 py-1.5 bg-muted/30 text-xs text-muted-foreground text-center border-t">
+                        Mostrando 50 de {leads.length} leads. Use a busca para filtrar.
+                      </div>
+                    )}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            </div>
+
+            {/* Date and Time - Side by side */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label>Data *</Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {date ? format(date, "dd/MM/yy", { locale: ptBR }) : "Selecionar"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0 z-50" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={setDate}
+                      disabled={(date) => date < new Date()}
+                      initialFocus
+                      className={cn("p-3 pointer-events-auto")}
+                      locale={ptBR}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Horário *</Label>
+                <Select value={time} onValueChange={setTime}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue>
+                      <div className="flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-muted-foreground" />
+                        {time}
+                      </div>
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent className="z-50">
+                    {TIME_SLOTS.map((slot) => (
+                      <SelectItem key={slot} value={slot}>
+                        {slot}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             {/* Meeting Type */}
@@ -276,22 +319,22 @@ const MeetingScheduler = ({
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="video" id="video" />
-                  <Label htmlFor="video" className="flex items-center gap-2 cursor-pointer">
-                    <Video className="h-4 w-4" />
+                  <Label htmlFor="video" className="flex items-center gap-1.5 cursor-pointer text-sm">
+                    <Video className="h-3.5 w-3.5" />
                     Vídeo
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="phone" id="phone" />
-                  <Label htmlFor="phone" className="flex items-center gap-2 cursor-pointer">
-                    <Phone className="h-4 w-4" />
+                  <Label htmlFor="phone" className="flex items-center gap-1.5 cursor-pointer text-sm">
+                    <Phone className="h-3.5 w-3.5" />
                     Telefone
                   </Label>
                 </div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="presencial" id="presencial" />
-                  <Label htmlFor="presencial" className="flex items-center gap-2 cursor-pointer">
-                    <MapPin className="h-4 w-4" />
+                  <Label htmlFor="presencial" className="flex items-center gap-1.5 cursor-pointer text-sm">
+                    <MapPin className="h-3.5 w-3.5" />
                     Presencial
                   </Label>
                 </div>
@@ -306,7 +349,7 @@ const MeetingScheduler = ({
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione um closer" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="z-50">
                     <SelectItem value="none">Nenhum</SelectItem>
                     {closers.map((closer) => (
                       <SelectItem key={closer.id} value={closer.id}>
@@ -325,13 +368,13 @@ const MeetingScheduler = ({
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Adicione observações sobre a reunião..."
-                className="min-h-[80px]"
+                className="min-h-[70px] resize-none"
               />
             </div>
           </div>
         </ScrollArea>
 
-        <DialogFooter className="mt-4">
+        <DialogFooter className="mt-4 pt-4 border-t">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
