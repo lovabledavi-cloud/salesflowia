@@ -27,10 +27,11 @@ interface TodayFollowupsProps {
 }
 
 const TodayFollowups = ({ leads, onSelectLead, onFollowupStatusChange }: TodayFollowupsProps) => {
-  const { todayFollowups, overdueFollowups, upcomingFollowups, statusCounts } = useMemo(() => {
+  const { todayFollowups, overdueFollowups, upcomingFollowups, completedFollowups, statusCounts } = useMemo(() => {
     const today: Lead[] = [];
     const overdue: Lead[] = [];
     const upcoming: Lead[] = [];
+    const completed: Lead[] = [];
     const counts: Record<FollowupStatus, number> = {
       pendente: 0,
       enviado: 0,
@@ -44,8 +45,11 @@ const TodayFollowups = ({ leads, onSelectLead, onFollowupStatusChange }: TodayFo
       const followupStatus = lead.followup_status || 'pendente';
       counts[followupStatus]++;
 
-      // Skip leads with "concluído" or "respondido" status - they're done
+      // Collect completed/responded leads for history section
       if (followupStatus === 'concluido' || followupStatus === 'respondido') {
+        if (lead.next_followup_date) {
+          completed.push(lead);
+        }
         return;
       }
 
@@ -73,11 +77,15 @@ const TodayFollowups = ({ leads, onSelectLead, onFollowupStatusChange }: TodayFo
     upcoming.sort((a, b) => 
       new Date(a.next_followup_date!).getTime() - new Date(b.next_followup_date!).getTime()
     );
+    completed.sort((a, b) => 
+      new Date(b.next_followup_date!).getTime() - new Date(a.next_followup_date!).getTime()
+    );
 
     return {
       todayFollowups: today,
       overdueFollowups: overdue,
       upcomingFollowups: upcoming,
+      completedFollowups: completed,
       statusCounts: counts,
     };
   }, [leads]);
@@ -155,26 +163,8 @@ const TodayFollowups = ({ leads, onSelectLead, onFollowupStatusChange }: TodayFo
     },
   ];
 
-  if (totalPending === 0 && upcomingFollowups.length === 0) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col items-center justify-center py-20"
-      >
-        <div className="p-4 rounded-full bg-primary/10 mb-4">
-          <CheckCircle2 className="w-12 h-12 text-primary" />
-        </div>
-        <h3 className="text-xl font-semibold text-foreground mb-2">
-          Tudo em dia!
-        </h3>
-        <p className="text-muted-foreground text-center max-w-md">
-          Não há follow-ups pendentes ou agendados para os próximos dias.
-          Continue o ótimo trabalho!
-        </p>
-      </motion.div>
-    );
-  }
+  // Don't show "all done" if there are completed followups to show
+  const hasAnyFollowups = totalPending > 0 || upcomingFollowups.length > 0 || completedFollowups.length > 0;
 
   return (
     <div className="space-y-6">
@@ -328,6 +318,61 @@ const TodayFollowups = ({ leads, onSelectLead, onFollowupStatusChange }: TodayFo
           </Card>
         </motion.div>
       )}
+
+      {/* Completed/Responded Section */}
+      {completedFollowups.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <Card className="border-green-500/30 bg-green-500/5">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-green-500">
+                <CheckCircle2 className="w-5 h-5" />
+                Concluídos / Respondidos ({completedFollowups.length})
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="divide-y divide-border">
+                {completedFollowups.slice(0, 10).map((lead) => (
+                  <CompletedFollowupItem
+                    key={lead.id}
+                    lead={lead as Lead & { next_followup_date: string }}
+                    onSelect={onSelectLead}
+                    onStatusChange={onFollowupStatusChange}
+                  />
+                ))}
+              </div>
+              {completedFollowups.length > 10 && (
+                <p className="text-sm text-muted-foreground text-center py-2">
+                  +{completedFollowups.length - 10} mais concluídos
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+
+      {/* Empty state when no followups at all */}
+      {!hasAnyFollowups && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col items-center justify-center py-20"
+        >
+          <div className="p-4 rounded-full bg-muted mb-4">
+            <Calendar className="w-12 h-12 text-muted-foreground" />
+          </div>
+          <h3 className="text-xl font-semibold text-foreground mb-2">
+            Nenhum Follow-up
+          </h3>
+          <p className="text-muted-foreground text-center max-w-md">
+            Nenhum follow-up foi agendado ainda. Agende follow-ups
+            para seus leads na tela de leads ou pipeline.
+          </p>
+        </motion.div>
+      )}
     </div>
   );
 };
@@ -405,6 +450,63 @@ const FollowupItem = ({ lead, type, onSelect, onStatusChange }: FollowupItemProp
         >
           <Phone className="w-4 h-4" />
         </a>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => onSelect(lead.id)}
+        >
+          Ver
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+// Component for completed/responded follow-ups
+interface CompletedFollowupItemProps {
+  lead: Lead & { next_followup_date: string };
+  onSelect: (leadId: string) => void;
+  onStatusChange?: (leadId: string, status: FollowupStatus) => Promise<void>;
+}
+
+const CompletedFollowupItem = ({ lead, onSelect, onStatusChange }: CompletedFollowupItemProps) => {
+  const currentStatus = lead.followup_status || 'concluido';
+  const statusConfig = FOLLOWUP_STATUS_CONFIG[currentStatus];
+
+  const handleStatusChange = async (newStatus: FollowupStatus) => {
+    if (onStatusChange) {
+      await onStatusChange(lead.id, newStatus);
+    }
+  };
+
+  return (
+    <div className="py-4 flex items-center justify-between gap-4 flex-wrap opacity-75 hover:opacity-100 transition-opacity">
+      <div className="flex items-center gap-3 flex-1 min-w-0">
+        <div className="p-2 rounded-full bg-green-500/10 shrink-0">
+          <CheckCircle2 className="w-4 h-4 text-green-500" />
+        </div>
+        <div className="min-w-0">
+          <p className="font-medium text-foreground truncate">{lead.name}</p>
+          <p className="text-sm text-muted-foreground truncate">{lead.email}</p>
+          {lead.followup_notes && (
+            <p className="text-xs text-muted-foreground mt-1 truncate">
+              "{lead.followup_notes}"
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 shrink-0 flex-wrap">
+        {onStatusChange && (
+          <FollowupStatusSelect
+            status={currentStatus}
+            onStatusChange={handleStatusChange}
+          />
+        )}
+        <Badge variant="outline" className="bg-green-500/10 text-green-500 border-green-500/20">
+          <Calendar className="w-3 h-3 mr-1" />
+          {format(new Date(lead.next_followup_date), "dd/MM", { locale: ptBR })}
+        </Badge>
         <Button
           variant="outline"
           size="sm"

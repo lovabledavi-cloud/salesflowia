@@ -81,7 +81,7 @@ const MeetingScheduler = ({
         date: meetingDate,
         type,
         notes: notes || undefined,
-        assignedTo: assignedTo || undefined,
+        assignedTo: assignedTo && assignedTo !== "none" ? assignedTo : undefined,
       });
 
       // Reset form
@@ -232,7 +232,7 @@ const MeetingScheduler = ({
                     <SelectValue placeholder="Selecione um closer" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Nenhum</SelectItem>
+                    <SelectItem value="none">Nenhum</SelectItem>
                     {closers.map((closer) => (
                       <SelectItem key={closer.id} value={closer.id}>
                         {closer.name}
