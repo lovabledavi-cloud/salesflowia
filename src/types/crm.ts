@@ -119,7 +119,8 @@ export type AdminView =
   | 'meetings'
   | 'team' 
   | 'goals' 
-  | 'reports';
+  | 'reports'
+  | 'settings';
 
 // Pipeline stage config
 export const PIPELINE_STAGES: { stage: PipelineStage; label: string; color: string }[] = [

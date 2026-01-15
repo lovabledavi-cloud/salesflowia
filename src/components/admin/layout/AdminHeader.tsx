@@ -47,6 +47,10 @@ const VIEW_TITLES: Record<AdminView, { title: string; subtitle: string }> = {
     title: "Relatórios",
     subtitle: "Analise o desempenho em detalhes.",
   },
+  settings: {
+    title: "Configurações",
+    subtitle: "Gerencie seu perfil e preferências.",
+  },
 };
 
 const QUICK_FILTERS = [

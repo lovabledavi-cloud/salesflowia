@@ -46,12 +46,19 @@ import LeadDetailDialog from "@/components/admin/lead/LeadDetailDialog";
 // Meetings components
 import MeetingsView from "@/components/admin/meetings/MeetingsView";
 
+// Settings components
+import SettingsView from "@/components/admin/settings/SettingsView";
+
+// Role-based dashboards
+import SDRDashboard from "@/components/admin/dashboard/SDRDashboard";
+import CloserDashboard from "@/components/admin/dashboard/CloserDashboard";
+
 const AdminContent = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { requestNotificationPermission } = useFollowupNotifications();
-  const { profile } = useUserProfile();
+  const { profile, teamMember, isAdmin, isManager, isSdr, isCloser } = useUserProfile();
   const { teamMembers, refreshTeamMembers } = useTeamMembers();
   const { goals, companyGoals, getCurrentMonthGoals, createCompanyGoal, updateCompanyGoal, createGoal, updateGoal, refreshGoals } = useGoals();
   
@@ -467,6 +474,10 @@ const AdminContent = () => {
           activeView={activeView}
           onViewChange={setActiveView}
           pendingFollowups={pendingFollowupsCount}
+          isAdmin={isAdmin}
+          isManager={isManager}
+          isSdr={isSdr}
+          isCloser={isCloser}
         />
 
         <main className="flex-1 overflow-auto">
@@ -485,20 +496,48 @@ const AdminContent = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2 }}
             >
-              {/* Dashboard View */}
+              {/* Dashboard View - Role-based */}
               {activeView === "dashboard" && (
                 <div className="space-y-6">
-                  <DashboardMetricsAdvanced leads={dashboardLeads} companyGoal={currentMonthGoal} teamMembers={teamMembers} />
-                  
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <PerformanceChart leads={dashboardLeads} days={chartDays} />
-                    <ConversionDonut leads={dashboardLeads} />
-                  </div>
+                  {(isAdmin || isManager) && (
+                    <>
+                      <DashboardMetricsAdvanced leads={dashboardLeads} companyGoal={currentMonthGoal} teamMembers={teamMembers} />
+                      
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <PerformanceChart leads={dashboardLeads} days={chartDays} />
+                        <ConversionDonut leads={dashboardLeads} />
+                      </div>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <TeamPerformance teamMembers={teamMembers} leads={dashboardLeads} />
-                    <GoalsProgress leads={dashboardLeads} companyGoal={currentMonthGoal} />
-                  </div>
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <TeamPerformance teamMembers={teamMembers} leads={dashboardLeads} />
+                        <GoalsProgress leads={dashboardLeads} companyGoal={currentMonthGoal} />
+                      </div>
+                    </>
+                  )}
+                  
+                  {isSdr && !isAdmin && !isManager && (
+                    <SDRDashboard
+                      leads={leads.filter(l => l.created_by === teamMember?.id || l.contacted_by === teamMember?.id)}
+                      allLeads={leads}
+                      teamMember={teamMember}
+                      goal={goals.find(g => g.team_member_id === teamMember?.id)}
+                      onOpenFollowup={handleOpenFollowup}
+                      onOpenNotes={handleOpenNotes}
+                    />
+                  )}
+                  
+                  {isCloser && !isAdmin && !isManager && (
+                    <CloserDashboard
+                      leads={leads.filter(l => l.assigned_to === teamMember?.id)}
+                      allLeads={leads}
+                      teamMember={teamMember}
+                      goal={goals.find(g => g.team_member_id === teamMember?.id)}
+                      onOpenDetails={(lead) => {
+                        setDetailLead(lead);
+                        setDetailDialogOpen(true);
+                      }}
+                    />
+                  )}
                 </div>
               )}
 
@@ -593,6 +632,9 @@ const AdminContent = () => {
                   <p className="text-muted-foreground">Relatórios em breve.</p>
                 </div>
               )}
+
+              {/* Settings View */}
+              {activeView === "settings" && <SettingsView />}
             </motion.div>
           </div>
         </main>
