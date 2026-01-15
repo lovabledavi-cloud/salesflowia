@@ -89,7 +89,7 @@ const allMenuGroups: MenuGroup[] = [
         id: "pipeline",
         label: "Pipeline",
         icon: GitBranch,
-        visibleFor: ["admin", "manager", "closer"],
+        visibleFor: ["admin", "manager", "sdr", "closer"],
       },
       {
         id: "leads",
