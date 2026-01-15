@@ -1,4 +1,4 @@
-import { MessageSquare, Calendar, Trash2, Phone, Mail, Clock, Eye } from "lucide-react";
+import { MessageSquare, Calendar, Trash2, Phone, Mail, Clock, Eye, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Lead, TeamMember } from "@/types/crm";
@@ -13,6 +13,8 @@ interface PipelineCardProps {
   onOpenFollowup: () => void;
   onDelete: () => void;
   onOpenDetails: () => void;
+  onAssign?: () => void;
+  canAssign?: boolean;
 }
 
 const PipelineCard = ({
@@ -23,6 +25,8 @@ const PipelineCard = ({
   onOpenFollowup,
   onDelete,
   onOpenDetails,
+  onAssign,
+  canAssign = false,
 }: PipelineCardProps) => {
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("pt-BR", {
@@ -70,14 +74,26 @@ const PipelineCard = ({
             </p>
           )}
         </div>
-        {teamMember && (
-          <Avatar className="h-6 w-6 ml-2 flex-shrink-0">
+        {teamMember ? (
+          <Avatar 
+            className="h-6 w-6 ml-2 flex-shrink-0 cursor-pointer hover:ring-2 ring-primary/50 transition-all" 
+            onClick={canAssign ? onAssign : undefined}
+            title={`Atribuído a: ${teamMember.name}`}
+          >
             <AvatarImage src={teamMember.avatar_url || undefined} />
             <AvatarFallback className="text-[10px] bg-primary/10 text-primary">
               {getInitials(teamMember.name)}
             </AvatarFallback>
           </Avatar>
-        )}
+        ) : canAssign ? (
+          <button
+            onClick={onAssign}
+            className="h-6 w-6 ml-2 flex-shrink-0 rounded-full border-2 border-dashed border-muted-foreground/30 flex items-center justify-center hover:border-primary hover:bg-primary/10 transition-colors"
+            title="Atribuir lead"
+          >
+            <UserPlus className="h-3 w-3 text-muted-foreground" />
+          </button>
+        ) : null}
       </div>
 
       {/* Stage time badge */}

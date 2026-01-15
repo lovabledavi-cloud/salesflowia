@@ -581,6 +581,8 @@ const AdminContent = () => {
                     setDetailLead(lead);
                     setDetailDialogOpen(true);
                   }}
+                  currentUserRole={isAdmin ? "admin" : isManager ? "manager" : isSdr ? "sdr" : isCloser ? "closer" : undefined}
+                  currentTeamMemberId={teamMember?.id}
                 />
               )}
 
