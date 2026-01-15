@@ -30,10 +30,12 @@ const FollowupStatusSelect = ({
   disabled = false,
 }: FollowupStatusSelectProps) => {
   const [updating, setUpdating] = useState(false);
-  const config = FOLLOWUP_STATUS_CONFIG[status];
+  // Ensure we always have a valid status, defaulting to 'pendente'
+  const currentStatus: FollowupStatus = status || 'pendente';
+  const config = FOLLOWUP_STATUS_CONFIG[currentStatus];
 
   const handleChange = async (newStatus: FollowupStatus) => {
-    if (newStatus === status) return;
+    if (newStatus === currentStatus || !newStatus) return;
     setUpdating(true);
     try {
       await onStatusChange(newStatus);
@@ -44,7 +46,7 @@ const FollowupStatusSelect = ({
 
   return (
     <Select
-      value={status}
+      value={currentStatus}
       onValueChange={handleChange}
       disabled={disabled || updating}
     >
@@ -57,7 +59,7 @@ const FollowupStatusSelect = ({
       >
         <SelectValue>
           <span className="flex items-center gap-1.5">
-            {statusIcons[status]}
+            {statusIcons[currentStatus]}
             {config.label}
           </span>
         </SelectValue>
@@ -83,7 +85,7 @@ const FollowupStatusSelect = ({
                     {statusIcons[statusKey]}
                   </span>
                   {statusConfig.label}
-                  {statusKey === status && (
+                  {statusKey === currentStatus && (
                     <Check className="w-3 h-3 ml-auto text-primary" />
                   )}
                 </span>
