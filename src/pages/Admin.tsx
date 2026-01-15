@@ -26,7 +26,7 @@ import { useTeamMembers } from "@/hooks/useTeamMembers";
 import { useGoals } from "@/hooks/useGoals";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { isToday, isPast, isWithinInterval, startOfDay, endOfDay } from "date-fns";
-import { AdminView, Lead, LeadStatus, DateRange } from "@/types/crm";
+import { AdminView, Lead, LeadStatus, DateRange, FollowupStatus } from "@/types/crm";
 
 // Dashboard components
 import DashboardMetrics from "@/components/admin/dashboard/DashboardMetrics";
@@ -251,6 +251,31 @@ const AdminContent = () => {
       toast({
         title: "Follow-up salvo",
         description: date ? "O follow-up foi agendado com sucesso." : "Follow-up removido.",
+      });
+    }
+  };
+
+  const handleFollowupStatusChange = async (leadId: string, newStatus: FollowupStatus) => {
+    const { error } = await supabase
+      .from("leads")
+      .update({ followup_status: newStatus })
+      .eq("id", leadId);
+
+    if (error) {
+      toast({
+        title: "Erro ao atualizar status do follow-up",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      setLeads((prev) =>
+        prev.map((lead) =>
+          lead.id === leadId ? { ...lead, followup_status: newStatus } : lead
+        )
+      );
+      toast({
+        title: "Status atualizado",
+        description: "O status do follow-up foi atualizado.",
       });
     }
   };
@@ -527,7 +552,11 @@ const AdminContent = () => {
 
               {/* Follow-ups View */}
               {activeView === "followups" && (
-                <TodayFollowups leads={leads} onSelectLead={handleSelectLeadById} />
+                <TodayFollowups 
+                  leads={leads} 
+                  onSelectLead={handleSelectLeadById} 
+                  onFollowupStatusChange={handleFollowupStatusChange}
+                />
               )}
 
               {/* Meetings View */}

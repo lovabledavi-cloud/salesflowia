@@ -153,6 +153,7 @@ export type Database = {
           created_at: string
           email: string
           followup_notes: string | null
+          followup_status: Database["public"]["Enums"]["followup_status"] | null
           id: string
           last_contact_date: string | null
           lost_reason: string | null
@@ -178,6 +179,9 @@ export type Database = {
           created_at?: string
           email: string
           followup_notes?: string | null
+          followup_status?:
+            | Database["public"]["Enums"]["followup_status"]
+            | null
           id?: string
           last_contact_date?: string | null
           lost_reason?: string | null
@@ -203,6 +207,9 @@ export type Database = {
           created_at?: string
           email?: string
           followup_notes?: string | null
+          followup_status?:
+            | Database["public"]["Enums"]["followup_status"]
+            | null
           id?: string
           last_contact_date?: string | null
           lost_reason?: string | null
@@ -346,6 +353,12 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "manager" | "sdr" | "closer"
+      followup_status:
+        | "pendente"
+        | "enviado"
+        | "respondido"
+        | "sem_resposta"
+        | "concluido"
       lead_status: "novo" | "contactado" | "convertido" | "perdido"
       pipeline_stage:
         | "novo"
@@ -483,6 +496,13 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "manager", "sdr", "closer"],
+      followup_status: [
+        "pendente",
+        "enviado",
+        "respondido",
+        "sem_resposta",
+        "concluido",
+      ],
       lead_status: ["novo", "contactado", "convertido", "perdido"],
       pipeline_stage: [
         "novo",

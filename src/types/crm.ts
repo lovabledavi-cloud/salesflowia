@@ -13,6 +13,8 @@ export type PipelineStage =
 
 export type LeadStatus = 'novo' | 'contactado' | 'convertido' | 'perdido';
 
+export type FollowupStatus = 'pendente' | 'enviado' | 'respondido' | 'sem_resposta' | 'concluido';
+
 export type ActivityType = 'call' | 'whatsapp' | 'email' | 'meeting' | 'note' | 'status_change';
 
 export interface UserRole {
@@ -87,6 +89,8 @@ export interface Lead {
   meeting_date: string | null;
   meeting_completed: boolean;
   no_show: boolean;
+  // Follow-up tracking
+  followup_status: FollowupStatus;
 }
 
 export interface Activity {
@@ -129,6 +133,15 @@ export const ROLE_CONFIG: Record<AppRole, { label: string; color: string }> = {
   manager: { label: 'Gerente', color: 'bg-blue-500' },
   sdr: { label: 'SDR', color: 'bg-amber-500' },
   closer: { label: 'Closer', color: 'bg-emerald-500' },
+};
+
+// Followup status config
+export const FOLLOWUP_STATUS_CONFIG: Record<FollowupStatus, { label: string; color: string; icon: string }> = {
+  pendente: { label: 'Pendente', color: 'bg-slate-500', icon: 'clock' },
+  enviado: { label: 'Enviado', color: 'bg-blue-500', icon: 'send' },
+  respondido: { label: 'Respondido', color: 'bg-emerald-500', icon: 'message-circle' },
+  sem_resposta: { label: 'Sem Resposta', color: 'bg-amber-500', icon: 'alert-circle' },
+  concluido: { label: 'Concluído', color: 'bg-green-500', icon: 'check-circle' },
 };
 
 // Date range type

@@ -1,11 +1,13 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { Clock, AlertTriangle, Calendar, User, Phone, CheckCircle2, CalendarCheck } from "lucide-react";
+import { Clock, AlertTriangle, Calendar, User, Phone, CheckCircle2, CalendarCheck, Send, MessageCircle, AlertCircle } from "lucide-react";
 import { format, isToday, isPast, isFuture } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FollowupStatus, FOLLOWUP_STATUS_CONFIG } from "@/types/crm";
+import FollowupStatusSelect from "./FollowupStatusSelect";
 
 interface Lead {
   id: string;
@@ -15,20 +17,33 @@ interface Lead {
   status: string;
   next_followup_date: string | null;
   followup_notes?: string | null;
+  followup_status?: FollowupStatus;
 }
 
 interface TodayFollowupsProps {
   leads: Lead[];
   onSelectLead: (leadId: string) => void;
+  onFollowupStatusChange?: (leadId: string, status: FollowupStatus) => Promise<void>;
 }
 
-const TodayFollowups = ({ leads, onSelectLead }: TodayFollowupsProps) => {
-  const { todayFollowups, overdueFollowups, upcomingFollowups } = useMemo(() => {
+const TodayFollowups = ({ leads, onSelectLead, onFollowupStatusChange }: TodayFollowupsProps) => {
+  const { todayFollowups, overdueFollowups, upcomingFollowups, statusCounts } = useMemo(() => {
     const today: Lead[] = [];
     const overdue: Lead[] = [];
     const upcoming: Lead[] = [];
+    const counts: Record<FollowupStatus, number> = {
+      pendente: 0,
+      enviado: 0,
+      respondido: 0,
+      sem_resposta: 0,
+      concluido: 0,
+    };
 
     leads.forEach((lead) => {
+      // Count by status
+      const followupStatus = lead.followup_status || 'pendente';
+      counts[followupStatus]++;
+
       if (!lead.next_followup_date) return;
       
       const followupDate = new Date(lead.next_followup_date);
@@ -58,13 +73,14 @@ const TodayFollowups = ({ leads, onSelectLead }: TodayFollowupsProps) => {
       todayFollowups: today,
       overdueFollowups: overdue,
       upcomingFollowups: upcoming,
+      statusCounts: counts,
     };
   }, [leads]);
 
   const totalPending = todayFollowups.length + overdueFollowups.length;
 
-  // Stats cards
-  const stats = [
+  // Date-based stats
+  const dateStats = [
     {
       label: "Atrasados",
       value: overdueFollowups.length,
@@ -95,6 +111,45 @@ const TodayFollowups = ({ leads, onSelectLead }: TodayFollowupsProps) => {
     },
   ];
 
+  // Status-based stats
+  const statusStats = [
+    {
+      label: "Pendente",
+      value: statusCounts.pendente,
+      icon: Clock,
+      color: "text-slate-400",
+      bgColor: "bg-slate-500/10",
+    },
+    {
+      label: "Enviado",
+      value: statusCounts.enviado,
+      icon: Send,
+      color: "text-blue-400",
+      bgColor: "bg-blue-500/10",
+    },
+    {
+      label: "Respondido",
+      value: statusCounts.respondido,
+      icon: MessageCircle,
+      color: "text-emerald-400",
+      bgColor: "bg-emerald-500/10",
+    },
+    {
+      label: "Sem Resposta",
+      value: statusCounts.sem_resposta,
+      icon: AlertCircle,
+      color: "text-amber-400",
+      bgColor: "bg-amber-500/10",
+    },
+    {
+      label: "Concluído",
+      value: statusCounts.concluido,
+      icon: CheckCircle2,
+      color: "text-green-400",
+      bgColor: "bg-green-500/10",
+    },
+  ];
+
   if (totalPending === 0 && upcomingFollowups.length === 0) {
     return (
       <motion.div
@@ -118,30 +173,62 @@ const TodayFollowups = ({ leads, onSelectLead }: TodayFollowupsProps) => {
 
   return (
     <div className="space-y-6">
-      {/* Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {stats.map((stat, index) => (
-          <motion.div
-            key={stat.label}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-          >
-            <Card className="bg-card border-border">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg ${stat.bgColor}`}>
-                    <stat.icon className={`w-5 h-5 ${stat.color}`} />
+      {/* Date-based Stats Grid */}
+      <div>
+        <h3 className="text-sm font-medium text-muted-foreground mb-3">Por Data</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {dateStats.map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <Card className="bg-card border-border">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-lg ${stat.bgColor}`}>
+                      <stat.icon className={`w-5 h-5 ${stat.color}`} />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+                      <p className="text-xs text-muted-foreground">{stat.label}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-                    <p className="text-xs text-muted-foreground">{stat.label}</p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Status-based Stats Grid */}
+      <div>
+        <h3 className="text-sm font-medium text-muted-foreground mb-3">Por Status</h3>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          {statusStats.map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 + index * 0.1 }}
+            >
+              <Card className="bg-card border-border">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-lg ${stat.bgColor}`}>
+                      <stat.icon className={`w-5 h-5 ${stat.color}`} />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+                      <p className="text-xs text-muted-foreground">{stat.label}</p>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
       {/* Overdue Section */}
@@ -166,6 +253,7 @@ const TodayFollowups = ({ leads, onSelectLead }: TodayFollowupsProps) => {
                     lead={lead}
                     type="overdue"
                     onSelect={onSelectLead}
+                    onStatusChange={onFollowupStatusChange}
                   />
                 ))}
               </div>
@@ -196,6 +284,7 @@ const TodayFollowups = ({ leads, onSelectLead }: TodayFollowupsProps) => {
                     lead={lead}
                     type="today"
                     onSelect={onSelectLead}
+                    onStatusChange={onFollowupStatusChange}
                   />
                 ))}
               </div>
@@ -226,6 +315,7 @@ const TodayFollowups = ({ leads, onSelectLead }: TodayFollowupsProps) => {
                     lead={lead}
                     type="upcoming"
                     onSelect={onSelectLead}
+                    onStatusChange={onFollowupStatusChange}
                   />
                 ))}
               </div>
@@ -241,9 +331,10 @@ interface FollowupItemProps {
   lead: Lead & { next_followup_date: string };
   type: "overdue" | "today" | "upcoming";
   onSelect: (leadId: string) => void;
+  onStatusChange?: (leadId: string, status: FollowupStatus) => Promise<void>;
 }
 
-const FollowupItem = ({ lead, type, onSelect }: FollowupItemProps) => {
+const FollowupItem = ({ lead, type, onSelect, onStatusChange }: FollowupItemProps) => {
   const getTypeStyles = () => {
     switch (type) {
       case "overdue":
@@ -265,9 +356,16 @@ const FollowupItem = ({ lead, type, onSelect }: FollowupItemProps) => {
   };
 
   const styles = getTypeStyles();
+  const currentStatus = lead.followup_status || 'pendente';
+
+  const handleStatusChange = async (newStatus: FollowupStatus) => {
+    if (onStatusChange) {
+      await onStatusChange(lead.id, newStatus);
+    }
+  };
 
   return (
-    <div className="py-4 flex items-center justify-between gap-4">
+    <div className="py-4 flex items-center justify-between gap-4 flex-wrap">
       <div className="flex items-center gap-3 flex-1 min-w-0">
         <div className="p-2 rounded-full bg-muted shrink-0">
           <User className="w-4 h-4 text-muted-foreground" />
@@ -283,7 +381,13 @@ const FollowupItem = ({ lead, type, onSelect }: FollowupItemProps) => {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 shrink-0">
+      <div className="flex items-center gap-2 shrink-0 flex-wrap">
+        {onStatusChange && (
+          <FollowupStatusSelect
+            status={currentStatus}
+            onStatusChange={handleStatusChange}
+          />
+        )}
         <Badge variant="outline" className={styles.badge}>
           <Calendar className="w-3 h-3 mr-1" />
           {styles.label}
