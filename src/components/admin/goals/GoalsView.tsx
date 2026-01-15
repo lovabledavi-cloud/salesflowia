@@ -198,11 +198,10 @@ const GoalsView = ({
     ? teamMembers.filter((m) => (m.role === "manager" || m.role === "admin") && m.is_active)
     : [];
 
-  // Check if user can edit a specific member's goal
+  // Check if user can edit a specific member's goal - ONLY Admin/Manager can edit
   const canEditMemberGoal = (memberId: string) => {
-    if (canEditOtherMemberGoals) return true;
-    // SDR/Closer can only edit their own goals
-    return memberId === currentTeamMemberId;
+    // SDRs and Closers cannot edit any goals (not even their own)
+    return canEditOtherMemberGoals;
   };
 
   const renderMemberGoalCard = (member: TeamMember, index: number) => {

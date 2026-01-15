@@ -56,9 +56,26 @@ const PipelineBoard = ({
   const filteredLeads = useMemo(() => {
     let filtered = leads;
 
-    // SDR/Closer can only see their assigned leads
+    // SDR/Closer can only see leads they work with
     if (!canSeeAllLeads && currentTeamMemberId) {
-      filtered = leads.filter((l) => l.assigned_to === currentTeamMemberId);
+      if (currentUserRole === "sdr") {
+        // SDR sees: leads they created, contacted, scheduled, or are assigned to them
+        filtered = leads.filter((l) => 
+          l.assigned_to === currentTeamMemberId ||
+          l.created_by === currentTeamMemberId ||
+          l.contacted_by === currentTeamMemberId ||
+          l.meeting_scheduled_by === currentTeamMemberId
+        );
+      } else if (currentUserRole === "closer") {
+        // Closer sees: leads assigned to them or that they closed
+        filtered = leads.filter((l) => 
+          l.assigned_to === currentTeamMemberId ||
+          l.closed_by === currentTeamMemberId
+        );
+      } else {
+        // Fallback: only assigned leads
+        filtered = leads.filter((l) => l.assigned_to === currentTeamMemberId);
+      }
     }
 
     // Apply member filter for admins/managers
@@ -71,7 +88,7 @@ const PipelineBoard = ({
     }
 
     return filtered;
-  }, [leads, canSeeAllLeads, currentTeamMemberId, memberFilter]);
+  }, [leads, canSeeAllLeads, currentTeamMemberId, memberFilter, currentUserRole]);
 
   // Get team members with leads count for filter
   const membersWithCounts = useMemo(() => {
