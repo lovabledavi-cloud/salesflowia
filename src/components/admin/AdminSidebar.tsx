@@ -1,7 +1,6 @@
 import {
   LayoutDashboard,
   Users,
-  Kanban,
   CalendarClock,
   LogOut,
   BarChart3,
@@ -71,11 +70,6 @@ const menuGroups = [
         id: "leads" as AdminView,
         label: "Leads",
         icon: Users,
-      },
-      {
-        id: "kanban" as AdminView,
-        label: "Kanban",
-        icon: Kanban,
       },
       {
         id: "meetings" as AdminView,

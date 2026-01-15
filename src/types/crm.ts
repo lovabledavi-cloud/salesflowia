@@ -115,7 +115,6 @@ export type AdminView =
   | 'dashboard' 
   | 'pipeline' 
   | 'leads' 
-  | 'kanban' 
   | 'followups' 
   | 'meetings'
   | 'team' 

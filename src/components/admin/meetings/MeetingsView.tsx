@@ -167,7 +167,8 @@ const MeetingsView = ({
       <MeetingScheduler
         open={schedulerOpen}
         onOpenChange={setSchedulerOpen}
-        lead={leadToSchedule || leadsWithoutMeeting[0] || null}
+        leads={leadsWithoutMeeting}
+        preSelectedLead={leadToSchedule}
         teamMembers={teamMembers}
         onSchedule={handleScheduleMeeting}
       />

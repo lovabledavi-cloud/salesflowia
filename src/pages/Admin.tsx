@@ -14,7 +14,6 @@ import DeleteLeadDialog from "@/components/admin/DeleteLeadDialog";
 import ExportButton from "@/components/admin/ExportButton";
 import TodayFollowups from "@/components/admin/followup/TodayFollowups";
 import FollowupDialog from "@/components/admin/followup/FollowupDialog";
-import KanbanBoard from "@/components/admin/kanban/KanbanBoard";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/layout/AdminHeader";
 import { NotificationPermissionBanner } from "@/components/admin/NotificationPermissionBanner";
@@ -445,7 +444,7 @@ const AdminContent = () => {
       );
     }
 
-    if (activeView === "kanban" || activeView === "pipeline") {
+    if (activeView === "pipeline") {
       return (
         <Button size="sm" onClick={() => setNewLeadDialogOpen(true)} className="gap-2">
           <UserPlus className="w-4 h-4" />
@@ -529,17 +528,6 @@ const AdminContent = () => {
                     />
                   </div>
                 </div>
-              )}
-
-              {/* Kanban View */}
-              {activeView === "kanban" && (
-                <KanbanBoard
-                  leads={filteredLeads}
-                  onStatusChange={handleStatusChange}
-                  onOpenNotes={handleOpenNotes}
-                  onOpenFollowup={handleOpenFollowup}
-                  onDeleteLead={handleOpenDeleteLead}
-                />
               )}
 
               {/* Pipeline View - Advanced 7-stage pipeline */}
