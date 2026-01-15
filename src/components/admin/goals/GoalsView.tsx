@@ -11,10 +11,11 @@ interface GoalsViewProps {
   goals: Goal[];
   teamMembers: TeamMember[];
   leads: Lead[];
-  onUpdateCompanyGoal: (id: string, data: Partial<CompanyGoal>) => Promise<void>;
-  onCreateCompanyGoal: (data: Omit<CompanyGoal, "id" | "created_at" | "updated_at">) => Promise<void>;
-  onUpdateGoal: (id: string, data: Partial<Goal>) => Promise<void>;
-  onCreateGoal: (data: Omit<Goal, "id" | "created_at" | "updated_at">) => Promise<void>;
+  onUpdateCompanyGoal: (id: string, data: Partial<CompanyGoal>) => Promise<boolean | void>;
+  onCreateCompanyGoal: (data: Omit<CompanyGoal, "id" | "created_at" | "updated_at">) => Promise<CompanyGoal | null | void>;
+  onUpdateGoal: (id: string, data: Partial<Goal>) => Promise<boolean | void>;
+  onCreateGoal: (data: Omit<Goal, "id" | "created_at" | "updated_at">) => Promise<Goal | null | void>;
+  onRefresh?: () => Promise<void>;
 }
 
 type GoalType = "company" | "individual";

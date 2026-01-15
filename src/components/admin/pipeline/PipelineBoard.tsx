@@ -1,26 +1,27 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Lead, PipelineStage, PIPELINE_STAGES, TeamMember } from "@/types/crm";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import PipelineColumn from "./PipelineColumn";
 import LostReasonDialog from "./LostReasonDialog";
 
 interface PipelineBoardProps {
   leads: Lead[];
   teamMembers: TeamMember[];
-  onStageChange: (leadId: string, newStage: PipelineStage, lostReason?: string) => Promise<void>;
   onOpenNotes: (lead: Lead) => void;
   onOpenFollowup: (lead: Lead) => void;
-  onDeleteLead: (lead: Lead) => void;
+  onLeadUpdate?: () => void;
 }
 
 const PipelineBoard = ({
   leads,
   teamMembers,
-  onStageChange,
   onOpenNotes,
   onOpenFollowup,
-  onDeleteLead,
+  onLeadUpdate,
 }: PipelineBoardProps) => {
+  const { toast } = useToast();
   const [lostDialogOpen, setLostDialogOpen] = useState(false);
   const [pendingMove, setPendingMove] = useState<{ leadId: string; newStage: PipelineStage } | null>(null);
 
@@ -73,6 +74,42 @@ const PipelineBoard = ({
     return totals;
   }, [leads]);
 
+  const handleStageChange = useCallback(async (leadId: string, newStage: PipelineStage, lostReason?: string) => {
+    const updateData: Record<string, unknown> = {
+      pipeline_stage: newStage,
+      stage_changed_at: new Date().toISOString(),
+    };
+
+    if (newStage === "perdido" && lostReason) {
+      updateData.lost_reason = lostReason;
+      updateData.status = "perdido";
+    }
+
+    if (newStage === "ganho") {
+      updateData.status = "convertido";
+      updateData.closed_at = new Date().toISOString();
+    }
+
+    const { error } = await supabase
+      .from("leads")
+      .update(updateData)
+      .eq("id", leadId);
+
+    if (error) {
+      toast({
+        title: "Erro ao atualizar estágio",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Estágio atualizado",
+        description: "O lead foi movido com sucesso.",
+      });
+      onLeadUpdate?.();
+    }
+  }, [toast, onLeadUpdate]);
+
   const handleDrop = async (leadId: string, newStage: PipelineStage) => {
     const lead = leads.find((l) => l.id === leadId);
     if (!lead || lead.pipeline_stage === newStage) return;
@@ -81,17 +118,38 @@ const PipelineBoard = ({
       setPendingMove({ leadId, newStage });
       setLostDialogOpen(true);
     } else {
-      await onStageChange(leadId, newStage);
+      await handleStageChange(leadId, newStage);
     }
   };
 
   const handleLostConfirm = async (reason: string) => {
     if (pendingMove) {
-      await onStageChange(pendingMove.leadId, pendingMove.newStage, reason);
+      await handleStageChange(pendingMove.leadId, pendingMove.newStage, reason);
       setPendingMove(null);
     }
     setLostDialogOpen(false);
   };
+
+  const handleDeleteLead = useCallback(async (lead: Lead) => {
+    const { error } = await supabase
+      .from("leads")
+      .delete()
+      .eq("id", lead.id);
+
+    if (error) {
+      toast({
+        title: "Erro ao excluir lead",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Lead excluído",
+        description: "O lead foi excluído com sucesso.",
+      });
+      onLeadUpdate?.();
+    }
+  }, [toast, onLeadUpdate]);
 
   const getTeamMember = (memberId: string | null) => {
     if (!memberId) return null;
@@ -118,7 +176,7 @@ const PipelineBoard = ({
             onDrop={handleDrop}
             onOpenNotes={onOpenNotes}
             onOpenFollowup={onOpenFollowup}
-            onDeleteLead={onDeleteLead}
+            onDeleteLead={handleDeleteLead}
           />
         ))}
       </div>
