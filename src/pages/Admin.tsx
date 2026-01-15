@@ -42,6 +42,7 @@ import GoalsView from "@/components/admin/goals/GoalsView";
 
 // Pipeline components
 import PipelineBoard from "@/components/admin/pipeline/PipelineBoard";
+import LeadDetailDialog from "@/components/admin/lead/LeadDetailDialog";
 
 // Meetings components
 import MeetingsView from "@/components/admin/meetings/MeetingsView";
@@ -78,6 +79,8 @@ const AdminContent = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [detailLead, setDetailLead] = useState<Lead | null>(null);
   const [followupDialogOpen, setFollowupDialogOpen] = useState(false);
   const [followupLead, setFollowupLead] = useState<Lead | null>(null);
 
@@ -547,6 +550,10 @@ const AdminContent = () => {
                   onLeadUpdate={fetchLeads}
                   onOpenNotes={handleOpenNotes}
                   onOpenFollowup={handleOpenFollowup}
+                  onOpenDetails={(lead) => {
+                    setDetailLead(lead);
+                    setDetailDialogOpen(true);
+                  }}
                 />
               )}
 
@@ -639,6 +646,25 @@ const AdminContent = () => {
             deleting={deleting}
           />
         )}
+
+        <LeadDetailDialog
+          open={detailDialogOpen}
+          onOpenChange={setDetailDialogOpen}
+          lead={detailLead}
+          teamMembers={teamMembers}
+          onSave={async (leadId, data) => {
+            const { error } = await supabase
+              .from("leads")
+              .update(data)
+              .eq("id", leadId);
+            if (error) {
+              toast({ title: "Erro ao salvar", description: error.message, variant: "destructive" });
+            } else {
+              toast({ title: "Lead atualizado" });
+              fetchLeads();
+            }
+          }}
+        />
       </div>
     </SidebarProvider>
   );

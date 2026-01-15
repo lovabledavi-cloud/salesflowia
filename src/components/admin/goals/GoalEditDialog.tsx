@@ -9,8 +9,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CompanyGoal, Goal } from "@/types/crm";
-import { Users, TrendingUp, Target, DollarSign, Calendar } from "lucide-react";
+import { CompanyGoal, Goal, AppRole } from "@/types/crm";
+import { Users, TrendingUp, Target, DollarSign, Calendar, LucideIcon } from "lucide-react";
 
 interface GoalEditDialogProps {
   open: boolean;
@@ -18,7 +18,19 @@ interface GoalEditDialogProps {
   goal: CompanyGoal | Goal | null;
   type: "company" | "individual";
   memberName?: string;
+  memberRole?: AppRole;
   onSave: (data: Partial<CompanyGoal | Goal>) => Promise<void>;
+}
+
+interface GoalField {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  iconColor: string;
+  value: number;
+  onChange: (value: number) => void;
+  isCurrency?: boolean;
+  roles?: AppRole[]; // Which roles should see this field
 }
 
 const GoalEditDialog = ({
@@ -27,6 +39,7 @@ const GoalEditDialog = ({
   goal,
   type,
   memberName,
+  memberRole,
   onSave,
 }: GoalEditDialogProps) => {
   const [leadsGoal, setLeadsGoal] = useState(0);
@@ -73,7 +86,11 @@ const GoalEditDialog = ({
     year: "numeric",
   });
 
-  const goalFields = [
+  // Define fields with role visibility
+  // SDR: leads, contacts, meetings (agendadas)
+  // Closer: conversions, revenue, meetings (realizadas)
+  // Manager/Admin/Company: all
+  const allGoalFields: GoalField[] = [
     {
       id: "leads",
       label: "Meta de Leads",
@@ -81,6 +98,7 @@ const GoalEditDialog = ({
       iconColor: "text-blue-500",
       value: leadsGoal,
       onChange: setLeadsGoal,
+      roles: ["sdr", "manager", "admin"],
     },
     {
       id: "contacts",
@@ -89,6 +107,16 @@ const GoalEditDialog = ({
       iconColor: "text-violet",
       value: contactsGoal,
       onChange: setContactsGoal,
+      roles: ["sdr", "manager", "admin"],
+    },
+    {
+      id: "meetings",
+      label: type === "company" ? "Meta de Reuniões" : memberRole === "sdr" ? "Meta de Reuniões Agendadas" : "Meta de Reuniões Realizadas",
+      icon: Calendar,
+      iconColor: "text-amber-500",
+      value: meetingsGoal,
+      onChange: setMeetingsGoal,
+      roles: ["sdr", "closer", "manager", "admin"],
     },
     {
       id: "conversions",
@@ -97,14 +125,7 @@ const GoalEditDialog = ({
       iconColor: "text-emerald",
       value: conversionsGoal,
       onChange: setConversionsGoal,
-    },
-    {
-      id: "meetings",
-      label: "Meta de Reuniões",
-      icon: Calendar,
-      iconColor: "text-amber-500",
-      value: meetingsGoal,
-      onChange: setMeetingsGoal,
+      roles: ["closer", "manager", "admin"],
     },
     {
       id: "revenue",
@@ -114,8 +135,14 @@ const GoalEditDialog = ({
       value: revenueGoal,
       onChange: setRevenueGoal,
       isCurrency: true,
+      roles: ["closer", "manager", "admin"],
     },
   ];
+
+  // Filter fields based on type and role
+  const goalFields = type === "company" 
+    ? allGoalFields 
+    : allGoalFields.filter(field => !field.roles || field.roles.includes(memberRole || "admin"));
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

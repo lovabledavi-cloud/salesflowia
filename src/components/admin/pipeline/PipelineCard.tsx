@@ -1,4 +1,4 @@
-import { MessageSquare, Calendar, Trash2, Phone, Mail, Clock } from "lucide-react";
+import { MessageSquare, Calendar, Trash2, Phone, Mail, Clock, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Lead, TeamMember } from "@/types/crm";
@@ -12,6 +12,7 @@ interface PipelineCardProps {
   onOpenNotes: () => void;
   onOpenFollowup: () => void;
   onDelete: () => void;
+  onOpenDetails: () => void;
 }
 
 const PipelineCard = ({
@@ -21,6 +22,7 @@ const PipelineCard = ({
   onOpenNotes,
   onOpenFollowup,
   onDelete,
+  onOpenDetails,
 }: PipelineCardProps) => {
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("pt-BR", {
@@ -91,6 +93,15 @@ const PipelineCard = ({
 
       {/* Quick Actions */}
       <div className="flex items-center gap-1 pt-2 border-t border-border opacity-0 group-hover:opacity-100 transition-opacity">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-7 w-7"
+          onClick={onOpenDetails}
+          title="Ver detalhes"
+        >
+          <Eye className="h-3.5 w-3.5 text-primary" />
+        </Button>
         <Button
           variant="ghost"
           size="icon"

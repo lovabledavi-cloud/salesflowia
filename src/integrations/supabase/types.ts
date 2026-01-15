@@ -150,8 +150,12 @@ export type Database = {
           assigned_to: string | null
           closed_at: string | null
           closed_by: string | null
+          contacted_at: string | null
+          contacted_by: string | null
           created_at: string
+          created_by: string | null
           email: string
+          followup_by: string | null
           followup_notes: string | null
           followup_status: Database["public"]["Enums"]["followup_status"] | null
           id: string
@@ -160,6 +164,7 @@ export type Database = {
           meeting_completed: boolean | null
           meeting_date: string | null
           meeting_scheduled: boolean | null
+          meeting_scheduled_by: string | null
           name: string
           next_followup_date: string | null
           no_show: boolean | null
@@ -176,8 +181,12 @@ export type Database = {
           assigned_to?: string | null
           closed_at?: string | null
           closed_by?: string | null
+          contacted_at?: string | null
+          contacted_by?: string | null
           created_at?: string
+          created_by?: string | null
           email: string
+          followup_by?: string | null
           followup_notes?: string | null
           followup_status?:
             | Database["public"]["Enums"]["followup_status"]
@@ -188,6 +197,7 @@ export type Database = {
           meeting_completed?: boolean | null
           meeting_date?: string | null
           meeting_scheduled?: boolean | null
+          meeting_scheduled_by?: string | null
           name: string
           next_followup_date?: string | null
           no_show?: boolean | null
@@ -204,8 +214,12 @@ export type Database = {
           assigned_to?: string | null
           closed_at?: string | null
           closed_by?: string | null
+          contacted_at?: string | null
+          contacted_by?: string | null
           created_at?: string
+          created_by?: string | null
           email?: string
+          followup_by?: string | null
           followup_notes?: string | null
           followup_status?:
             | Database["public"]["Enums"]["followup_status"]
@@ -216,6 +230,7 @@ export type Database = {
           meeting_completed?: boolean | null
           meeting_date?: string | null
           meeting_scheduled?: boolean | null
+          meeting_scheduled_by?: string | null
           name?: string
           next_followup_date?: string | null
           no_show?: boolean | null
@@ -239,6 +254,34 @@ export type Database = {
           {
             foreignKeyName: "leads_closed_by_fkey"
             columns: ["closed_by"]
+            isOneToOne: false
+            referencedRelation: "team_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_contacted_by_fkey"
+            columns: ["contacted_by"]
+            isOneToOne: false
+            referencedRelation: "team_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "team_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_followup_by_fkey"
+            columns: ["followup_by"]
+            isOneToOne: false
+            referencedRelation: "team_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leads_meeting_scheduled_by_fkey"
+            columns: ["meeting_scheduled_by"]
             isOneToOne: false
             referencedRelation: "team_members"
             referencedColumns: ["id"]

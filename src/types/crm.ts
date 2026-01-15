@@ -91,6 +91,12 @@ export interface Lead {
   no_show: boolean;
   // Follow-up tracking
   followup_status: FollowupStatus;
+  // Action tracking - who did what
+  created_by: string | null;
+  contacted_by: string | null;
+  contacted_at: string | null;
+  meeting_scheduled_by: string | null;
+  followup_by: string | null;
 }
 
 export interface Activity {
