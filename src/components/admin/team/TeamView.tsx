@@ -3,24 +3,19 @@ import { motion } from "framer-motion";
 import { Plus, Users, UserCheck, Phone, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TeamMember, Lead, AppRole, ROLE_CONFIG } from "@/types/crm";
+import { useTeamMembers } from "@/hooks/useTeamMembers";
 import TeamMemberCard from "./TeamMemberCard";
 import TeamMemberDialog from "./TeamMemberDialog";
 
 interface TeamViewProps {
-  teamMembers: TeamMember[];
   leads: Lead[];
-  onCreateMember: (data: Omit<TeamMember, "id" | "created_at" | "updated_at">) => Promise<void>;
-  onUpdateMember: (id: string, data: Partial<TeamMember>) => Promise<void>;
-  onDeleteMember: (id: string) => Promise<void>;
+  onRefresh?: () => Promise<void>;
 }
 
 const TeamView = ({
-  teamMembers,
   leads,
-  onCreateMember,
-  onUpdateMember,
-  onDeleteMember,
 }: TeamViewProps) => {
+  const { teamMembers, createTeamMember, updateTeamMember, deleteTeamMember } = useTeamMembers();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingMember, setEditingMember] = useState<TeamMember | null>(null);
 
@@ -67,12 +62,16 @@ const TeamView = ({
 
   const handleSave = async (data: Omit<TeamMember, "id" | "created_at" | "updated_at">) => {
     if (editingMember) {
-      await onUpdateMember(editingMember.id, data);
+      await updateTeamMember(editingMember.id, data);
     } else {
-      await onCreateMember(data);
+      await createTeamMember(data);
     }
     setDialogOpen(false);
     setEditingMember(null);
+  };
+
+  const handleDelete = async (memberId: string) => {
+    await deleteTeamMember(memberId);
   };
 
   const groupedMembers = useMemo(() => {
@@ -136,8 +135,8 @@ const TeamView = ({
           className="bg-card border border-border rounded-xl p-4"
         >
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-emerald/10">
-              <Target className="h-5 w-5 text-emerald" />
+            <div className="p-2 rounded-lg bg-emerald-500/10">
+              <Target className="h-5 w-5 text-emerald-500" />
             </div>
             <div>
               <p className="text-2xl font-bold">{stats.closers}</p>
@@ -196,7 +195,7 @@ const TeamView = ({
                   metrics={getMemberMetrics(member.id)}
                   index={index}
                   onEdit={() => handleOpenEdit(member)}
-                  onDelete={() => onDeleteMember(member.id)}
+                  onDelete={() => handleDelete(member.id)}
                 />
               ))}
             </div>

@@ -30,10 +30,18 @@ import { AdminView, Lead, LeadStatus, DateRange } from "@/types/crm";
 
 // Dashboard components
 import DashboardMetrics from "@/components/admin/dashboard/DashboardMetrics";
+import DashboardMetricsAdvanced from "@/components/admin/dashboard/DashboardMetricsAdvanced";
 import PerformanceChart from "@/components/admin/dashboard/PerformanceChart";
 import ConversionDonut from "@/components/admin/dashboard/ConversionDonut";
 import TeamPerformance from "@/components/admin/dashboard/TeamPerformance";
 import GoalsProgress from "@/components/admin/dashboard/GoalsProgress";
+
+// Team & Goals components
+import TeamView from "@/components/admin/team/TeamView";
+import GoalsView from "@/components/admin/goals/GoalsView";
+
+// Pipeline components
+import PipelineBoard from "@/components/admin/pipeline/PipelineBoard";
 
 const AdminContent = () => {
   const { user, loading, signOut } = useAuth();
@@ -41,8 +49,8 @@ const AdminContent = () => {
   const { toast } = useToast();
   const { requestNotificationPermission } = useFollowupNotifications();
   const { profile } = useUserProfile();
-  const { teamMembers } = useTeamMembers();
-  const { getCurrentMonthGoals } = useGoals();
+  const { teamMembers, refreshTeamMembers } = useTeamMembers();
+  const { goals, companyGoals, getCurrentMonthGoals, createCompanyGoal, updateCompanyGoal, createGoal, updateGoal, refreshGoals } = useGoals();
   
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loadingLeads, setLoadingLeads] = useState(true);
@@ -450,7 +458,7 @@ const AdminContent = () => {
               {/* Dashboard View */}
               {activeView === "dashboard" && (
                 <div className="space-y-6">
-                  <DashboardMetrics leads={dashboardLeads} companyGoal={currentMonthGoal} />
+                  <DashboardMetricsAdvanced leads={dashboardLeads} companyGoal={currentMonthGoal} teamMembers={teamMembers} />
                   
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <PerformanceChart leads={dashboardLeads} days={chartDays} />
@@ -503,14 +511,14 @@ const AdminContent = () => {
                 />
               )}
 
-              {/* Pipeline View - Same as Kanban for now */}
+              {/* Pipeline View - Advanced 7-stage pipeline */}
               {activeView === "pipeline" && (
-                <KanbanBoard
-                  leads={filteredLeads}
-                  onStatusChange={handleStatusChange}
+                <PipelineBoard
+                  leads={leads}
+                  teamMembers={teamMembers}
+                  onLeadUpdate={fetchLeads}
                   onOpenNotes={handleOpenNotes}
                   onOpenFollowup={handleOpenFollowup}
-                  onDeleteLead={handleOpenDeleteLead}
                 />
               )}
 
@@ -519,18 +527,27 @@ const AdminContent = () => {
                 <TodayFollowups leads={leads} onSelectLead={handleSelectLeadById} />
               )}
 
-              {/* Team View - Placeholder */}
+              {/* Team View */}
               {activeView === "team" && (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground">Gestão de equipe em breve.</p>
-                </div>
+                <TeamView
+                  leads={leads}
+                  onRefresh={refreshTeamMembers}
+                />
               )}
 
-              {/* Goals View - Placeholder */}
+              {/* Goals View */}
               {activeView === "goals" && (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground">Gestão de metas em breve.</p>
-                </div>
+                <GoalsView
+                  teamMembers={teamMembers}
+                  leads={leads}
+                  goals={goals}
+                  companyGoals={companyGoals}
+                  onCreateCompanyGoal={createCompanyGoal}
+                  onUpdateCompanyGoal={updateCompanyGoal}
+                  onCreateGoal={createGoal}
+                  onUpdateGoal={updateGoal}
+                  onRefresh={refreshGoals}
+                />
               )}
 
               {/* Reports View - Placeholder */}
