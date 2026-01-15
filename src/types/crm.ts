@@ -107,6 +107,7 @@ export type AdminView =
   | 'leads' 
   | 'kanban' 
   | 'followups' 
+  | 'meetings'
   | 'team' 
   | 'goals' 
   | 'reports';
