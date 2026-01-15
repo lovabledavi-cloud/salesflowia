@@ -44,6 +44,11 @@ const TodayFollowups = ({ leads, onSelectLead, onFollowupStatusChange }: TodayFo
       const followupStatus = lead.followup_status || 'pendente';
       counts[followupStatus]++;
 
+      // Skip leads with "concluído" or "respondido" status - they're done
+      if (followupStatus === 'concluido' || followupStatus === 'respondido') {
+        return;
+      }
+
       if (!lead.next_followup_date) return;
       
       const followupDate = new Date(lead.next_followup_date);
