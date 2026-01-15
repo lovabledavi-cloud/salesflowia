@@ -17,6 +17,9 @@ interface GoalsViewProps {
   onUpdateGoal: (id: string, data: Partial<Goal>) => Promise<boolean | void>;
   onCreateGoal: (data: Omit<Goal, "id" | "created_at" | "updated_at">) => Promise<Goal | null | void>;
   onRefresh?: () => Promise<void>;
+  // Role-based permissions
+  currentUserRole?: "admin" | "manager" | "sdr" | "closer";
+  currentTeamMemberId?: string | null;
 }
 
 type GoalType = "company" | "individual";
@@ -36,8 +39,16 @@ const GoalsView = ({
   onCreateCompanyGoal,
   onUpdateGoal,
   onCreateGoal,
+  currentUserRole,
+  currentTeamMemberId,
 }: GoalsViewProps) => {
   const [editingGoal, setEditingGoal] = useState<EditingGoal | null>(null);
+
+  // Permission checks
+  const isAdminOrManager = currentUserRole === "admin" || currentUserRole === "manager";
+  const canEditCompanyGoals = isAdminOrManager;
+  const canEditOtherMemberGoals = isAdminOrManager;
+  const canSeeAllMembers = isAdminOrManager;
 
   const currentMonth = new Date().getMonth() + 1;
   const currentYear = new Date().getFullYear();
@@ -174,10 +185,25 @@ const GoalsView = ({
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
 
-  // Group team members by role
-  const sdrs = teamMembers.filter((m) => m.role === "sdr" && m.is_active);
-  const closers = teamMembers.filter((m) => m.role === "closer" && m.is_active);
-  const managers = teamMembers.filter((m) => (m.role === "manager" || m.role === "admin") && m.is_active);
+  // Group team members by role - filter based on permissions
+  const filterByVisibility = (members: TeamMember[]) => {
+    if (canSeeAllMembers) return members;
+    // SDR/Closer can only see their own goals
+    return members.filter((m) => m.id === currentTeamMemberId);
+  };
+
+  const sdrs = filterByVisibility(teamMembers.filter((m) => m.role === "sdr" && m.is_active));
+  const closers = filterByVisibility(teamMembers.filter((m) => m.role === "closer" && m.is_active));
+  const managers = canSeeAllMembers 
+    ? teamMembers.filter((m) => (m.role === "manager" || m.role === "admin") && m.is_active)
+    : [];
+
+  // Check if user can edit a specific member's goal
+  const canEditMemberGoal = (memberId: string) => {
+    if (canEditOtherMemberGoals) return true;
+    // SDR/Closer can only edit their own goals
+    return memberId === currentTeamMemberId;
+  };
 
   const renderMemberGoalCard = (member: TeamMember, index: number) => {
     const memberGoal = getMemberGoal(member.id);
@@ -185,6 +211,7 @@ const GoalsView = ({
     const isSDR = member.role === "sdr";
     const isCloser = member.role === "closer";
     const roleConfig = ROLE_CONFIG[member.role];
+    const canEdit = canEditMemberGoal(member.id);
 
     return (
       <motion.div
@@ -206,15 +233,17 @@ const GoalsView = ({
               </Badge>
             </div>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => handleEditMemberGoal(member.id)}
-            className="gap-2"
-          >
-            <Edit2 className="h-4 w-4" />
-            {memberGoal ? "Editar" : "Definir Metas"}
-          </Button>
+          {canEdit && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleEditMemberGoal(member.id)}
+              className="gap-2"
+            >
+              <Edit2 className="h-4 w-4" />
+              {memberGoal ? "Editar" : "Definir Metas"}
+            </Button>
+          )}
         </div>
 
         {/* Role-specific metrics */}
@@ -366,10 +395,12 @@ const GoalsView = ({
               </p>
             </div>
           </div>
-          <Button variant="outline" size="sm" onClick={handleEditCompanyGoal} className="gap-2">
-            <Edit2 className="h-4 w-4" />
-            Editar Metas
-          </Button>
+          {canEditCompanyGoals && (
+            <Button variant="outline" size="sm" onClick={handleEditCompanyGoal} className="gap-2">
+              <Edit2 className="h-4 w-4" />
+              Editar Metas
+            </Button>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
