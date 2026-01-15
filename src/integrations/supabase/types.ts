@@ -63,6 +63,7 @@ export type Database = {
           created_at: string | null
           id: string
           leads_goal: number | null
+          meetings_goal: number | null
           month: number
           revenue_goal: number | null
           updated_at: string | null
@@ -74,6 +75,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           leads_goal?: number | null
+          meetings_goal?: number | null
           month: number
           revenue_goal?: number | null
           updated_at?: string | null
@@ -85,6 +87,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           leads_goal?: number | null
+          meetings_goal?: number | null
           month?: number
           revenue_goal?: number | null
           updated_at?: string | null
@@ -99,6 +102,7 @@ export type Database = {
           created_at: string | null
           id: string
           leads_goal: number | null
+          meetings_goal: number | null
           month: number
           revenue_goal: number | null
           team_member_id: string | null
@@ -111,6 +115,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           leads_goal?: number | null
+          meetings_goal?: number | null
           month: number
           revenue_goal?: number | null
           team_member_id?: string | null
@@ -123,6 +128,7 @@ export type Database = {
           created_at?: string | null
           id?: string
           leads_goal?: number | null
+          meetings_goal?: number | null
           month?: number
           revenue_goal?: number | null
           team_member_id?: string | null
@@ -150,8 +156,12 @@ export type Database = {
           id: string
           last_contact_date: string | null
           lost_reason: string | null
+          meeting_completed: boolean | null
+          meeting_date: string | null
+          meeting_scheduled: boolean | null
           name: string
           next_followup_date: string | null
+          no_show: boolean | null
           notes: string | null
           pipeline_stage: Database["public"]["Enums"]["pipeline_stage"] | null
           qualified_by: string | null
@@ -171,8 +181,12 @@ export type Database = {
           id?: string
           last_contact_date?: string | null
           lost_reason?: string | null
+          meeting_completed?: boolean | null
+          meeting_date?: string | null
+          meeting_scheduled?: boolean | null
           name: string
           next_followup_date?: string | null
+          no_show?: boolean | null
           notes?: string | null
           pipeline_stage?: Database["public"]["Enums"]["pipeline_stage"] | null
           qualified_by?: string | null
@@ -192,8 +206,12 @@ export type Database = {
           id?: string
           last_contact_date?: string | null
           lost_reason?: string | null
+          meeting_completed?: boolean | null
+          meeting_date?: string | null
+          meeting_scheduled?: boolean | null
           name?: string
           next_followup_date?: string | null
+          no_show?: boolean | null
           notes?: string | null
           pipeline_stage?: Database["public"]["Enums"]["pipeline_stage"] | null
           qualified_by?: string | null

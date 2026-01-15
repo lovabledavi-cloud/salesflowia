@@ -43,6 +43,7 @@ export interface Goal {
   contacts_goal: number;
   conversions_goal: number;
   revenue_goal: number;
+  meetings_goal: number;
   created_at: string;
   updated_at: string;
 }
@@ -55,6 +56,7 @@ export interface CompanyGoal {
   contacts_goal: number;
   conversions_goal: number;
   revenue_goal: number;
+  meetings_goal: number;
   created_at: string;
   updated_at: string;
 }
@@ -70,7 +72,7 @@ export interface Lead {
   next_followup_date: string | null;
   followup_notes: string | null;
   last_contact_date: string | null;
-  // New CRM fields
+  // CRM fields
   assigned_to: string | null;
   value: number;
   source: string | null;
@@ -80,6 +82,11 @@ export interface Lead {
   lost_reason: string | null;
   pipeline_stage: PipelineStage;
   stage_changed_at: string | null;
+  // Meeting tracking
+  meeting_scheduled: boolean;
+  meeting_date: string | null;
+  meeting_completed: boolean;
+  no_show: boolean;
 }
 
 export interface Activity {
