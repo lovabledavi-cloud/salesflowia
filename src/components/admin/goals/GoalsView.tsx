@@ -459,6 +459,11 @@ const GoalsView = ({
             ? teamMembers.find((m) => m.id === editingGoal.memberId)?.name
             : undefined
         }
+        memberRole={
+          editingGoal?.type === "individual" && editingGoal.memberId
+            ? teamMembers.find((m) => m.id === editingGoal.memberId)?.role
+            : undefined
+        }
         onSave={handleSaveGoal}
       />
     </div>

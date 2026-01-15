@@ -1,6 +1,6 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Mail, Phone, FileText, Users, Loader2, Trash2 } from "lucide-react";
+import { Mail, Phone, FileText, Users, Loader2, Trash2, Eye } from "lucide-react";
 import LeadStatusBadge, { LeadStatus } from "./LeadStatusBadge";
 import LeadStatusSelect from "./LeadStatusSelect";
 
@@ -12,6 +12,7 @@ interface Lead {
   status: LeadStatus;
   notes: string | null;
   created_at: string;
+  value?: number;
 }
 
 interface LeadTableProps {
@@ -20,6 +21,7 @@ interface LeadTableProps {
   onStatusChange: (leadId: string, status: LeadStatus) => void;
   onOpenNotes: (lead: Lead) => void;
   onDeleteLead: (lead: Lead) => void;
+  onOpenDetails?: (lead: Lead) => void;
   updatingLeadId: string | null;
 }
 
@@ -29,8 +31,16 @@ const LeadTable = ({
   onStatusChange,
   onOpenNotes,
   onDeleteLead,
+  onOpenDetails,
   updatingLeadId,
 }: LeadTableProps) => {
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+      minimumFractionDigits: 0,
+    }).format(value);
+  };
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("pt-BR", {
       day: "2-digit",
@@ -73,10 +83,11 @@ const LeadTable = ({
             <TableHead>Nome</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>WhatsApp</TableHead>
+            <TableHead>Valor</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Data</TableHead>
             <TableHead className="w-[80px]">Notas</TableHead>
-            <TableHead className="w-[60px]">Ações</TableHead>
+            <TableHead className="w-[100px]">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -104,6 +115,13 @@ const LeadTable = ({
                 </a>
               </TableCell>
               <TableCell>
+                {lead.value && lead.value > 0 ? (
+                  <span className="text-emerald font-medium">{formatCurrency(lead.value)}</span>
+                ) : (
+                  <span className="text-muted-foreground">—</span>
+                )}
+              </TableCell>
+              <TableCell>
                 <LeadStatusSelect
                   value={lead.status}
                   onValueChange={(value) => onStatusChange(lead.id, value)}
@@ -124,14 +142,27 @@ const LeadTable = ({
                 </Button>
               </TableCell>
               <TableCell>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onDeleteLead(lead)}
-                  className="text-muted-foreground hover:text-destructive"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                <div className="flex items-center gap-1">
+                  {onOpenDetails && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onOpenDetails(lead)}
+                      className="text-primary"
+                      title="Ver detalhes"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </Button>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => onDeleteLead(lead)}
+                    className="text-muted-foreground hover:text-destructive"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
               </TableCell>
             </TableRow>
           ))}

@@ -11,6 +11,7 @@ interface PipelineBoardProps {
   teamMembers: TeamMember[];
   onOpenNotes: (lead: Lead) => void;
   onOpenFollowup: (lead: Lead) => void;
+  onOpenDetails: (lead: Lead) => void;
   onLeadUpdate?: () => void;
 }
 
@@ -19,6 +20,7 @@ const PipelineBoard = ({
   teamMembers,
   onOpenNotes,
   onOpenFollowup,
+  onOpenDetails,
   onLeadUpdate,
 }: PipelineBoardProps) => {
   const { toast } = useToast();
@@ -177,6 +179,7 @@ const PipelineBoard = ({
             onOpenNotes={onOpenNotes}
             onOpenFollowup={onOpenFollowup}
             onDeleteLead={handleDeleteLead}
+            onOpenDetails={onOpenDetails}
           />
         ))}
       </div>

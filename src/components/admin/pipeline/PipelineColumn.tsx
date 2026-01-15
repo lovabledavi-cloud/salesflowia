@@ -15,6 +15,7 @@ interface PipelineColumnProps {
   onOpenNotes: (lead: Lead) => void;
   onOpenFollowup: (lead: Lead) => void;
   onDeleteLead: (lead: Lead) => void;
+  onOpenDetails: (lead: Lead) => void;
 }
 
 const PipelineColumn = ({
@@ -29,6 +30,7 @@ const PipelineColumn = ({
   onOpenNotes,
   onOpenFollowup,
   onDeleteLead,
+  onOpenDetails,
 }: PipelineColumnProps) => {
   const [isDragOver, setIsDragOver] = useState(false);
 
@@ -105,6 +107,7 @@ const PipelineColumn = ({
               onOpenNotes={() => onOpenNotes(lead)}
               onOpenFollowup={() => onOpenFollowup(lead)}
               onDelete={() => onDeleteLead(lead)}
+              onOpenDetails={() => onOpenDetails(lead)}
             />
           ))
         )}
