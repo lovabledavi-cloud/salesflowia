@@ -9,6 +9,7 @@ import {
   FileBarChart,
   GitBranch,
   UserCircle,
+  CalendarCheck,
 } from "lucide-react";
 import {
   Sidebar,
@@ -39,6 +40,7 @@ interface AdminSidebarProps {
   activeView: AdminView;
   onViewChange: (view: AdminView) => void;
   pendingFollowups?: number;
+  pendingMeetings?: number;
 }
 
 const menuGroups = [
@@ -76,6 +78,12 @@ const menuGroups = [
         icon: Kanban,
       },
       {
+        id: "meetings" as AdminView,
+        label: "Reuniões",
+        icon: CalendarCheck,
+        hasMeetingBadge: true,
+      },
+      {
         id: "followups" as AdminView,
         label: "Follow-ups",
         icon: CalendarClock,
@@ -108,6 +116,7 @@ const AdminSidebar = ({
   activeView,
   onViewChange,
   pendingFollowups = 0,
+  pendingMeetings = 0,
 }: AdminSidebarProps) => {
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";

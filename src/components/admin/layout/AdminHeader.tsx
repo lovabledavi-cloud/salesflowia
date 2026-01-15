@@ -31,6 +31,10 @@ const VIEW_TITLES: Record<AdminView, { title: string; subtitle: string }> = {
     title: "Kanban",
     subtitle: "Organize leads por status.",
   },
+  meetings: {
+    title: "Reuniões",
+    subtitle: "Calendário de reuniões e agendamentos.",
+  },
   followups: {
     title: "Follow-ups",
     subtitle: "Acompanhe os follow-ups agendados.",

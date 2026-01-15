@@ -1,8 +1,9 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Building2, Users, Edit2, Target, TrendingUp, DollarSign, Calendar } from "lucide-react";
+import { Building2, Users, Edit2, Target, TrendingUp, DollarSign, Calendar, Phone, UserCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CompanyGoal, Goal, TeamMember, Lead } from "@/types/crm";
+import { Badge } from "@/components/ui/badge";
+import { CompanyGoal, Goal, TeamMember, Lead, ROLE_CONFIG } from "@/types/crm";
 import GoalCard from "./GoalCard";
 import GoalEditDialog from "./GoalEditDialog";
 
@@ -69,6 +70,8 @@ const GoalsView = ({
         .filter((l) => l.pipeline_stage === "ganho")
         .reduce((acc, l) => acc + (l.value || 0), 0),
       meetings: memberLeads.filter((l) => l.meeting_scheduled).length,
+      meetingsCompleted: memberLeads.filter((l) => l.meeting_completed).length,
+      noShows: memberLeads.filter((l) => l.no_show).length,
     };
   };
 
@@ -135,6 +138,182 @@ const GoalsView = ({
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
 
+  // Group team members by role
+  const sdrs = teamMembers.filter((m) => m.role === "sdr" && m.is_active);
+  const closers = teamMembers.filter((m) => m.role === "closer" && m.is_active);
+  const managers = teamMembers.filter((m) => (m.role === "manager" || m.role === "admin") && m.is_active);
+
+  const renderMemberGoalCard = (member: TeamMember, index: number) => {
+    const memberGoal = getMemberGoal(member.id);
+    const metrics = getMemberMetrics(member.id);
+    const isSDR = member.role === "sdr";
+    const isCloser = member.role === "closer";
+    const roleConfig = ROLE_CONFIG[member.role];
+
+    return (
+      <motion.div
+        key={member.id}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.05 }}
+        className="bg-card border border-border rounded-xl p-5"
+      >
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-medium ${roleConfig.color}`}>
+              {member.name.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <h3 className="font-semibold">{member.name}</h3>
+              <Badge variant="outline" className="text-[10px]">
+                {roleConfig.label}
+              </Badge>
+            </div>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleEditMemberGoal(member.id)}
+            className="gap-2"
+          >
+            <Edit2 className="h-4 w-4" />
+            {memberGoal ? "Editar" : "Definir Metas"}
+          </Button>
+        </div>
+
+        {/* Role-specific metrics */}
+        {isSDR ? (
+          // SDR Focus: Meetings Scheduled
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <GoalCard
+              title="Reuniões Agendadas"
+              icon={Calendar}
+              iconColor="text-blue-500"
+              iconBg="bg-blue-500/10"
+              current={metrics.meetings}
+              goal={memberGoal?.meetings_goal || 0}
+              compact
+            />
+            <GoalCard
+              title="Leads Captados"
+              icon={Users}
+              iconColor="text-violet"
+              iconBg="bg-violet/10"
+              current={metrics.leads}
+              goal={memberGoal?.leads_goal || 0}
+              compact
+            />
+            <GoalCard
+              title="Contatos"
+              icon={Phone}
+              iconColor="text-amber-500"
+              iconBg="bg-amber-500/10"
+              current={metrics.contacts}
+              goal={memberGoal?.contacts_goal || 0}
+              compact
+            />
+            <div className="bg-muted/50 rounded-lg p-3">
+              <p className="text-[10px] text-muted-foreground mb-1">Taxa de Conversão</p>
+              <p className="text-xl font-bold text-emerald">
+                {metrics.leads > 0 ? ((metrics.meetings / metrics.leads) * 100).toFixed(0) : 0}%
+              </p>
+              <p className="text-[10px] text-muted-foreground">Lead → Reunião</p>
+            </div>
+          </div>
+        ) : isCloser ? (
+          // Closer Focus: Conversions & Revenue
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <GoalCard
+              title="Vendas Fechadas"
+              icon={Target}
+              iconColor="text-emerald"
+              iconBg="bg-emerald/10"
+              current={metrics.conversions}
+              goal={memberGoal?.conversions_goal || 0}
+              compact
+            />
+            <GoalCard
+              title="Faturamento"
+              icon={DollarSign}
+              iconColor="text-emerald"
+              iconBg="bg-emerald/10"
+              current={metrics.revenue}
+              goal={memberGoal?.revenue_goal || 0}
+              isCurrency
+              compact
+            />
+            <GoalCard
+              title="Reuniões Realizadas"
+              icon={UserCheck}
+              iconColor="text-blue-500"
+              iconBg="bg-blue-500/10"
+              current={metrics.meetingsCompleted}
+              goal={memberGoal?.meetings_goal || 0}
+              compact
+            />
+            <div className="bg-muted/50 rounded-lg p-3">
+              <p className="text-[10px] text-muted-foreground mb-1">Taxa de Fechamento</p>
+              <p className="text-xl font-bold text-emerald">
+                {metrics.meetingsCompleted > 0 ? ((metrics.conversions / metrics.meetingsCompleted) * 100).toFixed(0) : 0}%
+              </p>
+              <p className="text-[10px] text-muted-foreground">Reunião → Venda</p>
+            </div>
+          </div>
+        ) : (
+          // Managers/Admins: All metrics
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            <GoalCard
+              title="Leads"
+              icon={Users}
+              iconColor="text-blue-500"
+              iconBg="bg-blue-500/10"
+              current={metrics.leads}
+              goal={memberGoal?.leads_goal || 0}
+              compact
+            />
+            <GoalCard
+              title="Contatos"
+              icon={TrendingUp}
+              iconColor="text-violet"
+              iconBg="bg-violet/10"
+              current={metrics.contacts}
+              goal={memberGoal?.contacts_goal || 0}
+              compact
+            />
+            <GoalCard
+              title="Conversões"
+              icon={Target}
+              iconColor="text-emerald"
+              iconBg="bg-emerald/10"
+              current={metrics.conversions}
+              goal={memberGoal?.conversions_goal || 0}
+              compact
+            />
+            <GoalCard
+              title="Reuniões"
+              icon={Calendar}
+              iconColor="text-amber-500"
+              iconBg="bg-amber-500/10"
+              current={metrics.meetings}
+              goal={memberGoal?.meetings_goal || 0}
+              compact
+            />
+            <GoalCard
+              title="Faturamento"
+              icon={DollarSign}
+              iconColor="text-emerald"
+              iconBg="bg-emerald/10"
+              current={metrics.revenue}
+              goal={memberGoal?.revenue_goal || 0}
+              isCurrency
+              compact
+            />
+          </div>
+        )}
+      </motion.div>
+    );
+  };
+
   return (
     <div className="space-y-8">
       {/* Company Goals */}
@@ -175,20 +354,20 @@ const GoalsView = ({
             goal={currentCompanyGoal?.contacts_goal || 0}
           />
           <GoalCard
-            title="Conversões"
-            icon={Target}
-            iconColor="text-emerald"
-            iconBg="bg-emerald/10"
-            current={getActualMetrics.convertedLeads}
-            goal={currentCompanyGoal?.conversions_goal || 0}
-          />
-          <GoalCard
             title="Reuniões"
             icon={Calendar}
             iconColor="text-amber-500"
             iconBg="bg-amber-500/10"
             current={getActualMetrics.meetings}
             goal={currentCompanyGoal?.meetings_goal || 0}
+          />
+          <GoalCard
+            title="Conversões"
+            icon={Target}
+            iconColor="text-emerald"
+            iconBg="bg-emerald/10"
+            current={getActualMetrics.convertedLeads}
+            goal={currentCompanyGoal?.conversions_goal || 0}
           />
           <GoalCard
             title="Faturamento"
@@ -202,116 +381,73 @@ const GoalsView = ({
         </div>
       </div>
 
-      {/* Individual Goals */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-violet/10">
-            <Users className="h-5 w-5 text-violet" />
+      {/* SDR Goals - Focus on Meetings */}
+      {sdrs.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-amber-500/10">
+              <Calendar className="h-5 w-5 text-amber-500" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold">Metas SDR</h2>
+              <p className="text-sm text-muted-foreground">
+                Meta principal: Reuniões Agendadas
+              </p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-lg font-semibold">Metas Individuais</h2>
-            <p className="text-sm text-muted-foreground">
-              Clique em um membro para definir suas metas
-            </p>
+          <div className="space-y-4">
+            {sdrs.map((member, index) => renderMemberGoalCard(member, index))}
           </div>
         </div>
+      )}
 
-        {teamMembers.filter((m) => m.is_active).length === 0 ? (
-          <div className="text-center py-8 bg-card border border-border rounded-xl">
-            <Users className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
-            <p className="text-muted-foreground">Nenhum membro da equipe cadastrado</p>
+      {/* Closer Goals - Focus on Conversions & Revenue */}
+      {closers.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-emerald/10">
+              <DollarSign className="h-5 w-5 text-emerald" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold">Metas Closer</h2>
+              <p className="text-sm text-muted-foreground">
+                Meta principal: Conversão e Faturamento
+              </p>
+            </div>
           </div>
-        ) : (
           <div className="space-y-4">
-            {teamMembers
-              .filter((m) => m.is_active)
-              .map((member, index) => {
-                const memberGoal = getMemberGoal(member.id);
-                const metrics = getMemberMetrics(member.id);
-
-                return (
-                  <motion.div
-                    key={member.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="bg-card border border-border rounded-xl p-5"
-                  >
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium">
-                          {member.name.charAt(0).toUpperCase()}
-                        </div>
-                        <div>
-                          <h3 className="font-semibold">{member.name}</h3>
-                          <span className="text-xs text-muted-foreground capitalize">{member.role}</span>
-                        </div>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleEditMemberGoal(member.id)}
-                        className="gap-2"
-                      >
-                        <Edit2 className="h-4 w-4" />
-                        {memberGoal ? "Editar" : "Definir Metas"}
-                      </Button>
-                    </div>
-
-                    <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                      <GoalCard
-                        title="Leads"
-                        icon={Users}
-                        iconColor="text-blue-500"
-                        iconBg="bg-blue-500/10"
-                        current={metrics.leads}
-                        goal={memberGoal?.leads_goal || 0}
-                        compact
-                      />
-                      <GoalCard
-                        title="Contatos"
-                        icon={TrendingUp}
-                        iconColor="text-violet"
-                        iconBg="bg-violet/10"
-                        current={metrics.contacts}
-                        goal={memberGoal?.contacts_goal || 0}
-                        compact
-                      />
-                      <GoalCard
-                        title="Conversões"
-                        icon={Target}
-                        iconColor="text-emerald"
-                        iconBg="bg-emerald/10"
-                        current={metrics.conversions}
-                        goal={memberGoal?.conversions_goal || 0}
-                        compact
-                      />
-                      <GoalCard
-                        title="Reuniões"
-                        icon={Calendar}
-                        iconColor="text-amber-500"
-                        iconBg="bg-amber-500/10"
-                        current={metrics.meetings}
-                        goal={memberGoal?.meetings_goal || 0}
-                        compact
-                      />
-                      <GoalCard
-                        title="Faturamento"
-                        icon={DollarSign}
-                        iconColor="text-emerald"
-                        iconBg="bg-emerald/10"
-                        current={metrics.revenue}
-                        goal={memberGoal?.revenue_goal || 0}
-                        isCurrency
-                        compact
-                      />
-                    </div>
-                  </motion.div>
-                );
-              })}
+            {closers.map((member, index) => renderMemberGoalCard(member, index))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* Manager/Admin Goals */}
+      {managers.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-violet/10">
+              <Users className="h-5 w-5 text-violet" />
+            </div>
+            <div>
+              <h2 className="text-lg font-semibold">Metas Gestão</h2>
+              <p className="text-sm text-muted-foreground">
+                Visão completa de todas as métricas
+              </p>
+            </div>
+          </div>
+          <div className="space-y-4">
+            {managers.map((member, index) => renderMemberGoalCard(member, index))}
+          </div>
+        </div>
+      )}
+
+      {/* Empty state */}
+      {sdrs.length === 0 && closers.length === 0 && managers.length === 0 && (
+        <div className="text-center py-8 bg-card border border-border rounded-xl">
+          <Users className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
+          <p className="text-muted-foreground">Nenhum membro da equipe cadastrado</p>
+        </div>
+      )}
 
       <GoalEditDialog
         open={!!editingGoal}

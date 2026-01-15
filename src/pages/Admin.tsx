@@ -43,6 +43,9 @@ import GoalsView from "@/components/admin/goals/GoalsView";
 // Pipeline components
 import PipelineBoard from "@/components/admin/pipeline/PipelineBoard";
 
+// Meetings components
+import MeetingsView from "@/components/admin/meetings/MeetingsView";
+
 const AdminContent = () => {
   const { user, loading, signOut } = useAuth();
   const navigate = useNavigate();
@@ -525,6 +528,16 @@ const AdminContent = () => {
               {/* Follow-ups View */}
               {activeView === "followups" && (
                 <TodayFollowups leads={leads} onSelectLead={handleSelectLeadById} />
+              )}
+
+              {/* Meetings View */}
+              {activeView === "meetings" && (
+                <MeetingsView
+                  leads={leads}
+                  teamMembers={teamMembers}
+                  onLeadUpdate={fetchLeads}
+                  onOpenNotes={handleOpenNotes}
+                />
               )}
 
               {/* Team View */}
