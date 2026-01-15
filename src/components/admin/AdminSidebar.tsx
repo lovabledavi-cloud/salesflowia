@@ -9,6 +9,7 @@ import {
   GitBranch,
   UserCircle,
   CalendarCheck,
+  Settings,
 } from "lucide-react";
 import {
   Sidebar,
@@ -28,8 +29,9 @@ import Logo from "@/components/Logo";
 import ThemeToggle from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { AdminView } from "@/types/crm";
+import { AdminView, AppRole, ROLE_CONFIG } from "@/types/crm";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 
 interface AdminSidebarProps {
   onSignOut: () => void;
@@ -40,21 +42,43 @@ interface AdminSidebarProps {
   onViewChange: (view: AdminView) => void;
   pendingFollowups?: number;
   pendingMeetings?: number;
+  userRole?: AppRole | null;
+  isAdmin?: boolean;
+  isManager?: boolean;
+  isSdr?: boolean;
+  isCloser?: boolean;
 }
 
-const menuGroups = [
+interface MenuItem {
+  id: AdminView;
+  label: string;
+  icon: typeof BarChart3;
+  hasBadge?: boolean;
+  hasMeetingBadge?: boolean;
+  // Role-based visibility
+  visibleFor?: AppRole[];
+}
+
+interface MenuGroup {
+  label: string;
+  items: MenuItem[];
+}
+
+// Full menu structure with role visibility
+const allMenuGroups: MenuGroup[] = [
   {
     label: "VISÃO GERAL",
     items: [
       {
-        id: "dashboard" as AdminView,
+        id: "dashboard",
         label: "Dashboard",
         icon: BarChart3,
       },
       {
-        id: "reports" as AdminView,
+        id: "reports",
         label: "Relatórios",
         icon: FileBarChart,
+        visibleFor: ["admin", "manager"],
       },
     ],
   },
@@ -62,26 +86,29 @@ const menuGroups = [
     label: "GESTÃO",
     items: [
       {
-        id: "pipeline" as AdminView,
+        id: "pipeline",
         label: "Pipeline",
         icon: GitBranch,
+        visibleFor: ["admin", "manager", "closer"],
       },
       {
-        id: "leads" as AdminView,
+        id: "leads",
         label: "Leads",
         icon: Users,
+        visibleFor: ["admin", "manager", "sdr"],
       },
       {
-        id: "meetings" as AdminView,
+        id: "meetings",
         label: "Reuniões",
         icon: CalendarCheck,
         hasMeetingBadge: true,
       },
       {
-        id: "followups" as AdminView,
+        id: "followups",
         label: "Follow-ups",
         icon: CalendarClock,
         hasBadge: true,
+        visibleFor: ["admin", "manager", "sdr"],
       },
     ],
   },
@@ -89,14 +116,25 @@ const menuGroups = [
     label: "EQUIPE",
     items: [
       {
-        id: "team" as AdminView,
+        id: "team",
         label: "Time",
         icon: UserCircle,
+        visibleFor: ["admin", "manager"],
       },
       {
-        id: "goals" as AdminView,
+        id: "goals",
         label: "Metas",
         icon: Target,
+      },
+    ],
+  },
+  {
+    label: "CONTA",
+    items: [
+      {
+        id: "settings",
+        label: "Configurações",
+        icon: Settings,
       },
     ],
   },
@@ -111,6 +149,11 @@ const AdminSidebar = ({
   onViewChange,
   pendingFollowups = 0,
   pendingMeetings = 0,
+  userRole,
+  isAdmin = false,
+  isManager = false,
+  isSdr = false,
+  isCloser = false,
 }: AdminSidebarProps) => {
   const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
@@ -130,6 +173,41 @@ const AdminSidebar = ({
     return "U";
   };
 
+  // Filter menu items based on user role
+  const getFilteredMenuGroups = (): MenuGroup[] => {
+    // Admin and Manager see everything
+    if (isAdmin || isManager) {
+      return allMenuGroups;
+    }
+
+    return allMenuGroups
+      .map((group) => ({
+        ...group,
+        items: group.items.filter((item) => {
+          // If no visibility restriction, everyone can see
+          if (!item.visibleFor) return true;
+          // Check if user has any of the allowed roles
+          if (isSdr && item.visibleFor.includes("sdr")) return true;
+          if (isCloser && item.visibleFor.includes("closer")) return true;
+          return false;
+        }),
+      }))
+      .filter((group) => group.items.length > 0);
+  };
+
+  const filteredMenuGroups = getFilteredMenuGroups();
+
+  // Get display role
+  const getDisplayRole = () => {
+    if (isAdmin) return "admin";
+    if (isManager) return "manager";
+    if (isSdr) return "sdr";
+    if (isCloser) return "closer";
+    return null;
+  };
+
+  const displayRole = getDisplayRole();
+
   return (
     <Sidebar className="border-r border-border bg-sidebar">
       <SidebarHeader className="p-4">
@@ -142,7 +220,7 @@ const AdminSidebar = ({
       <SidebarSeparator />
 
       <SidebarContent className="px-2">
-        {menuGroups.map((group, groupIndex) => (
+        {filteredMenuGroups.map((group, groupIndex) => (
           <SidebarGroup key={group.label}>
             {!isCollapsed && (
               <SidebarGroupLabel className="text-xs font-semibold text-muted-foreground tracking-wider px-2">
@@ -154,6 +232,7 @@ const AdminSidebar = ({
                 {group.items.map((item) => {
                   const isActive = activeView === item.id;
                   const showBadge = item.hasBadge && pendingFollowups > 0;
+                  const showMeetingBadge = item.hasMeetingBadge && pendingMeetings > 0;
 
                   return (
                     <SidebarMenuItem key={item.id}>
@@ -177,9 +256,19 @@ const AdminSidebar = ({
                             {pendingFollowups > 9 ? "9+" : pendingFollowups}
                           </span>
                         )}
+                        {!isCollapsed && showMeetingBadge && (
+                          <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-medium text-primary-foreground">
+                            {pendingMeetings > 9 ? "9+" : pendingMeetings}
+                          </span>
+                        )}
                         {isCollapsed && showBadge && (
                           <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-medium text-destructive-foreground">
                             {pendingFollowups > 9 ? "9+" : pendingFollowups}
+                          </span>
+                        )}
+                        {isCollapsed && showMeetingBadge && (
+                          <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
+                            {pendingMeetings > 9 ? "9+" : pendingMeetings}
                           </span>
                         )}
                       </SidebarMenuButton>
@@ -188,7 +277,7 @@ const AdminSidebar = ({
                 })}
               </SidebarMenu>
             </SidebarGroupContent>
-            {groupIndex < menuGroups.length - 1 && <SidebarSeparator className="my-2" />}
+            {groupIndex < filteredMenuGroups.length - 1 && <SidebarSeparator className="my-2" />}
           </SidebarGroup>
         ))}
       </SidebarContent>
@@ -215,8 +304,19 @@ const AdminSidebar = ({
                 </p>
               )}
               <div className="flex items-center gap-1.5">
+                {displayRole && (
+                  <Badge 
+                    variant="secondary" 
+                    className={cn(
+                      "text-[10px] px-1.5 py-0",
+                      ROLE_CONFIG[displayRole].color,
+                      "text-white"
+                    )}
+                  >
+                    {ROLE_CONFIG[displayRole].label}
+                  </Badge>
+                )}
                 <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-xs text-muted-foreground">CONECTADO</span>
               </div>
             </div>
           )}
