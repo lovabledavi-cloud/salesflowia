@@ -121,6 +121,9 @@ export const useGoals = (): UseGoalsReturn => {
 
       if (error) throw error;
 
+      // Immediately refresh goals to ensure UI is updated
+      await fetchGoals();
+
       toast({
         title: "Meta atualizada",
         description: "A meta foi atualizada com sucesso.",
@@ -201,6 +204,9 @@ export const useGoals = (): UseGoalsReturn => {
         .eq("id", id);
 
       if (error) throw error;
+
+      // Immediately refresh goals to ensure UI is updated
+      await fetchGoals();
 
       toast({
         title: "Meta atualizada",
