@@ -9,13 +9,16 @@ import {
   Users,
   CheckCircle,
   XCircle,
+  Trophy,
+  Sparkles,
 } from "lucide-react";
 import { Lead, TeamMember, Goal } from "@/types/crm";
 import { isToday, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import EnhancedGoalCard from "./EnhancedGoalCard";
 
 interface CloserDashboardProps {
   leads: Lead[];
@@ -78,6 +81,9 @@ const CloserDashboard = ({
     // No-shows
     const noShows = assignedLeads.filter((l) => l.no_show).length;
 
+    // Average ticket
+    const avgTicket = wonLeads.length > 0 ? revenue / wonLeads.length : 0;
+
     return {
       inPipeline,
       meetingsToday,
@@ -88,6 +94,7 @@ const CloserDashboard = ({
       meetingsCompleted,
       noShows,
       assignedLeads,
+      avgTicket,
     };
   }, [leads, allLeads, teamMember]);
 
@@ -111,10 +118,19 @@ const CloserDashboard = ({
       ? (stats.meetingsCompleted / goal.meetings_goal) * 100
       : 0;
 
+    const conversionsExceeded = conversionsProgress > 100;
+    const revenueExceeded = revenueProgress > 100;
+    const meetingsExceeded = meetingsProgress > 100;
+    const anyExceeded = conversionsExceeded || revenueExceeded || meetingsExceeded;
+
     return {
-      conversionsProgress: Math.min(conversionsProgress, 100),
-      revenueProgress: Math.min(revenueProgress, 100),
-      meetingsProgress: Math.min(meetingsProgress, 100),
+      conversionsProgress,
+      revenueProgress,
+      meetingsProgress,
+      conversionsExceeded,
+      revenueExceeded,
+      meetingsExceeded,
+      anyExceeded,
     };
   }, [goal, stats]);
 
@@ -130,6 +146,16 @@ const CloserDashboard = ({
             {format(new Date(), "EEEE, d 'de' MMMM", { locale: ptBR })}
           </p>
         </div>
+        {goalProgress?.anyExceeded && (
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            className="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 rounded-full"
+          >
+            <Trophy className="h-4 w-4 text-amber-500" />
+            <span className="text-sm font-medium text-amber-500">Meta superada!</span>
+          </motion.div>
+        )}
       </div>
 
       {/* Stats Cards */}
@@ -137,16 +163,27 @@ const CloserDashboard = ({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-card border border-border rounded-xl p-4"
+          className={cn(
+            "bg-card border rounded-xl p-4",
+            goalProgress?.revenueExceeded ? "border-amber-500/50" : "border-border"
+          )}
         >
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-lg bg-emerald-500/10">
               <DollarSign className="h-5 w-5 text-emerald-500" />
             </div>
             <div>
-              <p className="text-lg font-bold">{formatCurrency(stats.revenue)}</p>
+              <p className={cn(
+                "text-lg font-bold",
+                goalProgress?.revenueExceeded && "text-amber-500"
+              )}>
+                {formatCurrency(stats.revenue)}
+              </p>
               <p className="text-xs text-muted-foreground">Receita Gerada</p>
             </div>
+            {goalProgress?.revenueExceeded && (
+              <Trophy className="h-4 w-4 text-amber-500 ml-auto" />
+            )}
           </div>
         </motion.div>
 
@@ -204,49 +241,59 @@ const CloserDashboard = ({
         </motion.div>
       </div>
 
-      {/* Goals Progress */}
-      {goalProgress && goal && (
+      {/* Goals Progress - Enhanced */}
+      {goal && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-card border border-border rounded-xl p-6"
+          className={cn(
+            "bg-card border rounded-xl p-6",
+            goalProgress?.anyExceeded ? "border-amber-500/30" : "border-border"
+          )}
         >
-          <div className="flex items-center gap-2 mb-4">
-            <Target className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold">Minhas Metas do Mês</h3>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Target className="h-5 w-5 text-primary" />
+              <h3 className="font-semibold">Minhas Metas do Mês</h3>
+            </div>
+            {goalProgress?.anyExceeded && (
+              <div className="flex items-center gap-1.5">
+                <Sparkles className="h-4 w-4 text-amber-500" />
+                <span className="text-xs font-medium text-amber-500">Superando expectativas!</span>
+              </div>
+            )}
           </div>
 
-          <div className="space-y-4">
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm">Vendas Fechadas</span>
-                <span className="text-sm font-medium">
-                  {stats.wonLeads} / {goal.conversions_goal}
-                </span>
-              </div>
-              <Progress value={goalProgress.conversionsProgress} className="h-2" />
-            </div>
-
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm">Receita</span>
-                <span className="text-sm font-medium">
-                  {formatCurrency(stats.revenue)} / {formatCurrency(goal.revenue_goal)}
-                </span>
-              </div>
-              <Progress value={goalProgress.revenueProgress} className="h-2" />
-            </div>
-
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm">Reuniões Realizadas</span>
-                <span className="text-sm font-medium">
-                  {stats.meetingsCompleted} / {goal.meetings_goal}
-                </span>
-              </div>
-              <Progress value={goalProgress.meetingsProgress} className="h-2" />
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <EnhancedGoalCard
+              title="Vendas Fechadas"
+              icon={CheckCircle}
+              iconColor="text-emerald-500"
+              iconBg="bg-emerald-500/10"
+              current={stats.wonLeads}
+              goal={goal.conversions_goal}
+              compact
+            />
+            <EnhancedGoalCard
+              title="Receita"
+              icon={DollarSign}
+              iconColor="text-amber-500"
+              iconBg="bg-amber-500/10"
+              current={stats.revenue}
+              goal={goal.revenue_goal}
+              isCurrency
+              compact
+            />
+            <EnhancedGoalCard
+              title="Reuniões Realizadas"
+              icon={CalendarCheck}
+              iconColor="text-purple-500"
+              iconBg="bg-purple-500/10"
+              current={stats.meetingsCompleted}
+              goal={goal.meetings_goal}
+              compact
+            />
           </div>
         </motion.div>
       )}
@@ -313,15 +360,27 @@ const CloserDashboard = ({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="bg-card border border-border rounded-xl p-6"
+          className={cn(
+            "bg-card border rounded-xl p-6",
+            goalProgress?.conversionsExceeded ? "border-emerald/50" : "border-border"
+          )}
         >
           <div className="flex items-center gap-2 mb-4">
-            <CheckCircle className="h-5 w-5 text-emerald-500" />
+            <CheckCircle className={cn(
+              "h-5 w-5",
+              goalProgress?.conversionsExceeded ? "text-amber-500" : "text-emerald-500"
+            )} />
             <h3 className="font-semibold">Vendas do Mês</h3>
+            {goalProgress?.conversionsExceeded && (
+              <Trophy className="h-4 w-4 text-amber-500" />
+            )}
           </div>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-3xl font-bold text-emerald-500">
+              <p className={cn(
+                "text-3xl font-bold",
+                goalProgress?.conversionsExceeded ? "text-amber-500" : "text-emerald-500"
+              )}>
                 {stats.wonLeads}
               </p>
               <p className="text-sm text-muted-foreground">
@@ -332,7 +391,9 @@ const CloserDashboard = ({
               <p className="text-lg font-semibold">
                 {formatCurrency(stats.revenue)}
               </p>
-              <p className="text-sm text-muted-foreground">receita total</p>
+              <p className="text-sm text-muted-foreground">
+                ticket médio: {formatCurrency(stats.avgTicket)}
+              </p>
             </div>
           </div>
         </motion.div>
