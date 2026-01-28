@@ -49,6 +49,9 @@ import MeetingsView from "@/components/admin/meetings/MeetingsView";
 // Settings components
 import SettingsView from "@/components/admin/settings/SettingsView";
 
+// Reports components
+import ReportsView from "@/components/admin/reports/ReportsView";
+
 // Role-based dashboards
 import SDRDashboard from "@/components/admin/dashboard/SDRDashboard";
 import CloserDashboard from "@/components/admin/dashboard/CloserDashboard";
@@ -630,11 +633,9 @@ const AdminContent = () => {
                 />
               )}
 
-              {/* Reports View - Placeholder */}
+              {/* Reports View */}
               {activeView === "reports" && (
-                <div className="text-center py-12">
-                  <p className="text-muted-foreground">Relatórios em breve.</p>
-                </div>
+                <ReportsView leads={leads} teamMembers={teamMembers} />
               )}
 
               {/* Settings View */}
