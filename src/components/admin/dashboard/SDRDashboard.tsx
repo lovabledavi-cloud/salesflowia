@@ -8,13 +8,17 @@ import {
   Clock,
   Target,
   TrendingUp,
+  Trophy,
+  Sparkles,
 } from "lucide-react";
-import { Lead, TeamMember, CompanyGoal, Goal } from "@/types/crm";
+import { Lead, TeamMember, Goal } from "@/types/crm";
 import { isToday, isPast, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import EnhancedGoalCard from "./EnhancedGoalCard";
 
 interface SDRDashboardProps {
   leads: Lead[];
@@ -70,6 +74,11 @@ const SDRDashboard = ({
       return isToday(new Date(l.next_followup_date));
     });
 
+    // Qualified leads by this SDR
+    const qualifiedLeads = allLeads.filter(
+      (l) => l.qualified_by === teamMember?.id
+    ).length;
+
     return {
       leadsCreated,
       leadsContacted,
@@ -77,6 +86,7 @@ const SDRDashboard = ({
       meetingsToday,
       pendingFollowups,
       todayFollowups,
+      qualifiedLeads,
     };
   }, [leads, allLeads, teamMember]);
 
@@ -93,10 +103,19 @@ const SDRDashboard = ({
       ? (stats.meetingsScheduled / goal.meetings_goal) * 100
       : 0;
 
+    const leadsExceeded = leadsProgress > 100;
+    const contactsExceeded = contactsProgress > 100;
+    const meetingsExceeded = meetingsProgress > 100;
+    const anyExceeded = leadsExceeded || contactsExceeded || meetingsExceeded;
+
     return {
-      leadsProgress: Math.min(leadsProgress, 100),
-      contactsProgress: Math.min(contactsProgress, 100),
-      meetingsProgress: Math.min(meetingsProgress, 100),
+      leadsProgress,
+      contactsProgress,
+      meetingsProgress,
+      leadsExceeded,
+      contactsExceeded,
+      meetingsExceeded,
+      anyExceeded,
     };
   }, [goal, stats]);
 
@@ -112,6 +131,16 @@ const SDRDashboard = ({
             {format(new Date(), "EEEE, d 'de' MMMM", { locale: ptBR })}
           </p>
         </div>
+        {goalProgress?.anyExceeded && (
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            className="flex items-center gap-2 px-3 py-1.5 bg-amber-500/10 rounded-full"
+          >
+            <Trophy className="h-4 w-4 text-amber-500" />
+            <span className="text-sm font-medium text-amber-500">Meta batida!</span>
+          </motion.div>
+        )}
       </div>
 
       {/* Stats Cards */}
@@ -184,49 +213,58 @@ const SDRDashboard = ({
         </motion.div>
       </div>
 
-      {/* Goals Progress */}
-      {goalProgress && goal && (
+      {/* Goals Progress - Enhanced with exceeded highlights */}
+      {goal && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-card border border-border rounded-xl p-6"
+          className={cn(
+            "bg-card border rounded-xl p-6",
+            goalProgress?.anyExceeded ? "border-amber-500/30" : "border-border"
+          )}
         >
-          <div className="flex items-center gap-2 mb-4">
-            <Target className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold">Minhas Metas do Mês</h3>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Target className="h-5 w-5 text-primary" />
+              <h3 className="font-semibold">Minhas Metas do Mês</h3>
+            </div>
+            {goalProgress?.anyExceeded && (
+              <div className="flex items-center gap-1.5">
+                <Sparkles className="h-4 w-4 text-amber-500" />
+                <span className="text-xs font-medium text-amber-500">Superando expectativas!</span>
+              </div>
+            )}
           </div>
 
-          <div className="space-y-4">
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm">Leads Captados</span>
-                <span className="text-sm font-medium">
-                  {stats.leadsCreated} / {goal.leads_goal}
-                </span>
-              </div>
-              <Progress value={goalProgress.leadsProgress} className="h-2" />
-            </div>
-
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm">Contatos Realizados</span>
-                <span className="text-sm font-medium">
-                  {stats.leadsContacted} / {goal.contacts_goal}
-                </span>
-              </div>
-              <Progress value={goalProgress.contactsProgress} className="h-2" />
-            </div>
-
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm">Reuniões Agendadas</span>
-                <span className="text-sm font-medium">
-                  {stats.meetingsScheduled} / {goal.meetings_goal}
-                </span>
-              </div>
-              <Progress value={goalProgress.meetingsProgress} className="h-2" />
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <EnhancedGoalCard
+              title="Leads Captados"
+              icon={Users}
+              iconColor="text-blue-500"
+              iconBg="bg-blue-500/10"
+              current={stats.leadsCreated}
+              goal={goal.leads_goal}
+              compact
+            />
+            <EnhancedGoalCard
+              title="Contatos Realizados"
+              icon={Phone}
+              iconColor="text-emerald-500"
+              iconBg="bg-emerald-500/10"
+              current={stats.leadsContacted}
+              goal={goal.contacts_goal}
+              compact
+            />
+            <EnhancedGoalCard
+              title="Reuniões Agendadas"
+              icon={CalendarCheck}
+              iconColor="text-purple-500"
+              iconBg="bg-purple-500/10"
+              current={stats.meetingsScheduled}
+              goal={goal.meetings_goal}
+              compact
+            />
           </div>
         </motion.div>
       )}

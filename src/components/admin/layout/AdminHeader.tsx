@@ -1,16 +1,20 @@
-import { format } from "date-fns";
+import { format, getMonth, getYear, startOfMonth, endOfMonth } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Menu, Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { AdminView, DateRange } from "@/types/crm";
+import MonthYearFilter from "../dashboard/MonthYearFilter";
 
 interface AdminHeaderProps {
   activeView: AdminView;
   userName?: string;
   dateRange?: DateRange;
   onDateRangeChange?: (range: DateRange) => void;
+  selectedMonth?: number;
+  selectedYear?: number;
+  onMonthYearChange?: (month: number, year: number) => void;
   actions?: React.ReactNode;
 }
 
@@ -64,11 +68,17 @@ const AdminHeader = ({
   userName,
   dateRange,
   onDateRangeChange,
+  selectedMonth,
+  selectedYear,
+  onMonthYearChange,
   actions,
 }: AdminHeaderProps) => {
   const viewConfig = VIEW_TITLES[activeView];
   const greeting = userName ? `Olá, ${userName.split(" ")[0]}!` : "Olá!";
   const showGreeting = activeView === "dashboard";
+
+  const currentMonth = selectedMonth || getMonth(new Date()) + 1;
+  const currentYear = selectedYear || getYear(new Date());
 
   const handleQuickFilter = (days: number) => {
     if (!onDateRangeChange) return;
@@ -102,6 +112,20 @@ const AdminHeader = ({
     return fromMatch && toMatch;
   };
 
+  const handleMonthChange = (month: number, year: number) => {
+    if (onMonthYearChange) {
+      onMonthYearChange(month, year);
+    }
+    // Also update the date range to match the selected month
+    if (onDateRangeChange) {
+      const monthDate = new Date(year, month - 1, 1);
+      onDateRangeChange({
+        from: startOfMonth(monthDate),
+        to: endOfMonth(monthDate),
+      });
+    }
+  };
+
   return (
     <header className="sticky top-0 z-10 py-4 px-4 md:px-8 bg-card/80 backdrop-blur-lg border-b border-border">
       <div className="flex items-center justify-between">
@@ -121,9 +145,20 @@ const AdminHeader = ({
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Month/Year filter for dashboard and goals */}
+          {(activeView === "dashboard" || activeView === "goals") && onMonthYearChange && (
+            <div className="hidden md:block">
+              <MonthYearFilter
+                selectedMonth={currentMonth}
+                selectedYear={currentYear}
+                onMonthYearChange={handleMonthChange}
+              />
+            </div>
+          )}
+
           {/* Quick date filters for dashboard */}
           {activeView === "dashboard" && onDateRangeChange && (
-            <div className="hidden md:flex items-center gap-1 bg-muted/50 p-1 rounded-lg">
+            <div className="hidden lg:flex items-center gap-1 bg-muted/50 p-1 rounded-lg">
               {QUICK_FILTERS.map((filter) => (
                 <Button
                   key={filter.days}
@@ -140,13 +175,6 @@ const AdminHeader = ({
                   {filter.label}
                 </Button>
               ))}
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 px-2 text-muted-foreground hover:text-foreground"
-              >
-                <CalendarIcon className="w-4 h-4" />
-              </Button>
             </div>
           )}
 

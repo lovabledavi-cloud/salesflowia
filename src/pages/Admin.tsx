@@ -76,6 +76,15 @@ const AdminContent = () => {
     to: undefined,
   });
 
+  // Month/Year filter for goals comparison
+  const [selectedMonth, setSelectedMonth] = useState(() => new Date().getMonth() + 1);
+  const [selectedYear, setSelectedYear] = useState(() => new Date().getFullYear());
+
+  const handleMonthYearChange = (month: number, year: number) => {
+    setSelectedMonth(month);
+    setSelectedYear(year);
+  };
+
   // Filters state
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<LeadStatus | "all">("all");
@@ -93,8 +102,10 @@ const AdminContent = () => {
   const [followupDialogOpen, setFollowupDialogOpen] = useState(false);
   const [followupLead, setFollowupLead] = useState<Lead | null>(null);
 
-  // Get current month goals
-  const { company: currentMonthGoal } = getCurrentMonthGoals();
+  // Get goals for selected month/year
+  const selectedMonthGoal = useMemo(() => {
+    return companyGoals.find(g => g.month === selectedMonth && g.year === selectedYear);
+  }, [companyGoals, selectedMonth, selectedYear]);
 
   // Calculate pending followups count
   const pendingFollowupsCount = useMemo(() => {
@@ -489,6 +500,9 @@ const AdminContent = () => {
             userName={profile?.full_name || undefined}
             dateRange={dashboardDateRange}
             onDateRangeChange={setDashboardDateRange}
+            selectedMonth={selectedMonth}
+            selectedYear={selectedYear}
+            onMonthYearChange={handleMonthYearChange}
             actions={renderHeaderActions()}
           />
 
@@ -504,7 +518,7 @@ const AdminContent = () => {
                 <div className="space-y-6">
                   {(isAdmin || isManager) && (
                     <>
-                      <DashboardMetricsAdvanced leads={dashboardLeads} companyGoal={currentMonthGoal} teamMembers={teamMembers} />
+                      <DashboardMetricsAdvanced leads={dashboardLeads} companyGoal={selectedMonthGoal} teamMembers={teamMembers} />
                       
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <PerformanceChart leads={dashboardLeads} days={chartDays} />
@@ -513,7 +527,7 @@ const AdminContent = () => {
 
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <TeamPerformance teamMembers={teamMembers} leads={dashboardLeads} />
-                        <GoalsProgress leads={dashboardLeads} companyGoal={currentMonthGoal} />
+                        <GoalsProgress leads={dashboardLeads} companyGoal={selectedMonthGoal} />
                       </div>
                     </>
                   )}
