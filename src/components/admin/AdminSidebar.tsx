@@ -1,5 +1,4 @@
 import {
-  LayoutDashboard,
   Users,
   CalendarClock,
   LogOut,
@@ -10,6 +9,8 @@ import {
   UserCircle,
   CalendarCheck,
   Settings,
+  ChevronsLeft,
+  ChevronsRight,
 } from "lucide-react";
 import {
   Sidebar,
@@ -23,6 +24,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
+  SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
 import Logo from "@/components/Logo";
@@ -32,6 +34,7 @@ import { cn } from "@/lib/utils";
 import { AdminView, AppRole, ROLE_CONFIG } from "@/types/crm";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface AdminSidebarProps {
   onSignOut: () => void;
@@ -155,7 +158,7 @@ const AdminSidebar = ({
   isSdr = false,
   isCloser = false,
 }: AdminSidebarProps) => {
-  const { state } = useSidebar();
+  const { state, toggleSidebar } = useSidebar();
   const isCollapsed = state === "collapsed";
 
   const getInitials = (name?: string, email?: string) => {
@@ -209,11 +212,33 @@ const AdminSidebar = ({
   const displayRole = getDisplayRole();
 
   return (
-    <Sidebar className="border-r border-border bg-sidebar">
+    <Sidebar collapsible="icon" className="border-r border-border bg-sidebar">
       <SidebarHeader className="p-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           {!isCollapsed && <Logo size="sm" />}
-          <ThemeToggle />
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={toggleSidebar}
+                  className="h-9 w-9"
+                  title={isCollapsed ? "Expandir menu" : "Recolher menu"}
+                >
+                  {isCollapsed ? (
+                    <ChevronsRight className="h-5 w-5 text-muted-foreground" />
+                  ) : (
+                    <ChevronsLeft className="h-5 w-5 text-muted-foreground" />
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                {isCollapsed ? "Expandir menu (Ctrl+B)" : "Recolher menu (Ctrl+B)"}
+              </TooltipContent>
+            </Tooltip>
+          </div>
         </div>
       </SidebarHeader>
 
@@ -336,6 +361,8 @@ const AdminSidebar = ({
           {!isCollapsed && <span>Sair</span>}
         </Button>
       </SidebarFooter>
+
+      <SidebarRail />
     </Sidebar>
   );
 };
