@@ -6,12 +6,15 @@ import { Badge } from "@/components/ui/badge";
 import { CompanyGoal, Goal, TeamMember, Lead, ROLE_CONFIG } from "@/types/crm";
 import GoalCard from "./GoalCard";
 import GoalEditDialog from "./GoalEditDialog";
+import { getCompanyActualMetricsForPeriod, getMemberMetricsForPeriod } from "./metrics";
 
 interface GoalsViewProps {
   companyGoals: CompanyGoal[];
   goals: Goal[];
   teamMembers: TeamMember[];
   leads: Lead[];
+  selectedMonth?: number;
+  selectedYear?: number;
   onUpdateCompanyGoal: (id: string, data: Partial<CompanyGoal>) => Promise<boolean | void>;
   onCreateCompanyGoal: (data: Omit<CompanyGoal, "id" | "created_at" | "updated_at">) => Promise<CompanyGoal | null | void>;
   onUpdateGoal: (id: string, data: Partial<Goal>) => Promise<boolean | void>;
@@ -35,6 +38,8 @@ const GoalsView = ({
   goals,
   teamMembers,
   leads,
+  selectedMonth,
+  selectedYear,
   onUpdateCompanyGoal,
   onCreateCompanyGoal,
   onUpdateGoal,
@@ -50,8 +55,8 @@ const GoalsView = ({
   const canEditOtherMemberGoals = isAdminOrManager;
   const canSeeAllMembers = isAdminOrManager;
 
-  const currentMonth = new Date().getMonth() + 1;
-  const currentYear = new Date().getFullYear();
+  const currentMonth = selectedMonth ?? new Date().getMonth() + 1;
+  const currentYear = selectedYear ?? new Date().getFullYear();
 
   const currentCompanyGoal = useMemo(() => {
     return companyGoals.find(
@@ -60,67 +65,8 @@ const GoalsView = ({
   }, [companyGoals, currentMonth, currentYear]);
 
   const getActualMetrics = useMemo(() => {
-    const totalLeads = leads.length;
-    const contactedLeads = leads.filter((l) => l.status === "contactado" || l.last_contact_date).length;
-    const convertedLeads = leads.filter((l) => l.status === "convertido" || l.pipeline_stage === "ganho").length;
-    const revenue = leads
-      .filter((l) => l.status === "convertido" || l.pipeline_stage === "ganho")
-      .reduce((acc, l) => acc + (l.value || 0), 0);
-    const meetings = leads.filter((l) => l.meeting_scheduled).length;
-
-    return { totalLeads, contactedLeads, convertedLeads, revenue, meetings };
-  }, [leads]);
-
-  const getMemberMetrics = (memberId: string, role: string) => {
-    // SDR metrics: based on created_by, contacted_by, and meeting_scheduled_by
-    // Closer metrics: based on assigned_to and closed_by
-    
-    if (role === "sdr") {
-      // SDR - Count leads they created, contacted, or scheduled meetings for
-      const leadsCreated = leads.filter((l) => l.created_by === memberId).length;
-      const leadsContacted = leads.filter((l) => l.contacted_by === memberId).length;
-      const meetingsScheduled = leads.filter((l) => l.meeting_scheduled_by === memberId).length;
-      
-      return {
-        leads: leadsCreated,
-        contacts: leadsContacted,
-        conversions: 0,
-        revenue: 0,
-        meetings: meetingsScheduled,
-        meetingsCompleted: 0,
-        noShows: 0,
-      };
-    } else if (role === "closer") {
-      // Closer - Count leads assigned to them or closed by them
-      const assignedLeads = leads.filter((l) => l.assigned_to === memberId);
-      const closedByMember = leads.filter((l) => l.closed_by === memberId);
-      const wonByMember = closedByMember.filter((l) => l.pipeline_stage === "ganho");
-      
-      return {
-        leads: assignedLeads.length,
-        contacts: assignedLeads.filter((l) => l.status === "contactado" || l.last_contact_date).length,
-        conversions: wonByMember.length,
-        revenue: wonByMember.reduce((acc, l) => acc + (l.value || 0), 0),
-        meetings: assignedLeads.filter((l) => l.meeting_scheduled).length,
-        meetingsCompleted: assignedLeads.filter((l) => l.meeting_completed).length,
-        noShows: assignedLeads.filter((l) => l.no_show).length,
-      };
-    } else {
-      // Manager/Admin - All leads
-      const memberLeads = leads.filter((l) => l.assigned_to === memberId);
-      return {
-        leads: memberLeads.length,
-        contacts: memberLeads.filter((l) => l.status === "contactado" || l.last_contact_date).length,
-        conversions: memberLeads.filter((l) => l.pipeline_stage === "ganho").length,
-        revenue: memberLeads
-          .filter((l) => l.pipeline_stage === "ganho")
-          .reduce((acc, l) => acc + (l.value || 0), 0),
-        meetings: memberLeads.filter((l) => l.meeting_scheduled).length,
-        meetingsCompleted: memberLeads.filter((l) => l.meeting_completed).length,
-        noShows: memberLeads.filter((l) => l.no_show).length,
-      };
-    }
-  };
+    return getCompanyActualMetricsForPeriod(leads, currentMonth, currentYear);
+  }, [leads, currentMonth, currentYear]);
 
   const getMemberGoal = (memberId: string) => {
     return goals.find(
@@ -206,7 +152,7 @@ const GoalsView = ({
 
   const renderMemberGoalCard = (member: TeamMember, index: number) => {
     const memberGoal = getMemberGoal(member.id);
-    const metrics = getMemberMetrics(member.id, member.role);
+    const metrics = getMemberMetricsForPeriod(leads, member.id, member.role, currentMonth, currentYear);
     const isSDR = member.role === "sdr";
     const isCloser = member.role === "closer";
     const roleConfig = ROLE_CONFIG[member.role];

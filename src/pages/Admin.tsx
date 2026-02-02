@@ -688,6 +688,8 @@ const AdminContent = () => {
                   leads={leads}
                   goals={goals}
                   companyGoals={companyGoals}
+                  selectedMonth={selectedMonth}
+                  selectedYear={selectedYear}
                   onCreateCompanyGoal={createCompanyGoal}
                   onUpdateCompanyGoal={updateCompanyGoal}
                   onCreateGoal={createGoal}
