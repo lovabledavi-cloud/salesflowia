@@ -21,7 +21,8 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 
 interface DashboardMetricsAdvancedProps {
-  leads: Lead[];
+  leads: Lead[]; // Leads created in the selected month
+  leadsClosedInMonth?: Lead[]; // Leads closed/won in the selected month (for revenue)
   companyGoal?: CompanyGoal;
   teamMembers: TeamMember[];
   previousPeriodLeads?: Lead[];
@@ -29,22 +30,26 @@ interface DashboardMetricsAdvancedProps {
 
 const DashboardMetricsAdvanced = ({ 
   leads, 
+  leadsClosedInMonth,
   companyGoal, 
   teamMembers,
-  previousPeriodLeads = [] 
+  previousPeriodLeads = []
 }: DashboardMetricsAdvancedProps) => {
+  // Use leadsClosedInMonth for revenue calculations, fallback to filtering from leads
+  const revenueLeads = leadsClosedInMonth || leads.filter(l => l.pipeline_stage === "ganho");
   const stats = useMemo(() => {
-    // Revenue
-    const revenue = leads
-      .filter((l) => l.status === "convertido" || l.pipeline_stage === "ganho")
-      .reduce((acc, l) => acc + (l.value || 0), 0);
+    // Revenue - use revenueLeads (closed in selected month) for accurate monthly revenue
+    const revenue = revenueLeads.reduce((acc, l) => acc + (l.value || 0), 0);
+
+    // Sales closed in the selected month
+    const salesClosed = revenueLeads.length;
 
     // Previous period revenue
     const prevRevenue = previousPeriodLeads
       .filter((l) => l.status === "convertido" || l.pipeline_stage === "ganho")
       .reduce((acc, l) => acc + (l.value || 0), 0);
 
-    // Leads metrics
+    // Leads metrics (based on leads created in the month)
     const totalLeads = leads.length;
     const leadsGoal = companyGoal?.leads_goal || 0;
     const leadsProgress = leadsGoal > 0 ? (totalLeads / leadsGoal) * 100 : 0;
@@ -78,7 +83,6 @@ const DashboardMetricsAdvanced = ({
 
     // Team Metrics
     const meetingsCompleted = leads.filter((l) => l.meeting_completed).length;
-    const salesClosed = leads.filter((l) => l.pipeline_stage === "ganho").length;
     const conversionsGoal = companyGoal?.conversions_goal || 0;
     const conversionsProgress = conversionsGoal > 0 ? (salesClosed / conversionsGoal) * 100 : 0;
     const conversionsExceeded = conversionsProgress > 100;
@@ -148,7 +152,7 @@ const DashboardMetricsAdvanced = ({
       leadsInPipeline,
       pipelineValue,
     };
-  }, [leads, companyGoal, previousPeriodLeads]);
+  }, [leads, revenueLeads, companyGoal, previousPeriodLeads]);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("pt-BR", {
