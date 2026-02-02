@@ -5,12 +5,18 @@ import { Lead, CompanyGoal } from "@/types/crm";
 
 interface GoalsProgressProps {
   leads: Lead[];
+  leadsClosedInMonth?: Lead[]; // Leads closed in the selected month for revenue
   companyGoal?: CompanyGoal;
 }
 
-const GoalsProgress = ({ leads, companyGoal }: GoalsProgressProps) => {
+const GoalsProgress = ({ leads, leadsClosedInMonth, companyGoal }: GoalsProgressProps) => {
   const progress = useMemo(() => {
     if (!companyGoal) return null;
+
+    // Use leadsClosedInMonth for revenue if provided, otherwise calculate from leads
+    const closedLeads = leadsClosedInMonth || leads.filter(l => l.pipeline_stage === "ganho");
+    const converted = closedLeads.length;
+    const revenue = closedLeads.reduce((acc, l) => acc + (l.value || 0), 0);
 
     const totalLeads = leads.length;
     const contacted = leads.filter(
@@ -22,12 +28,6 @@ const GoalsProgress = ({ leads, companyGoal }: GoalsProgressProps) => {
         l.pipeline_stage === "proposta" ||
         l.pipeline_stage === "ganho"
     ).length;
-    const converted = leads.filter(
-      (l) => l.status === "convertido" || l.pipeline_stage === "ganho"
-    ).length;
-    const revenue = leads
-      .filter((l) => l.status === "convertido" || l.pipeline_stage === "ganho")
-      .reduce((acc, l) => acc + (l.value || 0), 0);
 
     return {
       leads: {
@@ -51,7 +51,7 @@ const GoalsProgress = ({ leads, companyGoal }: GoalsProgressProps) => {
         percentage: Number(companyGoal.revenue_goal) > 0 ? Math.min((revenue / Number(companyGoal.revenue_goal)) * 100, 100) : 0,
       },
     };
-  }, [leads, companyGoal]);
+  }, [leads, leadsClosedInMonth, companyGoal]);
 
   const formatCurrency = (value: number) => {
     if (value >= 1000000) {

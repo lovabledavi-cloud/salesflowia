@@ -107,6 +107,52 @@ const AdminContent = () => {
     return companyGoals.find(g => g.month === selectedMonth && g.year === selectedYear);
   }, [companyGoals, selectedMonth, selectedYear]);
 
+  // Filter leads by selected month/year for goal comparison
+  // Uses different date fields depending on the metric:
+  // - For lead creation/contacts: use created_at
+  // - For revenue/conversions: use closed_at (when the deal was won)
+  const leadsForSelectedMonth = useMemo(() => {
+    return leads.filter((lead) => {
+      const createdDate = new Date(lead.created_at);
+      const createdMonth = createdDate.getMonth() + 1;
+      const createdYear = createdDate.getFullYear();
+      
+      // Include if created in this month
+      if (createdMonth === selectedMonth && createdYear === selectedYear) {
+        return true;
+      }
+      
+      // Also include if closed in this month (for revenue calculation)
+      if (lead.closed_at && lead.pipeline_stage === "ganho") {
+        const closedDate = new Date(lead.closed_at);
+        const closedMonth = closedDate.getMonth() + 1;
+        const closedYear = closedDate.getFullYear();
+        if (closedMonth === selectedMonth && closedYear === selectedYear) {
+          return true;
+        }
+      }
+      
+      return false;
+    });
+  }, [leads, selectedMonth, selectedYear]);
+
+  // Leads created in the selected month (for lead count metrics)
+  const leadsCreatedInMonth = useMemo(() => {
+    return leads.filter((lead) => {
+      const date = new Date(lead.created_at);
+      return date.getMonth() + 1 === selectedMonth && date.getFullYear() === selectedYear;
+    });
+  }, [leads, selectedMonth, selectedYear]);
+
+  // Leads that were closed/won in the selected month (for revenue metrics)
+  const leadsClosedInMonth = useMemo(() => {
+    return leads.filter((lead) => {
+      if (lead.pipeline_stage !== "ganho" || !lead.closed_at) return false;
+      const date = new Date(lead.closed_at);
+      return date.getMonth() + 1 === selectedMonth && date.getFullYear() === selectedYear;
+    });
+  }, [leads, selectedMonth, selectedYear]);
+
   // Calculate pending followups count
   const pendingFollowupsCount = useMemo(() => {
     return leads.filter((lead) => {
@@ -518,16 +564,21 @@ const AdminContent = () => {
                 <div className="space-y-6">
                   {(isAdmin || isManager) && (
                     <>
-                      <DashboardMetricsAdvanced leads={dashboardLeads} companyGoal={selectedMonthGoal} teamMembers={teamMembers} />
+                      <DashboardMetricsAdvanced 
+                        leads={leadsCreatedInMonth} 
+                        leadsClosedInMonth={leadsClosedInMonth}
+                        companyGoal={selectedMonthGoal} 
+                        teamMembers={teamMembers}
+                      />
                       
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <PerformanceChart leads={dashboardLeads} days={chartDays} />
-                        <ConversionDonut leads={dashboardLeads} />
+                        <ConversionDonut leads={leadsCreatedInMonth} />
                       </div>
 
                       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <TeamPerformance teamMembers={teamMembers} leads={dashboardLeads} />
-                        <GoalsProgress leads={dashboardLeads} companyGoal={selectedMonthGoal} />
+                        <TeamPerformance teamMembers={teamMembers} leads={leadsCreatedInMonth} leadsClosedInMonth={leadsClosedInMonth} />
+                        <GoalsProgress leads={leadsCreatedInMonth} leadsClosedInMonth={leadsClosedInMonth} companyGoal={selectedMonthGoal} />
                       </div>
                     </>
                   )}

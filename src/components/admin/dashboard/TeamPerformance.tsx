@@ -7,17 +7,20 @@ import { TeamMember, Lead, ROLE_CONFIG } from "@/types/crm";
 interface TeamPerformanceProps {
   teamMembers: TeamMember[];
   leads: Lead[];
+  leadsClosedInMonth?: Lead[]; // Leads closed in the selected month for accurate revenue
 }
 
-const TeamPerformance = ({ teamMembers, leads }: TeamPerformanceProps) => {
+const TeamPerformance = ({ teamMembers, leads, leadsClosedInMonth }: TeamPerformanceProps) => {
   const memberStats = useMemo(() => {
+    // Use leadsClosedInMonth for revenue calculations if provided
+    const closedLeads = leadsClosedInMonth || leads.filter(l => l.pipeline_stage === "ganho");
+    
     return teamMembers
       .filter((m) => m.is_active)
       .map((member) => {
         const assignedLeads = leads.filter((l) => l.assigned_to === member.id);
-        const convertedLeads = assignedLeads.filter(
-          (l) => l.status === "convertido" || l.pipeline_stage === "ganho"
-        );
+        // For converted leads count, use leads closed by this member
+        const convertedLeads = closedLeads.filter((l) => l.closed_by === member.id);
         const revenue = convertedLeads.reduce((acc, l) => acc + (l.value || 0), 0);
         const conversionRate =
           assignedLeads.length > 0
@@ -33,7 +36,7 @@ const TeamPerformance = ({ teamMembers, leads }: TeamPerformanceProps) => {
         };
       })
       .sort((a, b) => b.converted - a.converted);
-  }, [teamMembers, leads]);
+  }, [teamMembers, leads, leadsClosedInMonth]);
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("pt-BR", {
