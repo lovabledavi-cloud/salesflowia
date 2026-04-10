@@ -5,17 +5,17 @@ const cards = [
   {
     icon: <Clock className="w-5 h-5" />,
     title: "Agente Inteligente",
-    desc: "Atendimentos em segundos. Humanizado ou robótico, você escolhe. Atende Facebook, Web, Insta e WhatsApp simultaneamente.",
+    desc: "Atendimento em segundos para seu depósito. Humanizado ou robótico, você escolhe. Atende Facebook, Web, Insta e WhatsApp simultaneamente.",
   },
   {
     icon: <CalendarX className="w-5 h-5" />,
     title: "Vendas e Recorrência",
-    desc: "Cliente que comprou gás hoje tem anotação visual. O sistema entende quando o gás acaba e entra em contato sem você pedir.",
+    desc: "Cliente que comprou gás hoje tem anotação visual. O sistema sabe quando o botijão acaba e entra em contato automaticamente.",
   },
   {
     icon: <Filter className="w-5 h-5" />,
     title: "Resgate Automático",
-    desc: "Recuperamos sua base inativa inteira perguntando quem precisa de entrega de água ou gás com mensagens assertivas e gratuitas.",
+    desc: "Recuperamos toda a base inativa do seu depósito com mensagens assertivas para quem precisa de gás.",
   },
 ];
 
@@ -24,10 +24,10 @@ const PainPointsSection = () => (
     <RevealSection className="max-w-[1200px] mx-auto px-[5%]">
       <div className="text-center mb-16">
         <h2 className="font-heading font-extrabold text-[clamp(2.2rem,4vw,3.5rem)] tracking-tight mb-4">
-          Como transformamos contatos<br />
-          <span className="text-purple-500" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontWeight: 600 }}>"esquecidos"</span> em lucro no seu caixa
+          Como transformamos clientes<br />
+          <span className="text-purple-500" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontWeight: 600 }}>"esquecidos"</span> em lucro pro seu depósito
         </h2>
-        <p className="text-lg text-slate-400">Você não precisa de mais atendentes, precisa de inteligência robótica com trato humano.</p>
+        <p className="text-lg text-slate-400">Seu depósito não precisa de mais atendentes, precisa de inteligência robótica com trato humano.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

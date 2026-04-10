@@ -3,10 +3,10 @@ import { Zap, Settings, Plug, BarChart3, ArrowUpRight } from "lucide-react";
 import RevealSection from "./RevealSection";
 
 const steps = [
-  { icon: <Zap className="w-5 h-5" />, time: "3 DIAS", title: "Diagnóstico e Mapeamento", desc: "Entendemos seu produto, perfil de lead ideal e regras de qualificação." },
-  { icon: <Settings className="w-5 h-5" />, time: "5 DIAS", title: "Treinamento do Agente", desc: "Construímos o Agente com sua identidade de marca e fluxos de conversa." },
-  { icon: <Plug className="w-5 h-5" />, time: "2 DIAS", title: "Integração e Ativação", desc: "Conectamos ao seu WhatsApp Business. Sem mudança para sua equipe." },
-  { icon: <BarChart3 className="w-5 h-5" />, time: "CONTÍNUO", title: "Operação e Otimização", desc: "O Agente opera em tempo real. Nossa equipe refina continuamente." },
+  { icon: <Zap className="w-5 h-5" />, time: "3 DIAS", title: "Diagnóstico e Mapeamento", desc: "Entendemos a operação do seu depósito, perfil de clientes e regras de qualificação." },
+  { icon: <Settings className="w-5 h-5" />, time: "5 DIAS", title: "Treinamento do Agente", desc: "Construímos o Agente com a identidade do seu depósito e fluxos de conversa." },
+  { icon: <Plug className="w-5 h-5" />, time: "2 DIAS", title: "Integração e Ativação", desc: "Conectamos ao WhatsApp do seu depósito. Sem mudança para sua equipe." },
+  { icon: <BarChart3 className="w-5 h-5" />, time: "CONTÍNUO", title: "Operação e Otimização", desc: "O Agente opera em tempo real vendendo gás. Nossa equipe refina continuamente." },
 ];
 
 const LINE_FILL_MS = 900;

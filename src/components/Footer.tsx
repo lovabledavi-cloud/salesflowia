@@ -10,8 +10,8 @@ const Footer = () => {
 
           {/* Description */}
           <p className="text-sm text-muted-foreground text-center max-w-md">
-            O sistema de automação de vendas feito por donos de depósito, 
-            para donos de depósito.
+            O sistema de automação de vendas feito para depósitos de gás
+            que querem vender mais sem aumentar a equipe.
           </p>
 
           {/* Divider */}

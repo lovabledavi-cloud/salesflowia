@@ -2,7 +2,7 @@ const items = [
   { value: "+30%", label: "Recuperação de Base" },
   { value: "24/7", label: "Atendimento Online" },
   { value: "Zero", label: "Contatos Esquecidos" },
-  { value: "100%", label: "Venda Automática" },
+  { value: "100%", label: "Venda de Gás Automática" },
 ];
 
 const MarqueeSection = () => (

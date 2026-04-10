@@ -6,9 +6,9 @@ const features = [
   { icon: <TrendingUp className="w-4 h-4" />, title: "Real Time Dashboard", desc: "Métricas e relatórios de atendimentos em tempo real." },
   { icon: <LayoutGrid className="w-4 h-4" />, title: "Multicanal", desc: "WhatsApp, Facebook e Instagram integrados." },
   { icon: <ShoppingCart className="w-4 h-4" />, title: "Fechamento Automático", desc: "A IA vende, integrada ao seu catálogo." },
-  { icon: <Kanban className="w-4 h-4" />, title: "CRM de Vendas", desc: "Kanban completo de pedidos." },
-  { icon: <BellRing className="w-4 h-4" />, title: "Lembretes Inteligentes", desc: "Reposição automática em 30, 45 ou 60 dias." },
-  { icon: <Plug className="w-4 h-4" />, title: "Integração Nativa", desc: "Conecta ao seu sistema de gestão." },
+  { icon: <Kanban className="w-4 h-4" />, title: "CRM de Vendas", desc: "Kanban completo de pedidos do depósito." },
+  { icon: <BellRing className="w-4 h-4" />, title: "Lembretes Inteligentes", desc: "Reposição automática de botijão em 30, 45 ou 60 dias." },
+  { icon: <Plug className="w-4 h-4" />, title: "Integração Nativa", desc: "Conecta ao sistema de gestão do seu depósito." },
 ];
 
 const FeaturesSection = () => (
@@ -22,7 +22,7 @@ const FeaturesSection = () => (
           <span className="text-purple-500 font-playfair italic">vendas escaláveis.</span>
         </h2>
         <p className="text-sm sm:text-base text-slate-400 max-w-[420px] mb-8">
-          Aumente seus lucros conectando todo seu ecossistema a uma IA focada em resultados.
+          Aumente o faturamento do seu depósito conectando todo seu ecossistema a uma IA focada em resultados.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 gap-x-5">
