@@ -16,14 +16,13 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <div className="relative">
-      <div className="absolute top-0 left-0 w-full h-screen z-0"
-        style={{
-          backgroundImage: "url('/images/hero_bg.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
+    <div className="relative overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="/images/hero_bg.jpg" 
+          alt="" 
+          className="w-full h-full object-cover"
+        />
         <div className="absolute inset-0" style={{
           background: "linear-gradient(to bottom, rgba(3,0,5,0.3) 0%, rgba(3,0,5,0.7) 60%, rgba(3,0,5,1) 100%)"
         }} />
