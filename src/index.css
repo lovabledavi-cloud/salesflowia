@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;600;800&family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=Playfair+Display:ital,wght@1,600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -251,6 +251,42 @@
 
   .animate-float {
     animation: float 6s ease-in-out infinite;
+  }
+
+  /* Landing page reveal animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Landing glow button */
+  .landing-glow-btn {
+    position: relative;
+  }
+  .landing-glow-btn::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    background: linear-gradient(90deg, #a855f7, #ec4899, #a855f7);
+    z-index: -1;
+    border-radius: 105px;
+    filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .landing-glow-btn:hover::before {
+    opacity: 0.8;
+  }
+
+  /* Wave animation for audio */
+  @keyframes wave-anim {
+    0% { height: 30%; }
+    100% { height: 100%; }
   }
 }
 
