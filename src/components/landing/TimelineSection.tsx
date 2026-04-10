@@ -9,8 +9,7 @@ const steps = [
   { icon: <BarChart3 className="w-5 h-5" />, time: "CONTÍNUO", title: "Operação e Otimização", desc: "O Agente opera em tempo real. Nossa equipe refina continuamente." },
 ];
 
-const LINE_FILL_MS = 800;
-const CARD_REVEAL_MS = 400;
+const LINE_FILL_MS = 900;
 
 const TimelineSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -29,11 +28,10 @@ const TimelineSection = () => {
           runSequence();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     );
     obs.observe(el);
 
-    // Fallback
     const rect = el.getBoundingClientRect();
     if (rect.top < window.innerHeight && rect.bottom > 0 && !started.current) {
       started.current = true;
@@ -43,16 +41,21 @@ const TimelineSection = () => {
     return () => obs.disconnect();
   }, []);
 
+  // Sequence: reveal card 0 → fill line 0 → reveal card 1 → fill line 1 → ...
   const runSequence = () => {
-    let delay = 0;
+    let delay = 200;
+
     for (let i = 0; i < steps.length; i++) {
-      // Reveal card i
-      setTimeout(() => setActiveIndex(i), delay);
-      delay += CARD_REVEAL_MS;
-      // Start filling line from card i (if not last)
+      // Reveal card i (line from previous card already reached it)
+      const revealDelay = delay;
+      setTimeout(() => setActiveIndex(i), revealDelay);
+
+      // Start filling line FROM card i to next card
       if (i < steps.length - 1) {
-        setTimeout(() => setLineFilling(i), delay);
-        delay += LINE_FILL_MS;
+        delay += 300; // small pause after card lights up
+        const lineDelay = delay;
+        setTimeout(() => setLineFilling(i), lineDelay);
+        delay += LINE_FILL_MS; // wait for line to finish filling before next card
       }
     }
   };
@@ -67,11 +70,11 @@ const TimelineSection = () => {
         <div ref={sectionRef} className="mt-14 max-w-[600px]">
           {steps.map((s, i) => {
             const cardActive = i <= activeIndex;
-            const lineFilled = i <= lineFilling;
+            const lineActive = i <= lineFilling;
 
             return (
-              <div key={i} className="relative flex gap-6 sm:gap-10 pb-16 last:pb-0">
-                {/* Left: icon + line */}
+              <div key={i} className="relative flex gap-6 sm:gap-10">
+                {/* Left column: icon + line */}
                 <div className="flex flex-col items-center">
                   {/* Icon box */}
                   <div
@@ -84,14 +87,14 @@ const TimelineSection = () => {
                     {s.icon}
                   </div>
 
-                  {/* Connecting line */}
+                  {/* Line going down to next card */}
                   {i < steps.length - 1 && (
-                    <div className="w-px flex-1 bg-white/[0.04] relative mt-0 overflow-hidden">
+                    <div className="w-px bg-white/[0.04] relative overflow-hidden" style={{ height: "120px" }}>
                       <div
-                        className="absolute top-0 left-0 w-full bg-gradient-to-b from-purple-500 via-purple-500 to-purple-400/20"
+                        className="absolute top-0 left-0 w-full bg-purple-500"
                         style={{
-                          height: lineFilled ? "100%" : "0%",
-                          transition: `height ${LINE_FILL_MS}ms cubic-bezier(0.4, 0, 0.2, 1)`,
+                          height: lineActive ? "100%" : "0%",
+                          transition: `height ${LINE_FILL_MS}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`,
                         }}
                       />
                     </div>
@@ -100,10 +103,10 @@ const TimelineSection = () => {
 
                 {/* Right: content */}
                 <div
-                  className={`pt-2 transition-all duration-500 ${
+                  className={`pt-2 pb-16 transition-all duration-500 ${
                     cardActive
                       ? "opacity-100 translate-y-0"
-                      : "opacity-[0.15] translate-y-2"
+                      : "opacity-[0.12] translate-y-2"
                   }`}
                 >
                   <span
@@ -121,7 +124,7 @@ const TimelineSection = () => {
                   </span>
                   <h3
                     className={`text-lg sm:text-xl font-bold mb-2 transition-colors duration-500 ${
-                      cardActive ? "text-white" : "text-slate-700"
+                      cardActive ? "text-white" : "text-slate-800"
                     }`}
                   >
                     {s.title}
