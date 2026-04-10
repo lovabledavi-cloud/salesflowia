@@ -130,7 +130,7 @@ const CTASection = () => {
 
       {/* Footer */}
       <div className="max-w-[520px] mx-auto mt-14 text-center flex flex-col items-center gap-3 border-t border-white/[0.04] pt-6 px-5">
-        <img src="/images/logo.png" alt="SalesFlow.IA" className="h-7 object-contain opacity-50" />
+        <img src="/images/logo.png" alt="SalesFlow.IA" className="h-10 object-contain opacity-50" />
         <p className="text-slate-700 text-[11px]">&copy; 2026 SalesFlow.IA · Todos os direitos reservados.</p>
       </div>
     </footer>
