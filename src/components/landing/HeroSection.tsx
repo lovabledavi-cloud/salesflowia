@@ -36,8 +36,8 @@ const HeroSection = () => {
           Liberação Imediata
         </div>
 
-        <h1 className="font-heading font-extrabold text-[clamp(3rem,6vw,5rem)] tracking-tight mb-6 max-w-[1000px]" style={{ textShadow: "0 10px 30px rgba(0,0,0,0.8)" }}>
-          Transforme seu Depósito em uma<br />
+        <h1 className="font-heading font-extrabold text-[clamp(2.8rem,6vw,5rem)] tracking-[-0.03em] leading-[1.1] mb-6 max-w-[1000px]" style={{ textShadow: "0 10px 30px rgba(0,0,0,0.8)" }}>
+          Transforme seu Depósito<br />em uma<br />
           <span className="bg-gradient-to-br from-slate-50 to-purple-300 bg-clip-text text-transparent">
             Máquina de Vendas Automática.
           </span>
