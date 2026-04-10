@@ -16,7 +16,7 @@ const ComparisonSection = () => (
         Não é ferramenta, é<br /><span className="text-purple-500 font-playfair italic">estratégia e resultado.</span>
       </h2>
       <p className="text-sm text-slate-400 text-center max-w-[480px] mx-auto mb-8">
-        Veja como o SalesFlow se compara às soluções tradicionais.
+        Veja como o SalesFlow se compara às soluções tradicionais para depósitos de gás.
       </p>
 
       <div className="rounded-2xl border border-white/[0.06] overflow-hidden bg-white/[0.015]">

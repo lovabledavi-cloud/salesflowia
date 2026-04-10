@@ -22,7 +22,7 @@ const CTASection = () => {
         whatsapp: phone,
         email: "",
         source: "landing_page",
-        notes: `Revenda: ${revenda} | Botijões: ${botijoes}`,
+        notes: `Depósito: ${revenda} | Botijões: ${botijoes}`,
         status: "novo",
         pipeline_stage: "novo",
       });
@@ -49,7 +49,7 @@ const CTASection = () => {
 
         {/* Title */}
         <h2 className="font-extrabold text-[clamp(1.5rem,3.5vw,2rem)] leading-tight text-center mb-3">
-          Pronto para transformar<br />seus leads em <span className="text-purple-500 font-playfair italic">vendas?</span>
+          Pronto para escalar as<br />vendas do seu <span className="text-purple-500 font-playfair italic">depósito?</span>
         </h2>
 
         {/* Subtitle */}
@@ -93,7 +93,7 @@ const CTASection = () => {
                 type="text"
                 value={revenda}
                 onChange={(e) => setRevenda(e.target.value)}
-                placeholder="Nome da revenda"
+                placeholder="Nome do depósito"
                 className="w-full bg-transparent px-5 py-4 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:bg-white/[0.02] transition-colors"
               />
               <select
