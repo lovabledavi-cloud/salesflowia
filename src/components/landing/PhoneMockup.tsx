@@ -14,6 +14,7 @@ const PhoneMockup = () => {
   const [typing, setTyping] = useState(false);
   const [showBadge, setShowBadge] = useState(false);
   const [played, setPlayed] = useState(false);
+  const [hovered, setHovered] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -59,10 +60,18 @@ const PhoneMockup = () => {
       </div>
 
       {/* Phone */}
-      <div className="w-full h-[680px] bg-black rounded-[40px] border-[8px] border-[#1a1622] overflow-hidden relative transition-all duration-400 hover:[transform:rotateY(-5deg)_rotateX(2deg)_rotateZ(0deg)]"
+      <div
+        className="w-full h-[680px] bg-black rounded-[40px] border-[8px] border-[#1a1622] overflow-hidden relative"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
         style={{
-          transform: "rotateY(-15deg) rotateX(5deg) rotateZ(2deg)",
-          boxShadow: "inset 0 0 0 1px #332b42, 0 30px 60px rgba(0,0,0,0.8), 0 0 40px rgba(168,85,247,0.1)",
+          transform: hovered
+            ? "rotateY(0deg) rotateX(0deg) rotateZ(0deg)"
+            : "rotateY(-15deg) rotateX(5deg) rotateZ(2deg)",
+          transition: "transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.6s ease",
+          boxShadow: hovered
+            ? "inset 0 0 0 1px #443b52, 0 40px 70px rgba(0,0,0,0.9), 0 0 80px rgba(168,85,247,0.25)"
+            : "inset 0 0 0 1px #332b42, 0 30px 60px rgba(0,0,0,0.8), 0 0 40px rgba(168,85,247,0.1)",
           transformStyle: "preserve-3d",
         }}
       >
