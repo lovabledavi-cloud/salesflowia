@@ -20,7 +20,7 @@ const Navbar = () => {
     >
       <div className="max-w-[1400px] mx-auto px-[5%] flex justify-between items-center">
         <a href="#" className="no-underline">
-          <img src="/images/logo.png" alt="SalesFlow.IA" className="h-12 object-contain" />
+          <img src="/images/logo.png" alt="SalesFlow.IA" className="h-14 object-contain" />
         </a>
         <div className="flex gap-4 items-center">
           <a href="#metricas" className="hidden sm:inline-flex border border-white/10 bg-transparent text-slate-50 text-sm px-6 py-2.5 rounded-full font-medium hover:border-purple-500/50 transition-all">
