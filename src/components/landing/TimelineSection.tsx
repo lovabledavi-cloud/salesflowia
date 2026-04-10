@@ -141,6 +141,20 @@ const TimelineSection = () => {
             );
           })}
         </div>
+
+        {/* CTA after timeline */}
+        <div className={`mt-14 max-w-[600px] transition-all duration-700 delay-300 ${activeIndex >= steps.length - 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+          <a
+            href="#agendar"
+            className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-white font-semibold text-sm transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_35px_rgba(168,85,247,0.5)]"
+            style={{
+              background: "linear-gradient(135deg, #a855f7 0%, #9333ea 50%, #7c3aed 100%)",
+              boxShadow: "0 6px 24px rgba(168,85,247,0.35)",
+            }}
+          >
+            Quero meu diagnóstico gratuito <ArrowUpRight className="w-4 h-4" />
+          </a>
+        </div>
       </RevealSection>
     </section>
   );
