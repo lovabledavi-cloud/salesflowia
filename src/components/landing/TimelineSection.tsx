@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Zap, Settings, Plug, BarChart3 } from "lucide-react";
+import { Zap, Settings, Plug, BarChart3, ArrowUpRight } from "lucide-react";
 import RevealSection from "./RevealSection";
 
 const steps = [
