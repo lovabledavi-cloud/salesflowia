@@ -1,41 +1,41 @@
 import RevealSection from "./RevealSection";
 
 const MetricsSection = () => (
-  <section id="metricas" className="py-24 bg-[#030005] border-t border-white/[0.02]">
-    <RevealSection className="max-w-[1200px] mx-auto px-[5%]">
-      <h2 className="font-heading font-extrabold text-[clamp(2.2rem,4vw,3.5rem)] tracking-tight mb-1">
+  <section id="metricas" className="py-20 sm:py-24 bg-[#030005] border-t border-white/[0.02]">
+    <RevealSection className="max-w-[1000px] mx-auto px-5 sm:px-[5%]">
+      <h2 className="font-extrabold text-[clamp(1.6rem,3.5vw,2.5rem)] tracking-tight mb-1">
         Cada métrica, cada lead.
       </h2>
-      <p className="text-lg text-slate-400 mb-10">Tudo sob controle.</p>
+      <p className="text-sm sm:text-base text-slate-400 mb-8">Tudo sob controle.</p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="bg-white/[0.02] border border-white/[0.03] rounded-2xl p-10 text-center">
-          <h3 className="font-space text-6xl font-bold text-slate-50 leading-none mb-2">120</h3>
-          <p className="text-slate-400 text-sm">Agendamentos essa semana</p>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+        <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-6 sm:p-8 text-center">
+          <h3 className="font-space text-3xl sm:text-4xl font-bold text-slate-50 leading-none mb-1">1.2k</h3>
+          <p className="text-slate-500 text-xs sm:text-sm">Leads qualificados</p>
         </div>
-        <div className="bg-white/[0.02] border border-white/[0.03] rounded-2xl p-10 text-center">
-          <h3 className="font-space text-6xl font-bold text-slate-50 leading-none mb-2">2.4<span className="text-slate-400 text-2xl">min</span></h3>
-          <p className="text-slate-400 text-sm">Tempo Médio de Resposta (SLA)</p>
+        <div className="bg-white/[0.02] border border-white/[0.05] rounded-xl p-6 sm:p-8 text-center">
+          <h3 className="font-space text-3xl sm:text-4xl font-bold text-slate-50 leading-none mb-1">&lt;2<span className="text-slate-400 text-lg">s</span></h3>
+          <p className="text-slate-500 text-xs sm:text-sm">Tempo de resposta</p>
         </div>
-        <div className="bg-white/[0.02] border border-white/[0.03] rounded-2xl p-10 text-center">
-          <h3 className="font-space text-6xl font-bold text-slate-50 leading-none mb-2">91<span className="text-purple-500 text-2xl">%</span></h3>
-          <p className="text-slate-400 text-sm">Taxa de Leitura</p>
+        <div className="col-span-2 sm:col-span-1 bg-white/[0.02] border border-white/[0.05] rounded-xl p-6 sm:p-8 text-center">
+          <h3 className="font-space text-3xl sm:text-4xl font-bold text-slate-50 leading-none mb-1">24<span className="text-purple-500 text-lg">%</span></h3>
+          <p className="text-slate-500 text-xs sm:text-sm">Taxa de conversão</p>
         </div>
 
-        {/* Wide card with chart */}
-        <div className="md:col-span-3 bg-white/[0.02] border border-white/[0.03] rounded-2xl p-10">
-          <div className="flex flex-col sm:flex-row justify-between items-start mb-10 gap-4">
+        {/* Wide chart card */}
+        <div className="col-span-2 sm:col-span-3 bg-white/[0.02] border border-white/[0.05] rounded-xl p-6 sm:p-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start mb-6 gap-2">
             <div>
-              <h4 className="font-heading font-semibold text-sm">Visão Mensal (Qualificados)</h4>
-              <p className="text-slate-400 text-sm">Aumento exponencial contínuo.</p>
+              <h4 className="font-semibold text-sm text-slate-200">Qualificados / mês</h4>
+              <p className="text-slate-500 text-xs">Crescimento contínuo</p>
             </div>
-            <h3 className="font-space text-purple-500 text-lg font-bold">+ 315% ▲</h3>
+            <span className="font-space text-purple-400 text-sm font-bold">+18% ▲</span>
           </div>
-          <div className="flex items-end gap-2 h-[120px] border-b border-white/10 pb-px">
+          <div className="flex items-end gap-1.5 h-[80px] sm:h-[100px] border-b border-white/[0.06] pb-px">
             {[20, 35, 45, 50, 60, 55, 80, 100].map((h, i) => (
               <div
                 key={i}
-                className={`flex-1 rounded-t transition-all duration-1000 ${i === 7 ? "bg-purple-500 shadow-[0_0_20px_rgba(168,85,247,0.4)]" : "bg-white/10"}`}
+                className={`flex-1 rounded-t transition-all duration-1000 ${i === 7 ? "bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.3)]" : "bg-white/[0.08]"}`}
                 style={{ height: `${h}%` }}
               />
             ))}

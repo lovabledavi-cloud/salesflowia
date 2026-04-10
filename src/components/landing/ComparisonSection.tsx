@@ -1,49 +1,43 @@
-import { Check, Minus } from "lucide-react";
+import { Check, X } from "lucide-react";
 import RevealSection from "./RevealSection";
 
 const rows = [
-  { feature: "Integração Rápida nativa e Zapier", sf: "check", trad: "minus" },
-  { feature: "Tempo de aprendizado (Rampagem)", sf: "Instantâneo", trad: "2 a 4 meses" },
-  { feature: "Escalabilidade Absoluta (Sem limites diários)", sf: "check", trad: "minus" },
-  { feature: "Sentimento analítico em tempo real", sf: "check", trad: "minus" },
-  { feature: "Follow-up por voz (Áudios Humanos)", sf: "check", trad: "minus" },
+  { feature: "Integração rápida nativa", sf: true, trad: false },
+  { feature: "Tempo de rampagem", sf: "Instantâneo", trad: "2–4 meses" },
+  { feature: "Escalabilidade sem limites", sf: true, trad: false },
+  { feature: "Análise de sentimento em tempo real", sf: true, trad: false },
+  { feature: "Follow-up por áudio humanizado", sf: true, trad: false },
 ];
 
 const ComparisonSection = () => (
-  <section className="py-24 bg-[#030005] border-t border-white/[0.02] relative">
-    <div className="absolute bottom-[10%] -left-[300px] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(168,85,247,0.4)_0%,transparent_60%)] blur-[80px] rounded-full opacity-50 pointer-events-none" />
-
-    <RevealSection className="max-w-[1200px] mx-auto px-[5%]">
-      <h2 className="font-heading font-extrabold text-[clamp(2.2rem,4vw,3.5rem)] tracking-tight mb-4 text-center">
-        Não é só uma ferramenta.<br />É <span className="text-purple-500 font-playfair italic">estratégia e resultado.</span>
+  <section className="py-20 sm:py-24 bg-[#030005] border-t border-white/[0.02] relative">
+    <RevealSection className="max-w-[800px] mx-auto px-5 sm:px-[5%]">
+      <h2 className="font-extrabold text-[clamp(1.6rem,3.5vw,2.5rem)] tracking-tight mb-3 text-center">
+        Não é ferramenta, é<br /><span className="text-purple-500 font-playfair italic">estratégia e resultado.</span>
       </h2>
-      <p className="text-lg text-slate-400 text-center max-w-[600px] mx-auto mb-10">
-        Veja como o SalesFlow se sai quando comparado as soluções antiquadas que encarecem a operação da sua empresa.
+      <p className="text-sm text-slate-400 text-center max-w-[480px] mx-auto mb-8">
+        Veja como o SalesFlow se compara às soluções tradicionais.
       </p>
 
-      <div className="bg-white/[0.015] border border-white/[0.08] rounded-3xl overflow-x-auto shadow-[0_10px_40px_rgba(0,0,0,0.4)] backdrop-blur-xl">
-        <table className="w-full border-collapse text-left bg-[#0a0510]" style={{ borderRadius: "inherit" }}>
-          <thead>
-            <tr>
-              <th className="px-6 py-6 font-space font-medium text-sm text-slate-400 uppercase tracking-wider">Funcionalidade</th>
-              <th className="px-6 py-6 font-space font-medium text-sm text-purple-500 uppercase tracking-wider bg-purple-500/5 rounded-t-3xl">SalesFlow.IA</th>
-              <th className="px-6 py-6 font-space font-medium text-sm text-slate-400 uppercase tracking-wider">Modelos Tradicionais</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, i) => (
-              <tr key={i} className={i === rows.length - 1 ? "" : "border-b border-white/5"}>
-                <td className="px-6 py-6 text-base">{row.feature}</td>
-                <td className="px-6 py-6 bg-purple-500/[0.03] font-semibold">
-                  {row.sf === "check" ? <Check className="w-5 h-5 text-purple-500" /> : <strong className="text-purple-500">{row.sf}</strong>}
-                </td>
-                <td className="px-6 py-6">
-                  {row.trad === "minus" ? <Minus className="w-5 h-5 text-slate-500" /> : <span className="text-slate-400">{row.trad}</span>}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="rounded-2xl border border-white/[0.06] overflow-hidden bg-white/[0.015]">
+        <div className="grid grid-cols-[1fr_90px_90px] sm:grid-cols-[1fr_120px_120px] text-xs sm:text-sm">
+          {/* Header */}
+          <div className="px-4 py-3 text-slate-500 font-medium border-b border-white/[0.06]">Funcionalidade</div>
+          <div className="px-3 py-3 text-purple-400 font-semibold text-center border-b border-white/[0.06] bg-purple-500/5">SalesFlow</div>
+          <div className="px-3 py-3 text-slate-500 font-medium text-center border-b border-white/[0.06]">Tradicional</div>
+          
+          {rows.map((row, i) => (
+            <div key={i} className="contents">
+              <div className={`px-4 py-3.5 text-slate-300 text-xs sm:text-sm ${i < rows.length - 1 ? "border-b border-white/[0.04]" : ""}`}>{row.feature}</div>
+              <div className={`px-3 py-3.5 flex items-center justify-center bg-purple-500/[0.03] ${i < rows.length - 1 ? "border-b border-white/[0.04]" : ""}`}>
+                {row.sf === true ? <Check className="w-4 h-4 text-purple-400" /> : <span className="text-purple-400 font-semibold text-xs">{row.sf}</span>}
+              </div>
+              <div className={`px-3 py-3.5 flex items-center justify-center ${i < rows.length - 1 ? "border-b border-white/[0.04]" : ""}`}>
+                {row.trad === false ? <X className="w-4 h-4 text-slate-600" /> : <span className="text-slate-500 text-xs">{row.trad}</span>}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </RevealSection>
   </section>
