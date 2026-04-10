@@ -17,6 +17,7 @@ export default {
         sans: ['Inter', 'sans-serif'],
         heading: ['Albert Sans', 'sans-serif'],
         space: ['Space Grotesk', 'sans-serif'],
+        playfair: ['Playfair Display', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",

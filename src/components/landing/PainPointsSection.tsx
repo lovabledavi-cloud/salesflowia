@@ -25,7 +25,7 @@ const PainPointsSection = () => (
       <div className="text-center mb-16">
         <h2 className="font-heading font-extrabold text-[clamp(2.2rem,4vw,3.5rem)] tracking-tight mb-4">
           Como transformamos contatos<br />
-          <span className="text-purple-500 font-serif italic">"esquecidos"</span> em lucro no seu caixa
+          <span className="text-purple-500" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontWeight: 600 }}>"esquecidos"</span> em lucro no seu caixa
         </h2>
         <p className="text-lg text-slate-400">Você não precisa de mais atendentes, precisa de inteligência robótica com trato humano.</p>
       </div>
