@@ -3,45 +3,44 @@ import RevealSection from "./RevealSection";
 import PhoneMockup from "./PhoneMockup";
 
 const features = [
-  { icon: <TrendingUp className="w-5 h-5" />, title: "Real Time Dashboard", desc: "Acompanhe métricas e relatórios de atendimentos em tempo real." },
-  { icon: <LayoutGrid className="w-5 h-5" />, title: "Multicanal", desc: "Nossa IA atende clientes nas principais redes: WhatsApp, Facebook e Instagram." },
-  { icon: <ShoppingCart className="w-5 h-5" />, title: "Fechamento Automático", desc: "A IA não apenas atende, ela Vende. Integrada com seu catálogo e preços." },
-  { icon: <Kanban className="w-5 h-5" />, title: "CRM de Vendas", desc: "Controle total com visuais completos no Kanban de pedidos feitos." },
-  { icon: <BellRing className="w-5 h-5" />, title: "Lembretes Inteligentes", desc: "Lembre os clientes de repor o gás depois de 30, 45 ou 60 dias." },
-  { icon: <Plug className="w-5 h-5" />, title: "Integração Nativa", desc: "Pluga no seu banco de dados atual e sistema de gestão e estoque." },
+  { icon: <TrendingUp className="w-4 h-4" />, title: "Real Time Dashboard", desc: "Métricas e relatórios de atendimentos em tempo real." },
+  { icon: <LayoutGrid className="w-4 h-4" />, title: "Multicanal", desc: "WhatsApp, Facebook e Instagram integrados." },
+  { icon: <ShoppingCart className="w-4 h-4" />, title: "Fechamento Automático", desc: "A IA vende, integrada ao seu catálogo." },
+  { icon: <Kanban className="w-4 h-4" />, title: "CRM de Vendas", desc: "Kanban completo de pedidos." },
+  { icon: <BellRing className="w-4 h-4" />, title: "Lembretes Inteligentes", desc: "Reposição automática em 30, 45 ou 60 dias." },
+  { icon: <Plug className="w-4 h-4" />, title: "Integração Nativa", desc: "Conecta ao seu sistema de gestão." },
 ];
 
 const FeaturesSection = () => (
-  <section className="py-24 bg-[#030005] border-t border-white/[0.02] overflow-hidden relative">
-    {/* Purple glow */}
-    <div className="absolute top-[30%] -right-24 w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(168,85,247,0.4)_0%,transparent_60%)] blur-[80px] rounded-full opacity-50 pointer-events-none" />
+  <section className="py-20 sm:py-24 bg-[#030005] border-t border-white/[0.02] overflow-hidden relative">
+    <div className="absolute top-[30%] -right-24 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(168,85,247,0.3)_0%,transparent_60%)] blur-[80px] rounded-full opacity-50 pointer-events-none" />
 
-    <RevealSection className="max-w-[1200px] mx-auto px-[5%] grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-16 lg:gap-28 items-center">
+    <RevealSection className="max-w-[1000px] mx-auto px-5 sm:px-[5%] grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 lg:gap-20 items-center">
       <div>
-        <span className="text-xs tracking-[2px] text-slate-500 mb-5 block font-space">ÚNICA FERRAMENTA</span>
-        <h2 className="font-heading font-extrabold text-[clamp(2.2rem,4vw,3.5rem)] tracking-tight mb-4">
-          Para <span className="text-purple-500 font-playfair italic">Dominar Suas Vendas</span><br />de ponta a ponta.
+        <span className="text-[10px] sm:text-xs tracking-[2px] text-slate-500 mb-4 block font-space">SEU PARCEIRO ESTRATÉGICO PARA</span>
+        <h2 className="font-extrabold text-[clamp(1.6rem,3.5vw,2.5rem)] tracking-tight mb-3">
+          <span className="text-purple-500 font-playfair italic">vendas escaláveis.</span>
         </h2>
-        <p className="text-lg text-slate-400 max-w-[480px] mb-12">
-          Aumente seus lucros conectando todo seu ecossistema a uma IA focada exclusivamente em entregas de gás de cozinha e água.
+        <p className="text-sm sm:text-base text-slate-400 max-w-[420px] mb-8">
+          Aumente seus lucros conectando todo seu ecossistema a uma IA focada em resultados.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 gap-x-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 gap-x-5">
           {features.map((f, i) => (
-            <div key={i} className="flex gap-4 items-start">
-              <div className="w-10 h-10 min-w-[40px] rounded-full bg-purple-500/5 border border-purple-500/15 flex items-center justify-center text-purple-500">
+            <div key={i} className="flex gap-3 items-start">
+              <div className="w-8 h-8 min-w-[32px] rounded-lg bg-purple-500/5 border border-purple-500/15 flex items-center justify-center text-purple-500">
                 {f.icon}
               </div>
               <div>
-                <strong className="text-sm text-slate-200 block mb-1">{f.title}</strong>
-                <p className="text-xs text-slate-500 leading-relaxed">{f.desc}</p>
+                <strong className="text-xs sm:text-sm text-slate-200 block mb-0.5">{f.title}</strong>
+                <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed">{f.desc}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      <div>
+      <div className="flex justify-center">
         <PhoneMockup />
       </div>
     </RevealSection>
