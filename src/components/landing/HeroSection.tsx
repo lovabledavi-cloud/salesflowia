@@ -17,24 +17,34 @@ const HeroSection = () => {
 
   return (
     <section
-      className="relative isolate overflow-hidden"
-      style={{ minHeight: "max(100svh, 600px)" }}
+      className="relative isolate overflow-hidden bg-background"
+      style={{ minHeight: "max(100dvh, 600px)" }}
     >
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img
           src="/images/hero_bg.jpg"
           alt=""
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          aria-hidden="true"
+          loading="eager"
+          fetchPriority="high"
+          className="absolute inset-0 h-full w-full object-cover object-[58%_center] sm:object-center"
         />
-        <div className="absolute inset-0" style={{
-          background: "linear-gradient(to bottom, rgba(3,0,5,0.3) 0%, rgba(3,0,5,0.7) 60%, rgba(3,0,5,1) 100%)"
-        }} />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: [
+              "radial-gradient(circle at 50% 22%, hsl(var(--primary) / 0.22) 0%, transparent 34%)",
+              "radial-gradient(circle at 50% 88%, hsl(var(--primary) / 0.28) 0%, transparent 38%)",
+              "linear-gradient(to bottom, hsl(var(--background) / 0.14) 0%, hsl(var(--background) / 0.58) 54%, hsl(var(--background)) 100%)",
+            ].join(", "),
+          }}
+        />
       </div>
 
       <header
         ref={ref}
         className="reveal relative z-10 flex flex-col items-center justify-center text-center px-5 sm:px-[5%] max-w-[900px] mx-auto pt-16"
-        style={{ minHeight: "max(100svh, 600px)" }}
+        style={{ minHeight: "max(100dvh, 600px)" }}
       >
         <p className="text-[11px] sm:text-xs tracking-[0.2em] uppercase text-slate-400 mb-6 font-medium">
           Automação para Depósitos de Gás · WhatsApp Integrado
@@ -76,7 +86,7 @@ const HeroSection = () => {
           ))}
         </div>
       </header>
-    </div>
+    </section>
   );
 };
 
