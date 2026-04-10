@@ -1,45 +1,25 @@
-import Logo from "@/components/Logo";
-import HeroSection from "@/components/HeroSection";
-import HowItWorksSection from "@/components/HowItWorksSection";
-import StorySection from "@/components/StorySection";
-import SystemFeatures from "@/components/SystemFeatures";
-import BonusSection from "@/components/BonusSection";
-import PriceAnchor from "@/components/PriceAnchor";
-import PricingCard from "@/components/PricingCard";
-import TestimonialsSection from "@/components/TestimonialsSection";
-import FAQSection from "@/components/FAQSection";
-import GuaranteeSection from "@/components/GuaranteeSection";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/landing/Navbar";
+import HeroSection from "@/components/landing/HeroSection";
+import MarqueeSection from "@/components/landing/MarqueeSection";
+import PainPointsSection from "@/components/landing/PainPointsSection";
+import FeaturesSection from "@/components/landing/FeaturesSection";
+import TimelineSection from "@/components/landing/TimelineSection";
+import MetricsSection from "@/components/landing/MetricsSection";
+import ComparisonSection from "@/components/landing/ComparisonSection";
+import CTASection from "@/components/landing/CTASection";
 
 const Index = () => {
   return (
-    <main className="min-h-screen bg-background overflow-hidden">
-      {/* Header with Logo */}
-      <header className="py-4 px-4 md:px-8 bg-background border-b border-border/50">
-        <div className="container flex items-center justify-center md:justify-between">
-          <Logo size="lg" />
-          <a 
-            href="#pricing" 
-            className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald/10 text-emerald text-sm font-medium hover:bg-emerald/20 transition-colors"
-          >
-            Garantir Vaga
-          </a>
-        </div>
-      </header>
-      
-      <div>
-        <HeroSection />
-        <HowItWorksSection />
-        <SystemFeatures />
-        <TestimonialsSection />
-        <BonusSection />
-        <PriceAnchor />
-        <PricingCard />
-        <GuaranteeSection />
-        <StorySection />
-        <FAQSection />
-        <Footer />
-      </div>
+    <main className="min-h-screen bg-[#030005] text-slate-50 overflow-hidden" style={{ fontFamily: "'Inter', sans-serif" }}>
+      <Navbar />
+      <HeroSection />
+      <MarqueeSection />
+      <PainPointsSection />
+      <FeaturesSection />
+      <TimelineSection />
+      <MetricsSection />
+      <ComparisonSection />
+      <CTASection />
     </main>
   );
 };

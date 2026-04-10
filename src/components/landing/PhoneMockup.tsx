@@ -63,7 +63,7 @@ const PhoneMockup = () => {
         style={{
           transform: "rotateY(-15deg) rotateX(5deg) rotateZ(2deg)",
           boxShadow: "inset 0 0 0 1px #332b42, 0 30px 60px rgba(0,0,0,0.8), 0 0 40px rgba(168,85,247,0.1)",
-          transformStyle: "preserve3d",
+          transformStyle: "preserve-3d",
         }}
       >
         {/* Notch */}
