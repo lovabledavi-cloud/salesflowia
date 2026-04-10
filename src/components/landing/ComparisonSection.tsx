@@ -15,7 +15,7 @@ const ComparisonSection = () => (
 
     <RevealSection className="max-w-[1200px] mx-auto px-[5%]">
       <h2 className="font-heading font-extrabold text-[clamp(2.2rem,4vw,3.5rem)] tracking-tight mb-4 text-center">
-        Não é só uma ferramenta.<br />É <span className="text-purple-500 font-playfair">estratégia e resultado.</span>
+        Não é só uma ferramenta.<br />É <span className="text-purple-500 font-playfair italic">estratégia e resultado.</span>
       </h2>
       <p className="text-lg text-slate-400 text-center max-w-[600px] mx-auto mb-10">
         Veja como o SalesFlow se sai quando comparado as soluções antiquadas que encarecem a operação da sua empresa.

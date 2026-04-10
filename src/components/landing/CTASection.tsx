@@ -42,7 +42,7 @@ const CTASection = () => {
         <div className="max-w-[800px] mx-auto rounded-3xl border border-purple-500/50 bg-gradient-to-br from-[#160c24] to-[#030005] shadow-[0_20px_60px_rgba(168,85,247,0.15)] backdrop-blur-xl">
           <div className="p-16 md:px-20 text-center">
             <h2 className="font-heading font-extrabold text-[2.5rem] mb-5 leading-tight">
-              Pronto para transformar<br />seu depósito em uma <span className="text-purple-500 font-playfair">máquina de vendas?</span>
+              Pronto para transformar<br />seu depósito em uma <span className="text-purple-500 font-playfair italic">máquina de vendas?</span>
             </h2>
             <p className="text-slate-400 mb-8">Preencha os dados e receba sua arquitetura da SalesFlow IA sem custo em nossa Call Estratégica.</p>
 

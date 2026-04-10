@@ -20,7 +20,7 @@ const FeaturesSection = () => (
       <div>
         <span className="text-xs tracking-[2px] text-slate-500 mb-5 block font-space">ÚNICA FERRAMENTA</span>
         <h2 className="font-heading font-extrabold text-[clamp(2.2rem,4vw,3.5rem)] tracking-tight mb-4">
-          Para <span className="text-purple-500 font-playfair">Dominar Suas Vendas</span><br />de ponta a ponta.
+          Para <span className="text-purple-500 font-playfair italic">Dominar Suas Vendas</span><br />de ponta a ponta.
         </h2>
         <p className="text-lg text-slate-400 max-w-[480px] mb-12">
           Aumente seus lucros conectando todo seu ecossistema a uma IA focada exclusivamente em entregas de gás de cozinha e água.

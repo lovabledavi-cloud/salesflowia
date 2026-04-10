@@ -40,7 +40,7 @@ const TimelineSection = () => (
   <section className="py-24 bg-[#030005] border-t border-white/[0.02] relative">
     <RevealSection className="max-w-[1200px] mx-auto px-[5%]">
       <h2 className="font-heading font-extrabold text-[clamp(2.2rem,4vw,3.5rem)] tracking-tight mb-4">
-        Da prospecção à<br />entrega em <span className="text-purple-500 font-playfair">tempo recorde.</span>
+        Da prospecção à<br />entrega em <span className="text-purple-500 font-playfair italic">tempo recorde.</span>
       </h2>
 
       <div className="relative max-w-[800px] mx-auto mt-16">
