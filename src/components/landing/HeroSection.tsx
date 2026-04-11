@@ -55,7 +55,7 @@ const HeroSection = () => {
             boxShadow: "0 8px 32px rgba(168,85,247,0.4), inset 0 1px 0 rgba(255,255,255,0.15)",
           }}
         >
-          Fazer diagnóstico gratuito (2 min)
+          Agende uma demonstração
           <ArrowUpRight className="w-4 h-4" />
         </a>
 
