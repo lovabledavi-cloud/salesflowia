@@ -120,7 +120,7 @@ const CTASection = () => {
                 }}
               >
                 {loading ? "Enviando..." : (
-                  <>Solicitar Diagnóstico Gratuito <ArrowUpRight className="w-4 h-4" /></>
+                  <>Solicitar Demonstração Gratuita <ArrowUpRight className="w-4 h-4" /></>
                 )}
               </button>
             </div>

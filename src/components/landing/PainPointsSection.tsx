@@ -27,7 +27,7 @@ const PainPointsSection = () => (
           Como transformamos clientes<br />
           <span className="text-purple-500" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontWeight: 600 }}>"esquecidos"</span> em lucro pro seu depósito
         </h2>
-        <p className="text-lg text-slate-400">Seu depósito não precisa de mais atendentes, precisa de inteligência robótica com trato humano.</p>
+        <p className="text-lg text-slate-400">Seu depósito não precisa de mais atendentes, precisa de inteligência artificial com trato humano.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

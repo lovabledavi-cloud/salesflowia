@@ -28,7 +28,7 @@ const Navbar = () => {
               Dashboard
             </a>
             <a href="#agendar" className="inline-flex bg-slate-50 text-[#07040a] text-xs sm:text-sm px-4 sm:px-5 py-2 rounded-full font-bold hover:bg-white transition-all">
-              Diagnóstico Gratuito
+              Agende uma Demonstração
             </a>
           </div>
         </div>
