@@ -36,15 +36,15 @@ const HeroSection = () => {
         </p>
 
         <h1 className="font-extrabold text-[clamp(1.8rem,4.5vw,3.2rem)] leading-[1.15] mb-6 max-w-[750px] text-white" style={{ textShadow: "0 4px 20px rgba(0,0,0,0.6)" }}>
-          A IA que vende e{" "}
+          A IA que recupera, vende e{" "}
           <span className="font-playfair italic font-bold text-purple-400">fideliza clientes</span>
           <br />
-          enquanto seu depósito opera.
+          no automático.
         </h1>
 
         <p className="text-sm sm:text-base text-slate-400 max-w-[520px] mb-8 leading-relaxed">
-          Todo o poder analítico para engajar e fidelizar sua base de clientes 24h por dia,
-          sem precisar aumentar um real na folha de pagamento do seu depósito.
+          Nossa Inteligência Artificial transforma seus cadastros parados em lucro recorrente, 
+          sem aumentar seus custos.
         </p>
 
         <a
