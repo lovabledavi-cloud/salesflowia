@@ -19,13 +19,14 @@ const HeroSection = () => {
     <div className="relative">
       <div className="absolute top-0 left-0 w-full h-screen z-0"
         style={{
-          backgroundImage: "url('/images/hero_bg.jpg')",
+          backgroundImage: "url('/images/hero_bg_v2.jpg')",
           backgroundSize: "cover",
-          backgroundPosition: "center",
+          backgroundPosition: "center top",
+          backgroundRepeat: "no-repeat",
         }}
       >
         <div className="absolute inset-0" style={{
-          background: "linear-gradient(to bottom, rgba(3,0,5,0) 0%, rgba(3,0,5,0.3) 50%, rgba(3,0,5,0.85) 85%, rgba(3,0,5,1) 100%)"
+          background: "linear-gradient(to bottom, rgba(3,0,5,0.06) 0%, rgba(3,0,5,0.2) 46%, rgba(3,0,5,0.72) 82%, rgba(3,0,5,0.96) 100%)"
         }} />
       </div>
 
