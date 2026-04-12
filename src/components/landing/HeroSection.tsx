@@ -17,41 +17,37 @@ const HeroSection = () => {
 
   return (
     <div className="relative">
-      {/* CSS-based background with purple curved glows on sides */}
-      <div className="absolute top-0 left-0 w-full h-full z-0 overflow-hidden" style={{ background: "#080212" }}>
-        {/* Left purple glow */}
+      {/* Background - dark with subtle purple side glows like Datacrazy */}
+      <div className="absolute top-0 left-0 w-full h-full z-0 overflow-hidden" style={{ background: "#050010" }}>
+        {/* Left vertical purple beam */}
         <div className="absolute" style={{
-          top: "10%",
-          left: "-10%",
-          width: "45%",
-          height: "80%",
-          background: "radial-gradient(ellipse at center, rgba(120,50,200,0.25) 0%, rgba(80,30,160,0.12) 40%, transparent 70%)",
-          borderRadius: "50%",
-          filter: "blur(40px)",
+          top: "0%",
+          left: "-5%",
+          width: "30%",
+          height: "100%",
+          background: "linear-gradient(to right, rgba(120,40,220,0.15) 0%, rgba(100,30,180,0.06) 50%, transparent 100%)",
         }} />
-        {/* Right purple glow */}
+        {/* Right vertical purple beam */}
         <div className="absolute" style={{
-          top: "10%",
-          right: "-10%",
-          width: "45%",
-          height: "80%",
-          background: "radial-gradient(ellipse at center, rgba(120,50,200,0.25) 0%, rgba(80,30,160,0.12) 40%, transparent 70%)",
-          borderRadius: "50%",
-          filter: "blur(40px)",
+          top: "0%",
+          right: "-5%",
+          width: "30%",
+          height: "100%",
+          background: "linear-gradient(to left, rgba(120,40,220,0.15) 0%, rgba(100,30,180,0.06) 50%, transparent 100%)",
         }} />
-        {/* Subtle top center purple accent */}
+        {/* Center subtle glow */}
         <div className="absolute" style={{
-          top: "-5%",
-          left: "25%",
-          width: "50%",
-          height: "40%",
-          background: "radial-gradient(ellipse at center, rgba(100,40,180,0.08) 0%, transparent 70%)",
-          borderRadius: "50%",
-          filter: "blur(60px)",
+          top: "20%",
+          left: "30%",
+          width: "40%",
+          height: "60%",
+          background: "radial-gradient(ellipse at center, rgba(140,60,240,0.05) 0%, transparent 70%)",
+          filter: "blur(80px)",
         }} />
-        {/* Bottom fade to match page bg */}
-        <div className="absolute bottom-0 left-0 w-full h-32" style={{
-          background: "linear-gradient(to bottom, transparent, #030005)"
+        {/* Fine grain noise texture overlay */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")",
+          backgroundSize: "128px 128px",
         }} />
       </div>
 
@@ -97,25 +93,25 @@ const HeroSection = () => {
         </div>
       </header>
 
-      {/* Black hole video effect at bottom */}
-      <div className="relative z-10 -mt-16 sm:-mt-24 flex justify-center pointer-events-none">
-        <div className="relative w-full max-w-[900px]">
+      {/* Black hole video - large, overlapping next section */}
+      <div className="relative z-20 -mt-32 sm:-mt-48 flex justify-center pointer-events-none">
+        <div className="relative w-full max-w-[1100px]">
           <video
             autoPlay
             loop
             muted
             playsInline
-            className="w-full h-auto"
+            className="w-full h-auto scale-125 sm:scale-110"
             style={{
               mixBlendMode: "screen",
-              filter: "hue-rotate(270deg) saturate(1.5) brightness(1.1)",
+              filter: "hue-rotate(270deg) saturate(1.8) brightness(1.2)",
             }}
           >
             <source src="/videos/blackhole.mp4" type="video/mp4" />
           </video>
-          {/* Fade edges */}
+          {/* Fade edges smoothly into page background */}
           <div className="absolute inset-0" style={{
-            background: "radial-gradient(ellipse at center 40%, transparent 40%, #030005 75%)"
+            background: "radial-gradient(ellipse at center 45%, transparent 30%, #050010 65%)"
           }} />
         </div>
       </div>
