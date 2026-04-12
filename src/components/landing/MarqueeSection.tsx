@@ -6,7 +6,10 @@ const items = [
 ];
 
 const MarqueeSection = () => (
-  <div className="relative z-10 border-y border-white/[0.08] bg-white/[0.01] py-6 overflow-hidden whitespace-nowrap">
+  <div
+    className="relative z-30 border-y border-white/[0.08] py-6 overflow-hidden whitespace-nowrap backdrop-blur-md"
+    style={{ background: "rgba(5, 0, 16, 0.72)" }}
+  >
     <div className="flex w-max animate-marquee">
       {[...Array(3)].map((_, g) => (
         <div key={g} className="flex gap-20 px-10">
