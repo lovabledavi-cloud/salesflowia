@@ -93,9 +93,9 @@ const HeroSection = () => {
         </div>
       </header>
 
-      {/* Black hole video - positioned like reference */}
-      <div className="relative z-20 -mt-20 sm:-mt-28 flex justify-center pointer-events-none">
-        <div className="relative w-[90%] max-w-[700px]">
+      {/* Black hole video - between sections, no black bg visible */}
+      <div className="relative z-20 -mt-10 flex justify-center pointer-events-none overflow-hidden" style={{ height: "280px" }}>
+        <div className="absolute w-[120%] max-w-[1000px]" style={{ top: "-40%" }}>
           <video
             autoPlay
             loop
@@ -104,15 +104,11 @@ const HeroSection = () => {
             className="w-full h-auto"
             style={{
               mixBlendMode: "screen",
-              filter: "hue-rotate(270deg) saturate(1.2) brightness(0.9)",
+              filter: "hue-rotate(270deg) saturate(1.2) brightness(0.85)",
             }}
           >
             <source src="/videos/blackhole.mp4" type="video/mp4" />
           </video>
-          {/* Tight radial mask to isolate just the black hole */}
-          <div className="absolute inset-0" style={{
-            background: "radial-gradient(ellipse at center 40%, transparent 35%, #050010 58%)"
-          }} />
         </div>
       </div>
     </div>
