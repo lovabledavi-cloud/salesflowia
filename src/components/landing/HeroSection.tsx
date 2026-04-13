@@ -19,10 +19,11 @@ const HeroSection = () => {
     <div className="relative">
       <div className="absolute top-0 left-0 w-full h-screen z-0" style={{
         background: `
-          radial-gradient(ellipse 40% 60% at 50% 80%, rgba(139,92,246,0.12) 0%, transparent 70%),
-          radial-gradient(ellipse 30% 50% at 30% 70%, rgba(168,85,247,0.06) 0%, transparent 60%),
-          radial-gradient(ellipse 30% 50% at 70% 70%, rgba(168,85,247,0.06) 0%, transparent 60%),
-          linear-gradient(to bottom, #050208 0%, #0a0612 50%, #050208 100%)
+          radial-gradient(ellipse 25% 80% at 5% 50%, rgba(139,92,246,0.18) 0%, transparent 70%),
+          radial-gradient(ellipse 25% 80% at 95% 50%, rgba(139,92,246,0.18) 0%, transparent 70%),
+          radial-gradient(ellipse 15% 70% at 15% 40%, rgba(168,85,247,0.10) 0%, transparent 60%),
+          radial-gradient(ellipse 15% 70% at 85% 40%, rgba(168,85,247,0.10) 0%, transparent 60%),
+          linear-gradient(to bottom, #050208 0%, #07040a 50%, #050208 100%)
         `
       }} />
 
