@@ -17,37 +17,16 @@ const HeroSection = () => {
 
   return (
     <div className="relative">
-      {/* Background - dark with subtle purple side glows like Datacrazy */}
-      <div className="absolute top-0 left-0 w-full h-full z-0 overflow-hidden" style={{ background: "#050010" }}>
-        {/* Left vertical purple beam */}
-        <div className="absolute" style={{
-          top: "0%",
-          left: "-5%",
-          width: "30%",
-          height: "100%",
-          background: "linear-gradient(to right, rgba(120,40,220,0.15) 0%, rgba(100,30,180,0.06) 50%, transparent 100%)",
-        }} />
-        {/* Right vertical purple beam */}
-        <div className="absolute" style={{
-          top: "0%",
-          right: "-5%",
-          width: "30%",
-          height: "100%",
-          background: "linear-gradient(to left, rgba(120,40,220,0.15) 0%, rgba(100,30,180,0.06) 50%, transparent 100%)",
-        }} />
-        {/* Center subtle glow */}
-        <div className="absolute" style={{
-          top: "20%",
-          left: "30%",
-          width: "40%",
-          height: "60%",
-          background: "radial-gradient(ellipse at center, rgba(140,60,240,0.05) 0%, transparent 70%)",
-          filter: "blur(80px)",
-        }} />
-        {/* Fine grain noise texture overlay */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")",
-          backgroundSize: "128px 128px",
+      <div className="absolute top-0 left-0 w-full h-screen z-0"
+        style={{
+          backgroundImage: "url('/images/hero_bg_v2.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center top",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        <div className="absolute inset-0" style={{
+          background: "linear-gradient(to bottom, rgba(3,0,5,0) 0%, rgba(3,0,5,0.1) 50%, rgba(3,0,5,0.7) 85%, rgba(3,0,5,0.95) 100%)"
         }} />
       </div>
 
@@ -92,25 +71,6 @@ const HeroSection = () => {
           ))}
         </div>
       </header>
-
-      {/* Black hole video - cropped between sections like the reference */}
-      <div className="relative z-10 -mt-6 -mb-20 sm:-mb-28 h-[220px] sm:h-[280px] flex justify-center pointer-events-none overflow-hidden">
-        <div className="absolute left-1/2 w-[118%] max-w-[980px] -translate-x-1/2" style={{ top: "-22%" }}>
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-auto"
-            style={{
-              mixBlendMode: "screen",
-              filter: "hue-rotate(270deg) saturate(1.18) brightness(0.82)",
-            }}
-          >
-            <source src="/videos/blackhole.mp4" type="video/mp4" />
-          </video>
-        </div>
-      </div>
     </div>
   );
 };
