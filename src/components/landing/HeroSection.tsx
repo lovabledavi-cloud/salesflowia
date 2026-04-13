@@ -17,18 +17,14 @@ const HeroSection = () => {
 
   return (
     <div className="relative">
-      <div className="absolute top-0 left-0 w-full h-screen z-0"
-        style={{
-          backgroundImage: "url('/images/hero_bg_v2.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center top",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
-        <div className="absolute inset-0" style={{
-          background: "linear-gradient(to bottom, rgba(3,0,5,0) 0%, rgba(3,0,5,0.1) 50%, rgba(3,0,5,0.7) 85%, rgba(3,0,5,0.95) 100%)"
-        }} />
-      </div>
+      <div className="absolute top-0 left-0 w-full h-screen z-0" style={{
+        background: `
+          radial-gradient(ellipse 40% 60% at 50% 80%, rgba(139,92,246,0.12) 0%, transparent 70%),
+          radial-gradient(ellipse 30% 50% at 30% 70%, rgba(168,85,247,0.06) 0%, transparent 60%),
+          radial-gradient(ellipse 30% 50% at 70% 70%, rgba(168,85,247,0.06) 0%, transparent 60%),
+          linear-gradient(to bottom, #050208 0%, #0a0612 50%, #050208 100%)
+        `
+      }} />
 
       <header ref={ref} className="reveal relative z-10 h-screen min-h-[600px] flex flex-col items-center justify-center text-center px-5 sm:px-[5%] max-w-[900px] mx-auto pt-24">
         <p className="text-[11px] sm:text-xs tracking-[0.2em] uppercase text-slate-400 mb-6 font-medium">
