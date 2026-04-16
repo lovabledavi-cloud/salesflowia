@@ -40,39 +40,39 @@ const CTASection = () => {
   };
 
   return (
-    <footer id="agendar" className="py-20 sm:py-28 bg-[#030005]">
+    <footer id="agendar" className="py-20 sm:py-28 bg-orange-500">
       <RevealSection className="max-w-[520px] mx-auto px-5 sm:px-6">
         {/* Label */}
-        <p className="text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-slate-500 text-center mb-4 font-medium">
+        <p className="text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-white/70 text-center mb-4 font-medium">
           Comece agora mesmo
         </p>
 
         {/* Title */}
-        <h2 className="font-extrabold text-[clamp(1.5rem,3.5vw,2rem)] leading-tight text-center mb-3">
-          Pronto para escalar as<br />vendas do seu <span className="text-orange-500 font-playfair italic">depósito?</span>
+        <h2 className="font-extrabold text-[clamp(1.5rem,3.5vw,2rem)] leading-tight text-center mb-3 text-white">
+          Pronto para escalar as<br />vendas do seu <span className="text-white font-playfair italic underline decoration-2 underline-offset-4">depósito?</span>
         </h2>
 
         {/* Subtitle */}
-        <p className="text-xs sm:text-sm text-slate-500 text-center max-w-[400px] mx-auto mb-6">
+        <p className="text-xs sm:text-sm text-orange-100 text-center max-w-[400px] mx-auto mb-6">
           Agende uma conversa gratuita. Sem compromisso, sem cartão de crédito.
         </p>
 
         {/* Trust badges */}
         <div className="flex items-center justify-center gap-5 mb-8">
-          <div className="flex items-center gap-1.5 text-slate-500 text-[11px]">
+          <div className="flex items-center gap-1.5 text-white/80 text-[11px]">
             <Shield className="w-3.5 h-3.5" />
             <span>Dados seguros</span>
           </div>
-          <div className="flex items-center gap-1.5 text-slate-500 text-[11px]">
+          <div className="flex items-center gap-1.5 text-white/80 text-[11px]">
             <Lock className="w-3.5 h-3.5" />
             <span>100% gratuito</span>
           </div>
         </div>
 
         {/* Form card */}
-        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] overflow-hidden">
+        <div className="rounded-2xl border border-white/20 bg-white/15 overflow-hidden backdrop-blur-sm">
           <form onSubmit={handleSubmit}>
-            <div className="divide-y divide-white/[0.06]">
+            <div className="divide-y divide-white/20">
               <input
                 type="text"
                 value={name}
@@ -113,11 +113,7 @@ const CTASection = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-white font-semibold text-sm transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_0_30px_rgba(249,115,22,0.4)] disabled:opacity-50"
-                style={{
-                  background: "linear-gradient(135deg, #f97316 0%, #ea580c 50%, #c2410c 100%)",
-                  boxShadow: "0 4px 20px rgba(249,115,22,0.3)",
-                }}
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-white text-orange-600 font-semibold text-sm transition-all duration-300 hover:scale-[1.01] hover:shadow-lg disabled:opacity-50"
               >
                 {loading ? "Enviando..." : (
                   <>Solicitar Demonstração Gratuita <ArrowUpRight className="w-4 h-4" /></>
@@ -129,9 +125,9 @@ const CTASection = () => {
       </RevealSection>
 
       {/* Footer */}
-      <div className="max-w-[520px] mx-auto mt-14 text-center flex flex-col items-center gap-3 border-t border-white/[0.04] pt-6 px-5">
-        <img src="/images/logo.png" alt="SalesFlow.IA" className="h-10 object-contain opacity-50" />
-        <p className="text-slate-700 text-[11px]">&copy; 2026 SalesFlow.IA · Todos os direitos reservados.</p>
+      <div className="max-w-[520px] mx-auto mt-14 text-center flex flex-col items-center gap-3 border-t border-white/20 pt-6 px-5">
+        <img src="/images/logo.png" alt="SalesFlow.IA" className="h-10 object-contain opacity-70" />
+        <p className="text-white/60 text-[11px]">&copy; 2026 SalesFlow.IA · Todos os direitos reservados.</p>
       </div>
     </footer>
   );
