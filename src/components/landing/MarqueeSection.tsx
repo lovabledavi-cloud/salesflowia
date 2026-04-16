@@ -6,13 +6,13 @@ const items = [
 ];
 
 const MarqueeSection = () => (
-  <div className="relative z-10 border-y border-white/[0.08] bg-white/[0.01] py-6 overflow-hidden whitespace-nowrap">
+  <div className="relative z-10 bg-orange-500 py-6 overflow-hidden whitespace-nowrap">
     <div className="flex w-max animate-marquee">
       {[...Array(3)].map((_, g) => (
         <div key={g} className="flex gap-20 px-10">
           {items.map((item, i) => (
-            <div key={i} className="text-lg font-medium inline-flex items-center gap-3">
-              <span className="text-3xl text-orange-500 font-bold font-space">{item.value}</span>
+            <div key={i} className="text-lg font-medium inline-flex items-center gap-3 text-white">
+              <span className="text-3xl text-white font-bold font-space">{item.value}</span>
               {item.label}
             </div>
           ))}
