@@ -50,10 +50,10 @@ const PhoneMockup = () => {
   return (
     <div className="relative w-[260px] sm:w-[280px] mx-auto" style={{ perspective: "1000px" }}>
       {/* Floating badges */}
-      <div className="absolute top-12 -right-4 sm:-right-8 z-30 bg-purple-500 text-white border border-purple-300 px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-semibold shadow-[0_8px_20px_rgba(0,0,0,0.8),0_0_12px_rgba(168,85,247,0.4)] animate-float">
+      <div className="absolute top-12 -right-4 sm:-right-8 z-30 bg-orange-500 text-white border border-orange-300 px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-semibold shadow-[0_8px_20px_rgba(0,0,0,0.8),0_0_12px_rgba(249,115,22,0.4)] animate-float">
         <Flame className="w-3 h-3" /> Pedido Feito
       </div>
-      <div className={`absolute bottom-8 -left-4 sm:-left-12 z-30 bg-[#160c24] border border-purple-500/50 px-3 py-1.5 rounded-lg flex items-center gap-1.5 text-xs font-semibold text-slate-200 shadow-[0_8px_20px_rgba(0,0,0,0.8)] transition-all duration-500 ${showBadge ? "opacity-100 scale-100" : "opacity-0 scale-75"}`}
+      <div className={`absolute bottom-8 -left-4 sm:-left-12 z-30 bg-[#1a0f05] border border-orange-500/50 px-3 py-1.5 rounded-lg flex items-center gap-1.5 text-xs font-semibold text-slate-200 shadow-[0_8px_20px_rgba(0,0,0,0.8)] transition-all duration-500 ${showBadge ? "opacity-100 scale-100" : "opacity-0 scale-75"}`}
         style={{ animation: showBadge ? "float 5s ease-in-out infinite reverse" : "none" }}>
         <CheckSquare className="w-3 h-3" /> Lead qualificado
       </div>
@@ -69,8 +69,8 @@ const PhoneMockup = () => {
             : "rotateY(-12deg) rotateX(4deg) rotateZ(1.5deg)",
           transition: "transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.6s ease",
           boxShadow: hovered
-            ? "inset 0 0 0 1px #443b52, 0 30px 50px rgba(0,0,0,0.9), 0 0 60px rgba(168,85,247,0.2)"
-            : "inset 0 0 0 1px #332b42, 0 20px 40px rgba(0,0,0,0.8), 0 0 30px rgba(168,85,247,0.08)",
+            ? "inset 0 0 0 1px #44390a, 0 30px 50px rgba(0,0,0,0.9), 0 0 60px rgba(249,115,22,0.2)"
+            : "inset 0 0 0 1px #332b0a, 0 20px 40px rgba(0,0,0,0.8), 0 0 30px rgba(249,115,22,0.08)",
           transformStyle: "preserve-3d",
         }}
       >
@@ -80,13 +80,13 @@ const PhoneMockup = () => {
         <div className="w-full h-full bg-[#07040a] flex flex-col pt-7">
           {/* Chat header */}
           <div className="flex items-center gap-2.5 px-4 py-3 border-b border-white/[0.02] bg-white/[0.015] backdrop-blur-xl">
-            <div className="w-7 h-7 rounded-full bg-[#1c1428] border border-purple-500/30 flex items-center justify-center text-purple-300">
+            <div className="w-7 h-7 rounded-full bg-[#1a1008] border border-orange-500/30 flex items-center justify-center text-orange-300">
               <Bot className="w-4 h-4" />
             </div>
             <div className="flex flex-col text-xs leading-tight flex-1">
               <strong className="text-slate-50">Agente SalesFlow.IA</strong>
-              <span className="text-purple-300 text-[10px] flex items-center gap-1">
-                <span className="w-1 h-1 bg-purple-500 rounded-full shadow-[0_0_4px_rgba(168,85,247,1)]" />
+              <span className="text-orange-300 text-[10px] flex items-center gap-1">
+                <span className="w-1 h-1 bg-orange-500 rounded-full shadow-[0_0_4px_rgba(249,115,22,1)]" />
                 Online
               </span>
             </div>
@@ -100,7 +100,7 @@ const PhoneMockup = () => {
                 className={`max-w-[88%] px-3 py-2.5 rounded-2xl text-xs leading-relaxed animate-fade-in ${
                   msg.type === "bot"
                     ? "bg-[#150f1c] rounded-bl self-start text-slate-300 border border-white/[0.03]"
-                    : "bg-[#2d1b46] rounded-br self-end text-slate-50 border border-purple-500/20"
+                    : "bg-[#2d1b0a] rounded-br self-end text-slate-50 border border-orange-500/20"
                 }`}
               >
                 {msg.isAudio ? <AudioBubble /> : msg.text}
@@ -108,9 +108,9 @@ const PhoneMockup = () => {
             ))}
             {typing && (
               <div className="bg-[#150f1c] rounded-2xl rounded-bl px-3 py-2.5 self-start border border-white/[0.03] flex items-center gap-1">
-                <span className="w-1.5 h-1.5 bg-purple-300 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                <span className="w-1.5 h-1.5 bg-purple-300 rounded-full animate-bounce" style={{ animationDelay: "160ms" }} />
-                <span className="w-1.5 h-1.5 bg-purple-300 rounded-full animate-bounce" style={{ animationDelay: "320ms" }} />
+                <span className="w-1.5 h-1.5 bg-orange-300 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                <span className="w-1.5 h-1.5 bg-orange-300 rounded-full animate-bounce" style={{ animationDelay: "160ms" }} />
+                <span className="w-1.5 h-1.5 bg-orange-300 rounded-full animate-bounce" style={{ animationDelay: "320ms" }} />
               </div>
             )}
           </div>
@@ -122,17 +122,17 @@ const PhoneMockup = () => {
 
 const AudioBubble = () => (
   <div className="flex items-center gap-2">
-    <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center text-white">
+    <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white">
       <Play className="w-3 h-3" />
     </div>
-    <div className="w-5 h-5 rounded-full bg-[#1c1428] border border-purple-500/30 flex items-center justify-center text-purple-300 text-[10px]">
+    <div className="w-5 h-5 rounded-full bg-[#1a1008] border border-orange-500/30 flex items-center justify-center text-orange-300 text-[10px]">
       <Bot className="w-2.5 h-2.5" />
     </div>
     <div className="flex-1 flex items-center gap-0.5 h-4">
       {Array.from({ length: 10 }).map((_, i) => (
         <div
           key={i}
-          className="w-[2px] bg-purple-300 rounded"
+          className="w-[2px] bg-orange-300 rounded"
           style={{
             height: `${30 + Math.random() * 70}%`,
             animation: `wave-anim 1s infinite alternate ease-in-out`,
