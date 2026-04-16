@@ -43,27 +43,27 @@ const CTASection = () => {
     <footer id="agendar" className="py-20 sm:py-28 bg-orange-500">
       <RevealSection className="max-w-[520px] mx-auto px-5 sm:px-6">
         {/* Label */}
-        <p className="text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-slate-500 text-center mb-4 font-medium">
+        <p className="text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-white/70 text-center mb-4 font-medium">
           Comece agora mesmo
         </p>
 
         {/* Title */}
-        <h2 className="font-extrabold text-[clamp(1.5rem,3.5vw,2rem)] leading-tight text-center mb-3">
-          Pronto para escalar as<br />vendas do seu <span className="text-orange-500 font-playfair italic">depósito?</span>
+        <h2 className="font-extrabold text-[clamp(1.5rem,3.5vw,2rem)] leading-tight text-center mb-3 text-white">
+          Pronto para escalar as<br />vendas do seu <span className="text-white font-playfair italic underline decoration-2 underline-offset-4">depósito?</span>
         </h2>
 
         {/* Subtitle */}
-        <p className="text-xs sm:text-sm text-slate-500 text-center max-w-[400px] mx-auto mb-6">
+        <p className="text-xs sm:text-sm text-orange-100 text-center max-w-[400px] mx-auto mb-6">
           Agende uma conversa gratuita. Sem compromisso, sem cartão de crédito.
         </p>
 
         {/* Trust badges */}
         <div className="flex items-center justify-center gap-5 mb-8">
-          <div className="flex items-center gap-1.5 text-slate-500 text-[11px]">
+          <div className="flex items-center gap-1.5 text-white/80 text-[11px]">
             <Shield className="w-3.5 h-3.5" />
             <span>Dados seguros</span>
           </div>
-          <div className="flex items-center gap-1.5 text-slate-500 text-[11px]">
+          <div className="flex items-center gap-1.5 text-white/80 text-[11px]">
             <Lock className="w-3.5 h-3.5" />
             <span>100% gratuito</span>
           </div>
