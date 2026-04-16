@@ -12,7 +12,7 @@ const MarqueeSection = () => (
         <div key={g} className="flex gap-20 px-10">
           {items.map((item, i) => (
             <div key={i} className="text-lg font-medium inline-flex items-center gap-3">
-              <span className="text-3xl text-purple-500 font-bold font-space">{item.value}</span>
+              <span className="text-3xl text-orange-500 font-bold font-space">{item.value}</span>
               {item.label}
             </div>
           ))}

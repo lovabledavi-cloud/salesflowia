@@ -37,7 +37,7 @@ const HowItWorksSection = () => {
   return (
     <section className="py-20 md:py-32 relative overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-purple-950/10 to-background" />
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-orange-950/10 to-background" />
       <div className="absolute inset-0 bg-grid opacity-5" />
       
       <div className="container relative z-10">
@@ -51,7 +51,7 @@ const HowItWorksSection = () => {
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-foreground">
             Como transformamos contatos{" "}
-            <span className="text-purple-400">"esquecidos"</span>{" "}
+            <span className="text-orange-400">"esquecidos"</span>{" "}
             em lucro no seu caixa
           </h2>
           <p className="text-lg md:text-xl text-muted-foreground">
@@ -78,10 +78,10 @@ const HowItWorksSection = () => {
                 className="relative"
               >
                 {/* Card */}
-                <div className="relative h-full bg-card/30 backdrop-blur-sm border border-border/30 rounded-2xl p-6 hover:border-purple-500/20 hover:bg-card/50 transition-all duration-300 group">
+                <div className="relative h-full bg-card/30 backdrop-blur-sm border border-border/30 rounded-2xl p-6 hover:border-orange-500/20 hover:bg-card/50 transition-all duration-300 group">
                   {/* Step Number Badge */}
                   <div className="absolute -top-4 left-6">
-                    <span className="bg-purple-500/90 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg shadow-purple-500/20">
+                    <span className="bg-orange-500/90 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg shadow-orange-500/20">
                       PASSO {step.step}
                     </span>
                   </div>
@@ -100,13 +100,13 @@ const HowItWorksSection = () => {
                         delay: index * 0.15 + 0.3 
                       }}
                     >
-                      <div className="absolute inset-0 bg-purple-500/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="absolute inset-0 bg-orange-500/10 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                       <motion.div 
-                        className="relative w-14 h-14 bg-purple-500/10 rounded-xl flex items-center justify-center border border-purple-500/20"
+                        className="relative w-14 h-14 bg-orange-500/10 rounded-xl flex items-center justify-center border border-orange-500/20"
                         whileHover={{ scale: 1.1, rotate: 5 }}
                         transition={{ type: "spring", stiffness: 300 }}
                       >
-                        <step.icon className="w-7 h-7 text-purple-400" />
+                        <step.icon className="w-7 h-7 text-orange-400" />
                       </motion.div>
                     </motion.div>
                   </div>
@@ -116,12 +116,12 @@ const HowItWorksSection = () => {
                     {step.title}
                   </h3>
                   {step.subtitle && (
-                    <p className="text-xs text-purple-400/70 text-center mb-3">{step.subtitle}</p>
+                    <p className="text-xs text-orange-400/70 text-center mb-3">{step.subtitle}</p>
                   )}
                   
                   <div className="space-y-4 mt-4">
                     <div>
-                      <p className="text-xs font-medium text-purple-400 mb-1 uppercase tracking-wide">O que acontece</p>
+                      <p className="text-xs font-medium text-orange-400 mb-1 uppercase tracking-wide">O que acontece</p>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         {step.description}
                       </p>
@@ -150,7 +150,7 @@ const HowItWorksSection = () => {
         >
           <div className="relative max-w-4xl mx-auto">
             {/* Card */}
-            <div className="relative bg-gradient-to-br from-purple-500/5 to-emerald/5 border border-purple-500/10 rounded-2xl p-8 md:p-10">
+            <div className="relative bg-gradient-to-br from-purple-500/5 to-emerald/5 border border-orange-500/10 rounded-2xl p-8 md:p-10">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-1 h-6 bg-gradient-to-b from-purple-500 to-emerald rounded-full" />
                 <h3 className="text-xl md:text-2xl font-bold text-foreground">
@@ -165,7 +165,7 @@ const HowItWorksSection = () => {
                 </p>
                 
                 <p className="text-foreground/90">
-                  <span className="text-purple-400 font-medium">Com o SalesFlowIA,</span> sua revenda passa a vender{" "}
+                  <span className="text-orange-400 font-medium">Com o SalesFlowIA,</span> sua revenda passa a vender{" "}
                   <span className="font-semibold">ativamente</span> para quem já te conhece,{" "}
                   <span className="text-emerald font-medium">24 horas por dia</span>, sem depender de funcionário extra.
                 </p>

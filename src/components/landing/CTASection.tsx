@@ -49,7 +49,7 @@ const CTASection = () => {
 
         {/* Title */}
         <h2 className="font-extrabold text-[clamp(1.5rem,3.5vw,2rem)] leading-tight text-center mb-3">
-          Pronto para escalar as<br />vendas do seu <span className="text-purple-500 font-playfair italic">depósito?</span>
+          Pronto para escalar as<br />vendas do seu <span className="text-orange-500 font-playfair italic">depósito?</span>
         </h2>
 
         {/* Subtitle */}
@@ -113,10 +113,10 @@ const CTASection = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-white font-semibold text-sm transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-white font-semibold text-sm transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_0_30px_rgba(249,115,22,0.4)] disabled:opacity-50"
                 style={{
-                  background: "linear-gradient(135deg, #a855f7 0%, #9333ea 50%, #7c3aed 100%)",
-                  boxShadow: "0 4px 20px rgba(168,85,247,0.3)",
+                  background: "linear-gradient(135deg, #f97316 0%, #ea580c 50%, #c2410c 100%)",
+                  boxShadow: "0 4px 20px rgba(249,115,22,0.3)",
                 }}
               >
                 {loading ? "Enviando..." : (

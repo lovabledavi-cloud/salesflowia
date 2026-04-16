@@ -25,15 +25,15 @@ const PainPointsSection = () => (
       <div className="text-center mb-16">
         <h2 className="font-heading font-extrabold text-[clamp(2.2rem,4vw,3.5rem)] tracking-tight mb-4">
           Como transformamos clientes<br />
-          <span className="text-purple-500" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontWeight: 600 }}>"esquecidos"</span> em lucro pro seu depósito
+          <span className="text-orange-500" style={{ fontFamily: "'Playfair Display', serif", fontStyle: "italic", fontWeight: 600 }}>"esquecidos"</span> em lucro pro seu depósito
         </h2>
         <p className="text-lg text-slate-400">Seu depósito não precisa de mais atendentes, precisa de inteligência artificial com trato humano.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {cards.map((card, i) => (
-          <div key={i} className="bg-[#0d0914] border border-white/[0.03] rounded-2xl p-8 flex flex-col gap-4 transition-all hover:border-purple-500/50 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(0,0,0,0.5)] hover:bg-[#110e1a]">
-            <div className="w-12 h-12 rounded-full bg-[#140c24] border border-purple-500/15 flex items-center justify-center text-purple-500 mb-2">
+          <div key={i} className="bg-[#0d0905] border border-white/[0.03] rounded-2xl p-8 flex flex-col gap-4 transition-all hover:border-orange-500/50 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(0,0,0,0.5)] hover:bg-[#110e05]">
+            <div className="w-12 h-12 rounded-full bg-[#1a0f05] border border-orange-500/15 flex items-center justify-center text-orange-500 mb-2">
               {card.icon}
             </div>
             <h3 className="text-lg font-semibold text-white">{card.title}</h3>

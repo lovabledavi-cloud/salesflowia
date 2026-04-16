@@ -19,10 +19,10 @@ const HeroSection = () => {
     <div className="relative">
       <div className="absolute top-0 left-0 w-full h-screen z-0" style={{
         background: `
-          radial-gradient(ellipse 25% 80% at 5% 50%, rgba(139,92,246,0.18) 0%, transparent 70%),
-          radial-gradient(ellipse 25% 80% at 95% 50%, rgba(139,92,246,0.18) 0%, transparent 70%),
-          radial-gradient(ellipse 15% 70% at 15% 40%, rgba(168,85,247,0.10) 0%, transparent 60%),
-          radial-gradient(ellipse 15% 70% at 85% 40%, rgba(168,85,247,0.10) 0%, transparent 60%),
+          radial-gradient(ellipse 25% 80% at 5% 50%, rgba(249,115,22,0.18) 0%, transparent 70%),
+          radial-gradient(ellipse 25% 80% at 95% 50%, rgba(249,115,22,0.18) 0%, transparent 70%),
+          radial-gradient(ellipse 15% 70% at 15% 40%, rgba(251,146,60,0.10) 0%, transparent 60%),
+          radial-gradient(ellipse 15% 70% at 85% 40%, rgba(251,146,60,0.10) 0%, transparent 60%),
           linear-gradient(to bottom, #050208 0%, #07040a 50%, #050208 100%)
         `
       }} />
@@ -34,7 +34,7 @@ const HeroSection = () => {
 
         <h1 className="font-extrabold text-[clamp(1.8rem,4.5vw,3.2rem)] leading-[1.15] mb-6 max-w-[750px] text-white" style={{ textShadow: "0 4px 20px rgba(0,0,0,0.6)" }}>
           A IA que recupera, vende e{" "}
-          <span className="font-playfair italic font-bold text-purple-400">fideliza clientes</span>
+          <span className="font-playfair italic font-bold text-orange-400">fideliza clientes</span>
           <br />
           no automático.
         </h1>
@@ -46,10 +46,10 @@ const HeroSection = () => {
 
         <a
           href="#agendar"
-          className="inline-flex items-center gap-2.5 px-7 sm:px-8 py-3.5 sm:py-4 rounded-full text-white font-semibold text-sm sm:text-base transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_40px_rgba(168,85,247,0.5)]"
+          className="inline-flex items-center gap-2.5 px-7 sm:px-8 py-3.5 sm:py-4 rounded-full text-white font-semibold text-sm sm:text-base transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_40px_rgba(249,115,22,0.5)]"
           style={{
-            background: "linear-gradient(135deg, #a855f7 0%, #9333ea 50%, #7c3aed 100%)",
-            boxShadow: "0 8px 32px rgba(168,85,247,0.4), inset 0 1px 0 rgba(255,255,255,0.15)",
+            background: "linear-gradient(135deg, #f97316 0%, #ea580c 50%, #c2410c 100%)",
+            boxShadow: "0 8px 32px rgba(249,115,22,0.4), inset 0 1px 0 rgba(255,255,255,0.15)",
           }}
         >
           Agende uma demonstração

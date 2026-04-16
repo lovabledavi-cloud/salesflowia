@@ -18,7 +18,7 @@ const MetricsSection = () => (
           <p className="text-slate-500 text-xs sm:text-sm">Tempo de resposta</p>
         </div>
         <div className="col-span-2 sm:col-span-1 bg-white/[0.02] border border-white/[0.05] rounded-xl p-6 sm:p-8 text-center">
-          <h3 className="font-space text-3xl sm:text-4xl font-bold text-slate-50 leading-none mb-1">24<span className="text-purple-500 text-lg">%</span></h3>
+          <h3 className="font-space text-3xl sm:text-4xl font-bold text-slate-50 leading-none mb-1">24<span className="text-orange-500 text-lg">%</span></h3>
           <p className="text-slate-500 text-xs sm:text-sm">Taxa de conversão</p>
         </div>
 
@@ -29,13 +29,13 @@ const MetricsSection = () => (
               <h4 className="font-semibold text-sm text-slate-200">Qualificados / mês</h4>
               <p className="text-slate-500 text-xs">Crescimento contínuo</p>
             </div>
-            <span className="font-space text-purple-400 text-sm font-bold">+18% ▲</span>
+            <span className="font-space text-orange-400 text-sm font-bold">+18% ▲</span>
           </div>
           <div className="flex items-end gap-1.5 h-[80px] sm:h-[100px] border-b border-white/[0.06] pb-px">
             {[20, 35, 45, 50, 60, 55, 80, 100].map((h, i) => (
               <div
                 key={i}
-                className={`flex-1 rounded-t transition-all duration-1000 ${i === 7 ? "bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.3)]" : "bg-white/[0.08]"}`}
+                className={`flex-1 rounded-t transition-all duration-1000 ${i === 7 ? "bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.3)]" : "bg-white/[0.08]"}`}
                 style={{ height: `${h}%` }}
               />
             ))}

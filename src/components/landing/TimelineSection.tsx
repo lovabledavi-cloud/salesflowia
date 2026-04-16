@@ -64,7 +64,7 @@ const TimelineSection = () => {
     <section className="py-20 sm:py-24 bg-[#030005] border-t border-white/[0.02] relative">
       <RevealSection className="max-w-[1000px] mx-auto px-5 sm:px-[5%]">
         <h2 className="font-extrabold text-[clamp(1.6rem,3.5vw,2.5rem)] tracking-tight mb-3">
-          Da contratação à<br />conversão em <span className="text-purple-500 font-playfair italic">menos de 2<br />semanas.</span>
+          Da contratação à<br />conversão em <span className="text-orange-500 font-playfair italic">menos de 2<br />semanas.</span>
         </h2>
 
         <div ref={sectionRef} className="mt-14 max-w-[600px]">
@@ -80,7 +80,7 @@ const TimelineSection = () => {
                   <div
                     className={`relative z-10 w-14 h-14 sm:w-16 sm:h-16 rounded-xl border-2 flex items-center justify-center shrink-0 transition-all duration-500 ${
                       cardActive
-                        ? "border-purple-500 bg-purple-500/10 text-purple-400 shadow-[0_0_25px_rgba(168,85,247,0.4)] scale-100"
+                        ? "border-orange-500 bg-orange-500/10 text-orange-400 shadow-[0_0_25px_rgba(249,115,22,0.4)] scale-100"
                         : "border-white/[0.06] bg-white/[0.02] text-slate-700 scale-95"
                     }`}
                   >
@@ -91,7 +91,7 @@ const TimelineSection = () => {
                   {i < steps.length - 1 && (
                     <div className="w-px bg-white/[0.04] relative overflow-hidden" style={{ height: "120px" }}>
                       <div
-                        className="absolute top-0 left-0 w-full bg-purple-500"
+                        className="absolute top-0 left-0 w-full bg-orange-500"
                         style={{
                           height: lineActive ? "100%" : "0%",
                           transition: `height ${LINE_FILL_MS}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`,
@@ -112,7 +112,7 @@ const TimelineSection = () => {
                   <span
                     className={`inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-bold tracking-wider px-3 py-1 rounded-full mb-3 border transition-all duration-500 ${
                       cardActive
-                        ? "text-purple-300 border-purple-500/40 bg-purple-500/10"
+                        ? "text-orange-300 border-orange-500/40 bg-orange-500/10"
                         : "text-slate-700 border-white/[0.06] bg-transparent"
                     }`}
                   >
@@ -146,10 +146,10 @@ const TimelineSection = () => {
         <div className={`mt-14 text-center transition-all duration-700 delay-300 ${activeIndex >= steps.length - 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <a
             href="#agendar"
-            className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-white font-semibold text-sm transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_35px_rgba(168,85,247,0.5)]"
+            className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-white font-semibold text-sm transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_35px_rgba(249,115,22,0.5)]"
             style={{
-              background: "linear-gradient(135deg, #a855f7 0%, #9333ea 50%, #7c3aed 100%)",
-              boxShadow: "0 6px 24px rgba(168,85,247,0.35)",
+              background: "linear-gradient(135deg, #f97316 0%, #ea580c 50%, #c2410c 100%)",
+              boxShadow: "0 6px 24px rgba(249,115,22,0.35)",
             }}
           >
             Quero meu diagnóstico gratuito <ArrowUpRight className="w-4 h-4" />
