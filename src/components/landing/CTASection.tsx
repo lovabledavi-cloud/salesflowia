@@ -70,9 +70,9 @@ const CTASection = () => {
         </div>
 
         {/* Form card */}
-        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] overflow-hidden">
+        <div className="rounded-2xl border border-white/20 bg-white/15 overflow-hidden backdrop-blur-sm">
           <form onSubmit={handleSubmit}>
-            <div className="divide-y divide-white/[0.06]">
+            <div className="divide-y divide-white/20">
               <input
                 type="text"
                 value={name}
@@ -113,11 +113,7 @@ const CTASection = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl text-white font-semibold text-sm transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_0_30px_rgba(249,115,22,0.4)] disabled:opacity-50"
-                style={{
-                  background: "linear-gradient(135deg, #f97316 0%, #ea580c 50%, #c2410c 100%)",
-                  boxShadow: "0 4px 20px rgba(249,115,22,0.3)",
-                }}
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-white text-orange-600 font-semibold text-sm transition-all duration-300 hover:scale-[1.01] hover:shadow-lg disabled:opacity-50"
               >
                 {loading ? "Enviando..." : (
                   <>Solicitar Demonstração Gratuita <ArrowUpRight className="w-4 h-4" /></>
@@ -129,9 +125,9 @@ const CTASection = () => {
       </RevealSection>
 
       {/* Footer */}
-      <div className="max-w-[520px] mx-auto mt-14 text-center flex flex-col items-center gap-3 border-t border-white/[0.04] pt-6 px-5">
-        <img src="/images/logo.png" alt="SalesFlow.IA" className="h-10 object-contain opacity-50" />
-        <p className="text-slate-700 text-[11px]">&copy; 2026 SalesFlow.IA · Todos os direitos reservados.</p>
+      <div className="max-w-[520px] mx-auto mt-14 text-center flex flex-col items-center gap-3 border-t border-white/20 pt-6 px-5">
+        <img src="/images/logo.png" alt="SalesFlow.IA" className="h-10 object-contain opacity-70" />
+        <p className="text-white/60 text-[11px]">&copy; 2026 SalesFlow.IA · Todos os direitos reservados.</p>
       </div>
     </footer>
   );
