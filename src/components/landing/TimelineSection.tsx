@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { Zap, Settings, Plug, BarChart3, ArrowUpRight } from "lucide-react";
 import RevealSection from "./RevealSection";
 
+// Scroll-driven timeline: progress is tied directly to scroll position,
+// so scrolling DOWN fills the cards/lines, and scrolling UP unfills them.
+
 const steps = [
   { icon: <Zap className="w-5 h-5" />, time: "3 DIAS", title: "Diagnóstico e Mapeamento", desc: "Entendemos a operação do seu depósito, perfil de clientes e regras de qualificação." },
   { icon: <Settings className="w-5 h-5" />, time: "5 DIAS", title: "Treinamento do Agente", desc: "Construímos o Agente com a identidade do seu depósito e fluxos de conversa." },
