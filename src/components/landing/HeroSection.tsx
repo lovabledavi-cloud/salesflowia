@@ -17,15 +17,26 @@ const HeroSection = () => {
 
   return (
     <div className="relative">
-      <div className="absolute top-0 left-0 w-full h-screen z-0" style={{
+      <div className="absolute top-0 left-0 w-full h-screen z-0 overflow-hidden" style={{
         background: `
-          radial-gradient(ellipse 25% 80% at 5% 50%, rgba(249,115,22,0.18) 0%, transparent 70%),
-          radial-gradient(ellipse 25% 80% at 95% 50%, rgba(249,115,22,0.18) 0%, transparent 70%),
-          radial-gradient(ellipse 15% 70% at 15% 40%, rgba(251,146,60,0.10) 0%, transparent 60%),
-          radial-gradient(ellipse 15% 70% at 85% 40%, rgba(251,146,60,0.10) 0%, transparent 60%),
-          linear-gradient(to bottom, #050208 0%, #07040a 50%, #050208 100%)
+          radial-gradient(ellipse 35% 90% at 0% 50%, rgba(249,115,22,0.55) 0%, rgba(234,88,12,0.25) 35%, transparent 70%),
+          radial-gradient(ellipse 35% 90% at 100% 50%, rgba(249,115,22,0.55) 0%, rgba(234,88,12,0.25) 35%, transparent 70%),
+          radial-gradient(ellipse 20% 75% at 12% 45%, rgba(251,146,60,0.35) 0%, transparent 60%),
+          radial-gradient(ellipse 20% 75% at 88% 45%, rgba(251,146,60,0.35) 0%, transparent 60%),
+          radial-gradient(ellipse 80% 50% at 50% 100%, rgba(249,115,22,0.18) 0%, transparent 70%),
+          linear-gradient(to bottom, #0a0405 0%, #0d0608 50%, #0a0405 100%)
         `
-      }} />
+      }}>
+        {/* Dotted texture overlay */}
+        <div className="absolute inset-0 opacity-[0.15]" style={{
+          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.4) 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }} />
+        {/* Bottom glow accent */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60%] h-[200px] rounded-full blur-3xl" style={{
+          background: "radial-gradient(ellipse, rgba(249,115,22,0.4) 0%, transparent 70%)",
+        }} />
+      </div>
 
       <header ref={ref} className="reveal relative z-10 h-screen min-h-[600px] flex flex-col items-center justify-center text-center px-5 sm:px-[5%] max-w-[900px] mx-auto pt-24">
         <p className="text-[11px] sm:text-xs tracking-[0.2em] uppercase text-slate-400 mb-6 font-medium">
