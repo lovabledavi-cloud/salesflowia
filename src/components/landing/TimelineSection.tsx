@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { Zap, Settings, Plug, BarChart3, ArrowUpRight } from "lucide-react";
 import RevealSection from "./RevealSection";
 
+// Scroll-driven timeline: progress is tied directly to scroll position,
+// so scrolling DOWN fills the cards/lines, and scrolling UP unfills them.
+
 const steps = [
   { icon: <Zap className="w-5 h-5" />, time: "3 DIAS", title: "Diagnóstico e Mapeamento", desc: "Entendemos a operação do seu depósito, perfil de clientes e regras de qualificação." },
   { icon: <Settings className="w-5 h-5" />, time: "5 DIAS", title: "Treinamento do Agente", desc: "Construímos o Agente com a identidade do seu depósito e fluxos de conversa." },
@@ -13,52 +16,39 @@ const LINE_FILL_MS = 900;
 
 const TimelineSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const [lineFilling, setLineFilling] = useState(-1);
-  const started = useRef(false);
+  const [progress, setProgress] = useState(0); // 0 → steps.length
 
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting && !started.current) {
-          started.current = true;
-          obs.unobserve(el);
-          runSequence();
-        }
-      },
-      { threshold: 0.15 }
-    );
-    obs.observe(el);
 
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight && rect.bottom > 0 && !started.current) {
-      started.current = true;
-      runSequence();
-    }
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const start = vh * 0.8;
+      const end = vh * 0.3;
+      const total = rect.height + (start - end);
+      const traveled = start - rect.top;
+      const ratio = Math.max(0, Math.min(1, traveled / total));
+      setProgress(ratio * steps.length);
+    };
 
-    return () => obs.disconnect();
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
-
-  // Sequence: reveal card 0 → fill line 0 → reveal card 1 → fill line 1 → ...
-  const runSequence = () => {
-    let delay = 200;
-
-    for (let i = 0; i < steps.length; i++) {
-      // Reveal card i (line from previous card already reached it)
-      const revealDelay = delay;
-      setTimeout(() => setActiveIndex(i), revealDelay);
-
-      // Start filling line FROM card i to next card
-      if (i < steps.length - 1) {
-        delay += 300; // small pause after card lights up
-        const lineDelay = delay;
-        setTimeout(() => setLineFilling(i), lineDelay);
-        delay += LINE_FILL_MS; // wait for line to finish filling before next card
-      }
-    }
-  };
 
   return (
     <section className="py-20 sm:py-24 bg-[#030005] border-t border-white/[0.02] relative">
@@ -69,8 +59,8 @@ const TimelineSection = () => {
 
         <div ref={sectionRef} className="mt-14 max-w-[600px]">
           {steps.map((s, i) => {
-            const cardActive = i <= activeIndex;
-            const lineActive = i <= lineFilling;
+            const cardActive = progress > i + 0.4;
+            const lineProgress = Math.max(0, Math.min(1, (progress - i - 0.4) / 0.6));
 
             return (
               <div key={i} className="relative flex gap-6 sm:gap-10">
@@ -93,8 +83,8 @@ const TimelineSection = () => {
                       <div
                         className="absolute top-0 left-0 w-full bg-orange-500"
                         style={{
-                          height: lineActive ? "100%" : "0%",
-                          transition: `height ${LINE_FILL_MS}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`,
+                          height: `${lineProgress * 100}%`,
+                          transition: "height 150ms linear",
                         }}
                       />
                     </div>
@@ -143,7 +133,7 @@ const TimelineSection = () => {
         </div>
 
         {/* CTA after timeline */}
-        <div className={`mt-14 text-center transition-all duration-700 delay-300 ${activeIndex >= steps.length - 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+        <div className={`mt-14 text-center transition-all duration-700 ${progress >= steps.length - 0.3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <a
             href="#agendar"
             className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-white font-semibold text-sm transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_35px_rgba(249,115,22,0.5)]"

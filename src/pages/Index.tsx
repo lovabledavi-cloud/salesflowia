@@ -7,6 +7,7 @@ import TimelineSection from "@/components/landing/TimelineSection";
 import MetricsSection from "@/components/landing/MetricsSection";
 import ComparisonSection from "@/components/landing/ComparisonSection";
 import CTASection from "@/components/landing/CTASection";
+import SectionDivider from "@/components/landing/SectionDivider";
 
 const Index = () => {
   return (
@@ -14,11 +15,17 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <MarqueeSection />
+      <SectionDivider variant="glow" />
       <PainPointsSection />
+      <SectionDivider variant="line" />
       <FeaturesSection />
+      <SectionDivider variant="glow" />
       <TimelineSection />
+      <SectionDivider variant="line" />
       <MetricsSection />
+      <SectionDivider variant="glow" />
       <ComparisonSection />
+      <SectionDivider variant="line" />
       <CTASection />
     </main>
   );
