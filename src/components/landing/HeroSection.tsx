@@ -54,17 +54,6 @@ const HeroSection = () => {
         </p>
 
         {/* Dashboard mockup - REMOVED */}
-        <div className="mt-16 sm:mt-20 relative w-full max-w-[980px]">
-          <div className="absolute -inset-8 bg-orange-500/10 blur-3xl rounded-full" />
-          <div className="relative rounded-xl border border-white/10 overflow-hidden shadow-[0_30px_80px_-20px_rgba(249,115,22,0.3)]">
-            <img
-              src={dashboardVendas}
-              alt="Dashboard SalesFlow IA"
-              className="w-full h-auto block"
-              loading="eager"
-            />
-          </div>
-        </div>
       </header>
     </div>
   );
