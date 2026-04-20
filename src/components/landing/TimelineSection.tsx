@@ -59,8 +59,8 @@ const TimelineSection = () => {
 
         <div ref={sectionRef} className="mt-14 max-w-[600px]">
           {steps.map((s, i) => {
-            const cardActive = i <= activeIndex;
-            const lineActive = i <= lineFilling;
+            const cardActive = progress > i + 0.4;
+            const lineProgress = Math.max(0, Math.min(1, (progress - i - 0.4) / 0.6));
 
             return (
               <div key={i} className="relative flex gap-6 sm:gap-10">
@@ -83,8 +83,8 @@ const TimelineSection = () => {
                       <div
                         className="absolute top-0 left-0 w-full bg-orange-500"
                         style={{
-                          height: lineActive ? "100%" : "0%",
-                          transition: `height ${LINE_FILL_MS}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`,
+                          height: `${lineProgress * 100}%`,
+                          transition: "height 150ms linear",
                         }}
                       />
                     </div>
@@ -133,7 +133,7 @@ const TimelineSection = () => {
         </div>
 
         {/* CTA after timeline */}
-        <div className={`mt-14 text-center transition-all duration-700 delay-300 ${activeIndex >= steps.length - 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+        <div className={`mt-14 text-center transition-all duration-700 ${progress >= steps.length - 0.3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
           <a
             href="#agendar"
             className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full text-white font-semibold text-sm transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_35px_rgba(249,115,22,0.5)]"
