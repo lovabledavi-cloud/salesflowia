@@ -17,25 +17,83 @@ const HeroSection = () => {
 
   return (
     <div className="relative">
-      <div className="absolute top-0 left-0 w-full h-screen z-0 overflow-hidden" style={{
-        background: `
-          radial-gradient(ellipse 35% 90% at 0% 50%, rgba(249,115,22,0.55) 0%, rgba(234,88,12,0.25) 35%, transparent 70%),
-          radial-gradient(ellipse 35% 90% at 100% 50%, rgba(249,115,22,0.55) 0%, rgba(234,88,12,0.25) 35%, transparent 70%),
-          radial-gradient(ellipse 20% 75% at 12% 45%, rgba(251,146,60,0.35) 0%, transparent 60%),
-          radial-gradient(ellipse 20% 75% at 88% 45%, rgba(251,146,60,0.35) 0%, transparent 60%),
-          radial-gradient(ellipse 80% 50% at 50% 100%, rgba(249,115,22,0.18) 0%, transparent 70%),
-          linear-gradient(to bottom, #0a0405 0%, #0d0608 50%, #0a0405 100%)
-        `
-      }}>
-        {/* Dotted texture overlay */}
-        <div className="absolute inset-0 opacity-[0.15]" style={{
-          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.4) 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
-        }} />
-        {/* Bottom glow accent */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60%] h-[200px] rounded-full blur-3xl" style={{
-          background: "radial-gradient(ellipse, rgba(249,115,22,0.4) 0%, transparent 70%)",
-        }} />
+      <div className="absolute top-0 left-0 w-full h-screen z-0 overflow-hidden bg-[#050304]">
+        {/* Dotted grid texture (full background) */}
+        <div
+          className="absolute inset-0 opacity-[0.18]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, rgba(255,255,255,0.55) 1px, transparent 1px)",
+            backgroundSize: "22px 22px",
+            maskImage:
+              "radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 80%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 80%)",
+          }}
+        />
+
+        {/* LEFT vertical beam */}
+        <div
+          className="absolute top-0 bottom-0 left-0 w-[42%]"
+          style={{
+            background:
+              "linear-gradient(to right, rgba(249,115,22,0.85) 0%, rgba(234,88,12,0.55) 18%, rgba(194,65,12,0.25) 45%, transparent 75%)",
+            filter: "blur(40px)",
+          }}
+        />
+        <div
+          className="absolute top-0 bottom-0 left-0 w-[18%]"
+          style={{
+            background:
+              "linear-gradient(to right, rgba(255,140,40,0.9) 0%, rgba(249,115,22,0.4) 50%, transparent 100%)",
+            filter: "blur(60px)",
+          }}
+        />
+
+        {/* RIGHT vertical beam */}
+        <div
+          className="absolute top-0 bottom-0 right-0 w-[42%]"
+          style={{
+            background:
+              "linear-gradient(to left, rgba(249,115,22,0.85) 0%, rgba(234,88,12,0.55) 18%, rgba(194,65,12,0.25) 45%, transparent 75%)",
+            filter: "blur(40px)",
+          }}
+        />
+        <div
+          className="absolute top-0 bottom-0 right-0 w-[18%]"
+          style={{
+            background:
+              "linear-gradient(to left, rgba(255,140,40,0.9) 0%, rgba(249,115,22,0.4) 50%, transparent 100%)",
+            filter: "blur(60px)",
+          }}
+        />
+
+        {/* Center dark vignette to keep middle deep black */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 55% 70% at 50% 50%, rgba(5,3,4,0.95) 0%, rgba(5,3,4,0.7) 40%, transparent 75%)",
+          }}
+        />
+
+        {/* Bottom horizon glow */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-[280px]"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 100% at 50% 100%, rgba(249,115,22,0.35) 0%, rgba(234,88,12,0.15) 40%, transparent 75%)",
+          }}
+        />
+
+        {/* Top fade to black */}
+        <div
+          className="absolute top-0 left-0 right-0 h-[200px]"
+          style={{
+            background:
+              "linear-gradient(to bottom, #050304 0%, transparent 100%)",
+          }}
+        />
       </div>
 
       <header ref={ref} className="reveal relative z-10 h-screen min-h-[600px] flex flex-col items-center justify-center text-center px-5 sm:px-[5%] max-w-[900px] mx-auto pt-24">
