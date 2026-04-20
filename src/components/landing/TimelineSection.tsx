@@ -16,52 +16,39 @@ const LINE_FILL_MS = 900;
 
 const TimelineSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const [lineFilling, setLineFilling] = useState(-1);
-  const started = useRef(false);
+  const [progress, setProgress] = useState(0); // 0 → steps.length
 
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting && !started.current) {
-          started.current = true;
-          obs.unobserve(el);
-          runSequence();
-        }
-      },
-      { threshold: 0.15 }
-    );
-    obs.observe(el);
 
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight && rect.bottom > 0 && !started.current) {
-      started.current = true;
-      runSequence();
-    }
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const rect = el.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const start = vh * 0.8;
+      const end = vh * 0.3;
+      const total = rect.height + (start - end);
+      const traveled = start - rect.top;
+      const ratio = Math.max(0, Math.min(1, traveled / total));
+      setProgress(ratio * steps.length);
+    };
 
-    return () => obs.disconnect();
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, []);
-
-  // Sequence: reveal card 0 → fill line 0 → reveal card 1 → fill line 1 → ...
-  const runSequence = () => {
-    let delay = 200;
-
-    for (let i = 0; i < steps.length; i++) {
-      // Reveal card i (line from previous card already reached it)
-      const revealDelay = delay;
-      setTimeout(() => setActiveIndex(i), revealDelay);
-
-      // Start filling line FROM card i to next card
-      if (i < steps.length - 1) {
-        delay += 300; // small pause after card lights up
-        const lineDelay = delay;
-        setTimeout(() => setLineFilling(i), lineDelay);
-        delay += LINE_FILL_MS; // wait for line to finish filling before next card
-      }
-    }
-  };
 
   return (
     <section className="py-20 sm:py-24 bg-[#030005] border-t border-white/[0.02] relative">
