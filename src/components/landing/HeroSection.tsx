@@ -53,11 +53,10 @@ const HeroSection = () => {
           Agende uma <em className="font-playfair text-slate-400">conversa rápida</em> e veja como escalar seu depósito.
         </p>
 
-        {/* Dashboard mockup */}
+        {/* Dashboard mockup - REMOVED */}
         <div className="mt-16 sm:mt-20 relative w-full max-w-[980px]">
-          <div className="absolute -inset-8 bg-orange-500/20 blur-3xl rounded-full" />
-          <div className="absolute -inset-2 bg-gradient-to-b from-orange-500/40 to-transparent rounded-2xl blur-xl" />
-          <div className="relative rounded-xl border border-white/10 overflow-hidden shadow-[0_30px_80px_-20px_rgba(249,115,22,0.45)]">
+          <div className="absolute -inset-8 bg-orange-500/10 blur-3xl rounded-full" />
+          <div className="relative rounded-xl border border-white/10 overflow-hidden shadow-[0_30px_80px_-20px_rgba(249,115,22,0.3)]">
             <img
               src={dashboardVendas}
               alt="Dashboard SalesFlow IA"
