@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { ArrowUpRight } from "lucide-react";
+import dashboardVendas from "@/assets/dashboard-vendas.png";
 
 const HeroSection = () => {
   const ref = useRef<HTMLElement>(null);
@@ -17,86 +18,9 @@ const HeroSection = () => {
 
   return (
     <div className="relative">
-      <div className="absolute top-0 left-0 w-full h-screen z-0 overflow-hidden bg-[#050304]">
-        {/* Dotted grid texture (full background) */}
-        <div
-          className="absolute inset-0 opacity-[0.18]"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle, rgba(255,255,255,0.55) 1px, transparent 1px)",
-            backgroundSize: "22px 22px",
-            maskImage:
-              "radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 80%)",
-            WebkitMaskImage:
-              "radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 80%)",
-          }}
-        />
+      <div className="absolute top-0 left-0 w-full h-full z-0 overflow-hidden bg-black" />
 
-        {/* LEFT vertical beam */}
-        <div
-          className="absolute top-0 bottom-0 left-0 w-[42%]"
-          style={{
-            background:
-              "linear-gradient(to right, rgba(249,115,22,0.85) 0%, rgba(234,88,12,0.55) 18%, rgba(194,65,12,0.25) 45%, transparent 75%)",
-            filter: "blur(40px)",
-          }}
-        />
-        <div
-          className="absolute top-0 bottom-0 left-0 w-[18%]"
-          style={{
-            background:
-              "linear-gradient(to right, rgba(255,140,40,0.9) 0%, rgba(249,115,22,0.4) 50%, transparent 100%)",
-            filter: "blur(60px)",
-          }}
-        />
-
-        {/* RIGHT vertical beam */}
-        <div
-          className="absolute top-0 bottom-0 right-0 w-[42%]"
-          style={{
-            background:
-              "linear-gradient(to left, rgba(249,115,22,0.85) 0%, rgba(234,88,12,0.55) 18%, rgba(194,65,12,0.25) 45%, transparent 75%)",
-            filter: "blur(40px)",
-          }}
-        />
-        <div
-          className="absolute top-0 bottom-0 right-0 w-[18%]"
-          style={{
-            background:
-              "linear-gradient(to left, rgba(255,140,40,0.9) 0%, rgba(249,115,22,0.4) 50%, transparent 100%)",
-            filter: "blur(60px)",
-          }}
-        />
-
-        {/* Center dark vignette to keep middle deep black */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 55% 70% at 50% 50%, rgba(5,3,4,0.95) 0%, rgba(5,3,4,0.7) 40%, transparent 75%)",
-          }}
-        />
-
-        {/* Bottom horizon glow */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-[280px]"
-          style={{
-            background:
-              "radial-gradient(ellipse 70% 100% at 50% 100%, rgba(249,115,22,0.35) 0%, rgba(234,88,12,0.15) 40%, transparent 75%)",
-          }}
-        />
-
-        {/* Top fade to black */}
-        <div
-          className="absolute top-0 left-0 right-0 h-[200px]"
-          style={{
-            background:
-              "linear-gradient(to bottom, #050304 0%, transparent 100%)",
-          }}
-        />
-      </div>
-
-      <header ref={ref} className="reveal relative z-10 h-screen min-h-[600px] flex flex-col items-center justify-center text-center px-5 sm:px-[5%] max-w-[900px] mx-auto pt-24">
+      <header ref={ref} className="reveal relative z-10 min-h-screen flex flex-col items-center justify-start text-center px-5 sm:px-[5%] max-w-[1100px] mx-auto pt-28 pb-20">
         <p className="text-[11px] sm:text-xs tracking-[0.2em] uppercase text-slate-400 mb-6 font-medium">
           Automação para Depósitos de Gás · WhatsApp Integrado
         </p>
@@ -129,12 +53,18 @@ const HeroSection = () => {
           Agende uma <em className="font-playfair text-slate-400">conversa rápida</em> e veja como escalar seu depósito.
         </p>
 
-        <div className="mt-12 flex items-center justify-center gap-8 opacity-40">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="w-8 h-8 rounded-full border border-slate-600 flex items-center justify-center">
-              <div className="w-4 h-4 bg-slate-500 rounded-full opacity-50" />
-            </div>
-          ))}
+        {/* Dashboard mockup */}
+        <div className="mt-16 sm:mt-20 relative w-full max-w-[980px]">
+          <div className="absolute -inset-8 bg-orange-500/20 blur-3xl rounded-full" />
+          <div className="absolute -inset-2 bg-gradient-to-b from-orange-500/40 to-transparent rounded-2xl blur-xl" />
+          <div className="relative rounded-xl border border-white/10 overflow-hidden shadow-[0_30px_80px_-20px_rgba(249,115,22,0.45)]">
+            <img
+              src={dashboardVendas}
+              alt="Dashboard SalesFlow IA"
+              className="w-full h-auto block"
+              loading="eager"
+            />
+          </div>
         </div>
       </header>
     </div>
