@@ -18,7 +18,7 @@ const HeroSection = () => {
 
   return (
     <div className="relative">
-      <div className="absolute top-0 left-0 w-full h-full z-0 overflow-hidden bg-white" />
+      <div className="absolute top-0 left-0 w-full h-full z-0 overflow-hidden bg-transparent" />
 
       <header ref={ref} className="reveal relative z-10 min-h-[88vh] flex flex-col items-center justify-center text-center px-5 sm:px-[5%] max-w-[1100px] mx-auto pt-28 pb-8">
         <p className="text-[11px] sm:text-xs tracking-[0.2em] uppercase text-slate-500 mb-6 font-medium">

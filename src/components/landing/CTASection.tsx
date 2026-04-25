@@ -40,7 +40,7 @@ const CTASection = () => {
   };
 
   return (
-    <footer id="agendar" className="py-20 sm:py-28 bg-white">
+    <footer id="agendar" className="py-20 sm:py-28 bg-transparent">
       <RevealSection className="max-w-[520px] mx-auto px-5 sm:px-6">
         {/* Label */}
         <p className="text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-slate-500 text-center mb-4 font-medium">

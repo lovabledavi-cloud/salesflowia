@@ -108,7 +108,7 @@ const ChartBars = () => {
 };
 
 const MetricsSection = () => (
-  <section id="metricas" className="py-20 sm:py-24 bg-white">
+  <section id="metricas" className="py-20 sm:py-24 bg-transparent">
     <RevealSection className="max-w-[1000px] mx-auto px-5 sm:px-[5%]">
       <h2 className="font-extrabold text-[clamp(1.6rem,3.5vw,2.5rem)] tracking-tight mb-1 text-slate-900">
         Cada métrica, cada lead.
