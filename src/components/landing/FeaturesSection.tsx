@@ -30,17 +30,24 @@ const FeaturesSection = () => (
           {features.map((f, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, x: -40, y: 20, scale: 0.9 }}
+              whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
               viewport={{ once: false, amount: 0.4 }}
-              transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
-              className="flex gap-3 items-start"
+              transition={{ duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              whileHover={{ x: 4, transition: { duration: 0.2 } }}
+              className="group flex gap-3 items-start cursor-default p-2 -m-2 rounded-xl hover:bg-orange-50/40 transition-colors duration-300"
             >
-              <div className="w-8 h-8 min-w-[32px] rounded-lg bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-500">
+              <motion.div
+                initial={{ rotate: -90, scale: 0 }}
+                whileInView={{ rotate: 0, scale: 1 }}
+                viewport={{ once: false, amount: 0.4 }}
+                transition={{ duration: 0.5, delay: i * 0.1 + 0.15, type: "spring", stiffness: 200 }}
+                className="w-9 h-9 min-w-[36px] rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white shadow-[0_4px_12px_-2px_rgba(249,115,22,0.5)] group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300"
+              >
                 {f.icon}
-              </div>
+              </motion.div>
               <div>
-                <strong className="text-xs sm:text-sm text-slate-900 block mb-0.5">{f.title}</strong>
+                <strong className="text-xs sm:text-sm text-slate-900 block mb-0.5 group-hover:text-orange-600 transition-colors duration-300">{f.title}</strong>
                 <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed">{f.desc}</p>
               </div>
             </motion.div>
