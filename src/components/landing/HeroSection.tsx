@@ -20,7 +20,7 @@ const HeroSection = () => {
     <div className="relative">
       <div className="absolute top-0 left-0 w-full h-full z-0 overflow-hidden bg-black" />
 
-      <header ref={ref} className="reveal relative z-10 min-h-screen flex flex-col items-center justify-start text-center px-5 sm:px-[5%] max-w-[1100px] mx-auto pt-28 pb-20">
+      <header ref={ref} className="reveal relative z-10 min-h-[88vh] flex flex-col items-center justify-center text-center px-5 sm:px-[5%] max-w-[1100px] mx-auto pt-28 pb-8">
         <p className="text-[11px] sm:text-xs tracking-[0.2em] uppercase text-slate-400 mb-6 font-medium">
           Automação para Depósitos de Gás · WhatsApp Integrado
         </p>
