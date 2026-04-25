@@ -1,4 +1,5 @@
 import { TrendingUp, LayoutGrid, ShoppingCart, Kanban, BellRing, Plug } from "lucide-react";
+import { motion } from "framer-motion";
 import RevealSection from "./RevealSection";
 import PhoneMockup from "./PhoneMockup";
 
@@ -27,7 +28,14 @@ const FeaturesSection = () => (
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 gap-x-5">
           {features.map((f, i) => (
-            <div key={i} className="flex gap-3 items-start">
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: false, amount: 0.4 }}
+              transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
+              className="flex gap-3 items-start"
+            >
               <div className="w-8 h-8 min-w-[32px] rounded-lg bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-500">
                 {f.icon}
               </div>
@@ -35,14 +43,24 @@ const FeaturesSection = () => (
                 <strong className="text-xs sm:text-sm text-slate-900 block mb-0.5">{f.title}</strong>
                 <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed">{f.desc}</p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
 
-      <div className="flex justify-center">
+      <motion.div
+        className="flex justify-center"
+        initial={{ opacity: 0, x: 200, rotate: 90, scale: 0.6 }}
+        whileInView={{ opacity: 1, x: 0, rotate: 0, scale: 1 }}
+        viewport={{ once: false, amount: 0.3 }}
+        transition={{
+          duration: 1.1,
+          ease: [0.16, 1, 0.3, 1],
+          rotate: { duration: 1.2, ease: [0.34, 1.56, 0.64, 1] },
+        }}
+      >
         <PhoneMockup />
-      </div>
+      </motion.div>
     </RevealSection>
   </section>
 );

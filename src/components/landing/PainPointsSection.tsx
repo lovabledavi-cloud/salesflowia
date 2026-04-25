@@ -1,4 +1,5 @@
 import { Clock, CalendarX, Filter } from "lucide-react";
+import { motion } from "framer-motion";
 import RevealSection from "./RevealSection";
 
 const cards = [
@@ -32,13 +33,28 @@ const PainPointsSection = () => (
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {cards.map((card, i) => (
-          <div key={i} className="bg-white border border-slate-200 rounded-2xl p-8 flex flex-col gap-4 transition-all hover:border-orange-500/60 hover:-translate-y-1 hover:shadow-[0_15px_30px_rgba(15,23,42,0.08)]">
-            <div className="w-12 h-12 rounded-full bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-500 mb-2">
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 80, rotateX: -25, scale: 0.9 }}
+            whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+            viewport={{ once: false, amount: 0.3 }}
+            transition={{ duration: 0.7, delay: i * 0.15, ease: [0.22, 1, 0.36, 1] }}
+            whileHover={{ y: -6, transition: { duration: 0.25 } }}
+            style={{ transformPerspective: 1000 }}
+            className="bg-white border border-slate-200 rounded-2xl p-8 flex flex-col gap-4 hover:border-orange-500/60 hover:shadow-[0_15px_30px_rgba(15,23,42,0.08)]"
+          >
+            <motion.div
+              initial={{ scale: 0, rotate: -180 }}
+              whileInView={{ scale: 1, rotate: 0 }}
+              viewport={{ once: false, amount: 0.3 }}
+              transition={{ duration: 0.6, delay: i * 0.15 + 0.3, type: "spring", stiffness: 180 }}
+              className="w-12 h-12 rounded-full bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-500 mb-2"
+            >
               {card.icon}
-            </div>
+            </motion.div>
             <h3 className="text-lg font-semibold text-slate-900">{card.title}</h3>
             <p className="text-slate-600 text-sm leading-relaxed">{card.desc}</p>
-          </div>
+          </motion.div>
         ))}
       </div>
     </RevealSection>
