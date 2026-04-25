@@ -14,8 +14,8 @@ const Navbar = () => {
       <nav
         className={`max-w-[1200px] mx-auto rounded-2xl transition-all duration-400 px-4 sm:px-6 ${
           scrolled
-            ? "bg-[rgba(10,5,16,0.75)] border border-orange-500/20 py-2.5"
-            : "bg-[rgba(10,5,16,0.4)] border border-white/[0.06] py-3"
+            ? "bg-white/85 border border-orange-500/30 py-2.5 shadow-sm"
+            : "bg-white/70 border border-slate-200 py-3"
         }`}
         style={{ backdropFilter: "blur(16px)" }}
       >
@@ -24,10 +24,10 @@ const Navbar = () => {
             <img src="/images/logo.png" alt="SalesFlow.IA" className="h-10 sm:h-12 object-contain" />
           </a>
           <div className="flex gap-3 items-center">
-            <a href="#metricas" className="hidden sm:inline-flex border border-white/10 bg-transparent text-slate-50 text-xs px-5 py-2 rounded-full font-medium hover:border-orange-500/50 transition-all">
+            <a href="#metricas" className="hidden sm:inline-flex border border-slate-200 bg-transparent text-slate-700 text-xs px-5 py-2 rounded-full font-medium hover:border-orange-500/60 hover:text-orange-600 transition-all">
               Dashboard
             </a>
-            <a href="#agendar" className="inline-flex bg-slate-50 text-[#07040a] text-xs sm:text-sm px-4 sm:px-5 py-2 rounded-full font-bold hover:bg-white transition-all">
+            <a href="#agendar" className="inline-flex bg-orange-500 text-white text-xs sm:text-sm px-4 sm:px-5 py-2 rounded-full font-bold hover:bg-orange-600 transition-all">
               Agende uma Demonstração
             </a>
           </div>

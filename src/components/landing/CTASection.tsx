@@ -40,7 +40,7 @@ const CTASection = () => {
   };
 
   return (
-    <footer id="agendar" className="py-20 sm:py-28 bg-[#030005]">
+    <footer id="agendar" className="py-20 sm:py-28 bg-white">
       <RevealSection className="max-w-[520px] mx-auto px-5 sm:px-6">
         {/* Label */}
         <p className="text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-slate-500 text-center mb-4 font-medium">
@@ -48,38 +48,38 @@ const CTASection = () => {
         </p>
 
         {/* Title */}
-        <h2 className="font-extrabold text-[clamp(1.5rem,3.5vw,2rem)] leading-tight text-center mb-3">
+        <h2 className="font-extrabold text-[clamp(1.5rem,3.5vw,2rem)] leading-tight text-center mb-3 text-slate-900">
           Pronto para escalar as<br />vendas do seu <span className="text-orange-500 font-playfair italic">depósito?</span>
         </h2>
 
         {/* Subtitle */}
-        <p className="text-xs sm:text-sm text-slate-500 text-center max-w-[400px] mx-auto mb-6">
+        <p className="text-xs sm:text-sm text-slate-600 text-center max-w-[400px] mx-auto mb-6">
           Agende uma conversa gratuita. Sem compromisso, sem cartão de crédito.
         </p>
 
         {/* Trust badges */}
         <div className="flex items-center justify-center gap-5 mb-8">
-          <div className="flex items-center gap-1.5 text-slate-500 text-[11px]">
+          <div className="flex items-center gap-1.5 text-slate-600 text-[11px]">
             <Shield className="w-3.5 h-3.5" />
             <span>Dados seguros</span>
           </div>
-          <div className="flex items-center gap-1.5 text-slate-500 text-[11px]">
+          <div className="flex items-center gap-1.5 text-slate-600 text-[11px]">
             <Lock className="w-3.5 h-3.5" />
             <span>100% gratuito</span>
           </div>
         </div>
 
         {/* Form card */}
-        <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] overflow-hidden">
+        <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
           <form onSubmit={handleSubmit}>
-            <div className="divide-y divide-white/[0.06]">
+            <div className="divide-y divide-slate-200">
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Seu nome"
                 required
-                className="w-full bg-transparent px-5 py-4 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:bg-white/[0.02] transition-colors"
+                className="w-full bg-transparent px-5 py-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-slate-50 transition-colors"
               />
               <input
                 type="tel"
@@ -87,25 +87,25 @@ const CTASection = () => {
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="(00) 00000-0000"
                 required
-                className="w-full bg-transparent px-5 py-4 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:bg-white/[0.02] transition-colors"
+                className="w-full bg-transparent px-5 py-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-slate-50 transition-colors"
               />
               <input
                 type="text"
                 value={revenda}
                 onChange={(e) => setRevenda(e.target.value)}
                 placeholder="Nome do depósito"
-                className="w-full bg-transparent px-5 py-4 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:bg-white/[0.02] transition-colors"
+                className="w-full bg-transparent px-5 py-4 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:bg-slate-50 transition-colors"
               />
               <select
                 value={botijoes}
                 onChange={(e) => setBotijoes(e.target.value)}
-                className="w-full bg-transparent px-5 py-4 text-sm text-white appearance-none focus:outline-none focus:bg-white/[0.02] transition-colors"
+                className="w-full bg-transparent px-5 py-4 text-sm text-slate-900 appearance-none focus:outline-none focus:bg-slate-50 transition-colors"
               >
-                <option value="" disabled className="bg-[#0a0510]">Quantidade de botijões / mês</option>
-                <option value="Até 500" className="bg-[#0a0510]">Até 500 botijões</option>
-                <option value="500 a 2.000" className="bg-[#0a0510]">500 a 2.000 botijões</option>
-                <option value="2.000 a 5.000" className="bg-[#0a0510]">2.000 a 5.000 botijões</option>
-                <option value="Acima de 5.000" className="bg-[#0a0510]">Acima de 5.000 botijões</option>
+                <option value="" disabled>Quantidade de botijões / mês</option>
+                <option value="Até 500">Até 500 botijões</option>
+                <option value="500 a 2.000">500 a 2.000 botijões</option>
+                <option value="2.000 a 5.000">2.000 a 5.000 botijões</option>
+                <option value="Acima de 5.000">Acima de 5.000 botijões</option>
               </select>
             </div>
 
@@ -129,9 +129,9 @@ const CTASection = () => {
       </RevealSection>
 
       {/* Footer */}
-      <div className="max-w-[520px] mx-auto mt-14 text-center flex flex-col items-center gap-3 border-t border-white/[0.04] pt-6 px-5">
-        <img src="/images/logo.png" alt="SalesFlow.IA" className="h-10 object-contain opacity-50" />
-        <p className="text-slate-700 text-[11px]">&copy; 2026 SalesFlow.IA · Todos os direitos reservados.</p>
+      <div className="max-w-[520px] mx-auto mt-14 text-center flex flex-col items-center gap-3 border-t border-slate-200 pt-6 px-5">
+        <img src="/images/logo.png" alt="SalesFlow.IA" className="h-10 object-contain opacity-70" />
+        <p className="text-slate-500 text-[11px]">&copy; 2026 SalesFlow.IA · Todos os direitos reservados.</p>
       </div>
     </footer>
   );

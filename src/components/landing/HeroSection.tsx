@@ -18,21 +18,21 @@ const HeroSection = () => {
 
   return (
     <div className="relative">
-      <div className="absolute top-0 left-0 w-full h-full z-0 overflow-hidden bg-black" />
+      <div className="absolute top-0 left-0 w-full h-full z-0 overflow-hidden bg-white" />
 
       <header ref={ref} className="reveal relative z-10 min-h-[88vh] flex flex-col items-center justify-center text-center px-5 sm:px-[5%] max-w-[1100px] mx-auto pt-28 pb-8">
-        <p className="text-[11px] sm:text-xs tracking-[0.2em] uppercase text-slate-400 mb-6 font-medium">
+        <p className="text-[11px] sm:text-xs tracking-[0.2em] uppercase text-slate-500 mb-6 font-medium">
           Automação para Depósitos de Gás · WhatsApp Integrado
         </p>
 
-        <h1 className="font-extrabold text-[clamp(1.8rem,4.5vw,3.2rem)] leading-[1.15] mb-6 max-w-[750px] text-white" style={{ textShadow: "0 4px 20px rgba(0,0,0,0.6)" }}>
+        <h1 className="font-extrabold text-[clamp(1.8rem,4.5vw,3.2rem)] leading-[1.15] mb-6 max-w-[750px] text-slate-900">
           A IA que recupera, vende e{" "}
-          <span className="font-playfair italic font-bold text-orange-400">fideliza clientes</span>
+          <span className="font-playfair italic font-bold text-orange-500">fideliza clientes</span>
           <br />
           no automático.
         </h1>
 
-        <p className="text-sm sm:text-base text-slate-400 max-w-[520px] mb-8 leading-relaxed">
+        <p className="text-sm sm:text-base text-slate-600 max-w-[520px] mb-8 leading-relaxed">
           Nossa Inteligência Artificial transforma seus cadastros parados em lucro recorrente, 
           sem aumentar seus custos.
         </p>
@@ -50,7 +50,7 @@ const HeroSection = () => {
         </a>
 
         <p className="text-xs sm:text-sm text-slate-500 mt-4">
-          Agende uma <em className="font-playfair text-slate-400">conversa rápida</em> e veja como escalar seu depósito.
+          Agende uma <em className="font-playfair text-slate-600">conversa rápida</em> e veja como escalar seu depósito.
         </p>
 
         {/* Dashboard mockup - REMOVED */}
