@@ -25,7 +25,7 @@ const HeroSection = () => {
           Automação para Depósitos de Gás · WhatsApp Integrado
         </p>
 
-        <h1 className="font-extrabold text-[clamp(1.8rem,4.5vw,3.2rem)] leading-[1.15] mb-6 max-w-[750px] text-slate-900">
+        <h1 className="font-extrabold text-[clamp(2.6rem,6.5vw,5rem)] leading-[1.05] tracking-tight mb-6 max-w-[900px] text-slate-900">
           A IA que recupera, vende e{" "}
           <span className="font-playfair italic font-bold text-orange-500">fideliza clientes</span>
           <br />
