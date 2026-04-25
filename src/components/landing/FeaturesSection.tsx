@@ -12,7 +12,7 @@ const features = [
 ];
 
 const FeaturesSection = () => (
-  <section className="py-20 sm:py-24 bg-white border-t border-slate-100 overflow-hidden relative">
+  <section className="py-20 sm:py-24 bg-transparent overflow-hidden relative">
     <div className="absolute top-[30%] -right-24 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(249,115,22,0.18)_0%,transparent_60%)] blur-[80px] rounded-full opacity-60 pointer-events-none" />
 
     <RevealSection className="max-w-[1000px] mx-auto px-5 sm:px-[5%] grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 lg:gap-20 items-center">

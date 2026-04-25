@@ -20,7 +20,7 @@ const cards = [
 ];
 
 const PainPointsSection = () => (
-  <section className="py-24 bg-white border-t border-slate-100">
+  <section className="py-24 bg-transparent">
     <RevealSection className="max-w-[1200px] mx-auto px-[5%]">
       <div className="text-center mb-16">
         <h2 className="font-heading font-extrabold text-[clamp(2.2rem,4vw,3.5rem)] tracking-tight mb-4 text-slate-900">

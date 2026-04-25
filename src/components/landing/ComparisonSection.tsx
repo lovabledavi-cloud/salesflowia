@@ -10,7 +10,7 @@ const rows = [
 ];
 
 const ComparisonSection = () => (
-  <section className="py-20 sm:py-24 bg-white border-t border-slate-100 relative">
+  <section className="py-20 sm:py-24 bg-transparent relative">
     <RevealSection className="max-w-[800px] mx-auto px-5 sm:px-[5%]">
       <h2 className="font-extrabold text-[clamp(1.6rem,3.5vw,2.5rem)] tracking-tight mb-3 text-center text-slate-900">
         Não é ferramenta, é<br /><span className="text-orange-500 font-playfair italic">estratégia e resultado.</span>
