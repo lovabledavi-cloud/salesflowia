@@ -1,5 +1,3 @@
-import { useEffect, useRef, useState } from "react";
-
 const items = [
   { display: "+30%", label: "Recuperação de Base" },
   { display: "24/7", label: "Atendimento Online" },
