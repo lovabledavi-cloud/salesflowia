@@ -11,7 +11,7 @@ import SectionDivider from "@/components/landing/SectionDivider";
 
 const Index = () => {
   return (
-    <main className="min-h-screen bg-[#030005] text-slate-50 overflow-hidden" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <main className="min-h-screen bg-white text-slate-900 overflow-hidden" style={{ fontFamily: "'Inter', sans-serif" }}>
       <Navbar />
       <HeroSection />
       <MarqueeSection />

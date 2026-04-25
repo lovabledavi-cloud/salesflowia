@@ -51,9 +51,9 @@ const TimelineSection = () => {
   }, []);
 
   return (
-    <section className="py-20 sm:py-24 bg-[#030005] border-t border-white/[0.02] relative">
+    <section className="py-20 sm:py-24 bg-white border-t border-slate-100 relative">
       <RevealSection className="max-w-[1000px] mx-auto px-5 sm:px-[5%]">
-        <h2 className="font-extrabold text-[clamp(1.6rem,3.5vw,2.5rem)] tracking-tight mb-3">
+        <h2 className="font-extrabold text-[clamp(1.6rem,3.5vw,2.5rem)] tracking-tight mb-3 text-slate-900">
           Da contratação à<br />conversão em <span className="text-orange-500 font-playfair italic">menos de 2<br />semanas.</span>
         </h2>
 
@@ -70,8 +70,8 @@ const TimelineSection = () => {
                   <div
                     className={`relative z-10 w-14 h-14 sm:w-16 sm:h-16 rounded-xl border-2 flex items-center justify-center shrink-0 transition-all duration-500 ${
                       cardActive
-                        ? "border-orange-500 bg-orange-500/10 text-orange-400 shadow-[0_0_25px_rgba(249,115,22,0.4)] scale-100"
-                        : "border-white/[0.06] bg-white/[0.02] text-slate-700 scale-95"
+                        ? "border-orange-500 bg-orange-50 text-orange-500 shadow-[0_0_25px_rgba(249,115,22,0.25)] scale-100"
+                        : "border-slate-200 bg-slate-50 text-slate-300 scale-95"
                     }`}
                   >
                     {s.icon}
@@ -79,7 +79,7 @@ const TimelineSection = () => {
 
                   {/* Line going down to next card */}
                   {i < steps.length - 1 && (
-                    <div className="w-px bg-white/[0.04] relative overflow-hidden" style={{ height: "120px" }}>
+                    <div className="w-px bg-slate-200 relative overflow-hidden" style={{ height: "120px" }}>
                       <div
                         className="absolute top-0 left-0 w-full bg-orange-500"
                         style={{
@@ -96,14 +96,14 @@ const TimelineSection = () => {
                   className={`pt-2 pb-16 transition-all duration-500 ${
                     cardActive
                       ? "opacity-100 translate-y-0"
-                      : "opacity-[0.12] translate-y-2"
+                      : "opacity-30 translate-y-2"
                   }`}
                 >
                   <span
                     className={`inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-bold tracking-wider px-3 py-1 rounded-full mb-3 border transition-all duration-500 ${
                       cardActive
-                        ? "text-orange-300 border-orange-500/40 bg-orange-500/10"
-                        : "text-slate-700 border-white/[0.06] bg-transparent"
+                        ? "text-orange-600 border-orange-300 bg-orange-50"
+                        : "text-slate-400 border-slate-200 bg-transparent"
                     }`}
                   >
                     <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -114,14 +114,14 @@ const TimelineSection = () => {
                   </span>
                   <h3
                     className={`text-lg sm:text-xl font-bold mb-2 transition-colors duration-500 ${
-                      cardActive ? "text-white" : "text-slate-800"
+                      cardActive ? "text-slate-900" : "text-slate-400"
                     }`}
                   >
                     {s.title}
                   </h3>
                   <p
                     className={`text-sm leading-relaxed max-w-[400px] transition-colors duration-500 ${
-                      cardActive ? "text-slate-400" : "text-slate-800"
+                      cardActive ? "text-slate-600" : "text-slate-300"
                     }`}
                   >
                     {s.desc}

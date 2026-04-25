@@ -12,28 +12,28 @@ const features = [
 ];
 
 const FeaturesSection = () => (
-  <section className="py-20 sm:py-24 bg-[#030005] border-t border-white/[0.02] overflow-hidden relative">
-    <div className="absolute top-[30%] -right-24 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(249,115,22,0.3)_0%,transparent_60%)] blur-[80px] rounded-full opacity-50 pointer-events-none" />
+  <section className="py-20 sm:py-24 bg-white border-t border-slate-100 overflow-hidden relative">
+    <div className="absolute top-[30%] -right-24 w-[400px] h-[400px] bg-[radial-gradient(circle,rgba(249,115,22,0.18)_0%,transparent_60%)] blur-[80px] rounded-full opacity-60 pointer-events-none" />
 
     <RevealSection className="max-w-[1000px] mx-auto px-5 sm:px-[5%] grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 lg:gap-20 items-center">
       <div>
         <span className="text-[10px] sm:text-xs tracking-[2px] text-slate-500 mb-4 block font-space">SEU PARCEIRO ESTRATÉGICO PARA</span>
-        <h2 className="font-extrabold text-[clamp(1.6rem,3.5vw,2.5rem)] tracking-tight mb-3">
+        <h2 className="font-extrabold text-[clamp(1.6rem,3.5vw,2.5rem)] tracking-tight mb-3 text-slate-900">
           <span className="text-orange-500 font-playfair italic">vendas escaláveis.</span>
         </h2>
-        <p className="text-sm sm:text-base text-slate-400 max-w-[420px] mb-8">
+        <p className="text-sm sm:text-base text-slate-600 max-w-[420px] mb-8">
           Aumente o faturamento do seu depósito conectando todo seu ecossistema a uma IA focada em resultados.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 gap-x-5">
           {features.map((f, i) => (
             <div key={i} className="flex gap-3 items-start">
-              <div className="w-8 h-8 min-w-[32px] rounded-lg bg-orange-500/5 border border-orange-500/15 flex items-center justify-center text-orange-500">
+              <div className="w-8 h-8 min-w-[32px] rounded-lg bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-500">
                 {f.icon}
               </div>
               <div>
-                <strong className="text-xs sm:text-sm text-slate-200 block mb-0.5">{f.title}</strong>
-                <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed">{f.desc}</p>
+                <strong className="text-xs sm:text-sm text-slate-900 block mb-0.5">{f.title}</strong>
+                <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed">{f.desc}</p>
               </div>
             </div>
           ))}

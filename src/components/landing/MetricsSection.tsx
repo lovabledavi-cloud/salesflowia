@@ -89,12 +89,12 @@ const ChartBars = () => {
   }, []);
 
   return (
-    <div ref={ref} className="flex items-end gap-1.5 h-[80px] sm:h-[100px] border-b border-white/10 pb-px">
+    <div ref={ref} className="flex items-end gap-1.5 h-[80px] sm:h-[100px] border-b border-slate-200 pb-px">
       {BARS.map((h, i) => (
         <div
           key={i}
           className={`flex-1 rounded-t transition-all ease-out ${
-            i === 7 ? "bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)]" : "bg-white/10"
+            i === 7 ? "bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.35)]" : "bg-slate-200"
           }`}
           style={{
             height: animated ? `${h}%` : "0%",
@@ -108,47 +108,47 @@ const ChartBars = () => {
 };
 
 const MetricsSection = () => (
-  <section id="metricas" className="py-20 sm:py-24 bg-[#030005]">
+  <section id="metricas" className="py-20 sm:py-24 bg-white">
     <RevealSection className="max-w-[1000px] mx-auto px-5 sm:px-[5%]">
-      <h2 className="font-extrabold text-[clamp(1.6rem,3.5vw,2.5rem)] tracking-tight mb-1 text-white">
+      <h2 className="font-extrabold text-[clamp(1.6rem,3.5vw,2.5rem)] tracking-tight mb-1 text-slate-900">
         Cada métrica, cada lead.
       </h2>
-      <p className="text-sm sm:text-base text-slate-400 mb-8">Tudo sob controle.</p>
+      <p className="text-sm sm:text-base text-slate-600 mb-8">Tudo sob controle.</p>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-        <div className="bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 text-center backdrop-blur-sm">
-          <h3 className="font-space text-3xl sm:text-4xl font-bold text-orange-400 leading-none mb-1 tabular-nums">
+        <div className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 text-center shadow-sm">
+          <h3 className="font-space text-3xl sm:text-4xl font-bold text-orange-500 leading-none mb-1 tabular-nums">
             <StatNumber
               target={1.2}
               decimals={1}
               format={(d) => d}
               suffix="k"
-              suffixClass="text-orange-300"
+              suffixClass="text-orange-400"
             />
           </h3>
-          <p className="text-slate-400 text-xs sm:text-sm">Leads qualificados</p>
+          <p className="text-slate-600 text-xs sm:text-sm">Leads qualificados</p>
         </div>
-        <div className="bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 text-center backdrop-blur-sm">
-          <h3 className="font-space text-3xl sm:text-4xl font-bold text-orange-400 leading-none mb-1 tabular-nums">
-            &lt;<StatNumber target={2} suffix="s" suffixClass="text-orange-300 text-lg" />
+        <div className="bg-white border border-slate-200 rounded-xl p-6 sm:p-8 text-center shadow-sm">
+          <h3 className="font-space text-3xl sm:text-4xl font-bold text-orange-500 leading-none mb-1 tabular-nums">
+            &lt;<StatNumber target={2} suffix="s" suffixClass="text-orange-400 text-lg" />
           </h3>
-          <p className="text-slate-400 text-xs sm:text-sm">Tempo de resposta</p>
+          <p className="text-slate-600 text-xs sm:text-sm">Tempo de resposta</p>
         </div>
-        <div className="col-span-2 sm:col-span-1 bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 text-center backdrop-blur-sm">
-          <h3 className="font-space text-3xl sm:text-4xl font-bold text-orange-400 leading-none mb-1 tabular-nums">
-            <StatNumber target={24} suffix="%" suffixClass="text-orange-300 text-lg" />
+        <div className="col-span-2 sm:col-span-1 bg-white border border-slate-200 rounded-xl p-6 sm:p-8 text-center shadow-sm">
+          <h3 className="font-space text-3xl sm:text-4xl font-bold text-orange-500 leading-none mb-1 tabular-nums">
+            <StatNumber target={24} suffix="%" suffixClass="text-orange-400 text-lg" />
           </h3>
-          <p className="text-slate-400 text-xs sm:text-sm">Taxa de conversão</p>
+          <p className="text-slate-600 text-xs sm:text-sm">Taxa de conversão</p>
         </div>
 
         {/* Wide chart card */}
-        <div className="col-span-2 sm:col-span-3 bg-white/5 border border-white/10 rounded-xl p-6 sm:p-8 backdrop-blur-sm">
+        <div className="col-span-2 sm:col-span-3 bg-white border border-slate-200 rounded-xl p-6 sm:p-8 shadow-sm">
           <div className="flex flex-col sm:flex-row justify-between items-start mb-6 gap-2">
             <div>
-              <h4 className="font-semibold text-sm text-white">Qualificados / mês</h4>
-              <p className="text-slate-400 text-xs">Crescimento contínuo</p>
+              <h4 className="font-semibold text-sm text-slate-900">Qualificados / mês</h4>
+              <p className="text-slate-600 text-xs">Crescimento contínuo</p>
             </div>
-            <span className="font-space text-orange-400 text-sm font-bold tabular-nums">
+            <span className="font-space text-orange-500 text-sm font-bold tabular-nums">
               +<StatNumber target={18} />% ▲
             </span>
           </div>
